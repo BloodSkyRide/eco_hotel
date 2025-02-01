@@ -125,7 +125,7 @@
 
                     <div class="form-group">
                         <label for="select_item">Seleccionar item inventario:</label>
-                        <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger"
+                        <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" tabindex="9999"
                             style="width: 100%;" id="select_item_inventory">
                             <option selected="selected" value="selected">Seleccionar item</option>
 

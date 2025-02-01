@@ -13,7 +13,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-    <title>Intranet Rapi Pollo</title>
+    <title>Intranet Parador Rapi</title>
 </head>
 
 <body class="body">

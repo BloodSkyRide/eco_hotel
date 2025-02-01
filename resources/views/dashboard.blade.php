@@ -97,7 +97,7 @@
             <a href="https://www.facebook.com/share/1Bn3Xcx28H/?mibextid=wwXIfr" class="brand-link" target="blank">
                 <img src="{{ asset('assets/small_logo.png') }}" alt="Mypantalla"
                     class="brand-image img-circle elevation-3 shadow">
-                <span class="brand-text font-weight-light">Rapi Pollo</span>
+                <span class="brand-text font-weight-light">Parador Rapi</span>
             </a>
 
             <!-- Sidebar -->
@@ -355,6 +355,17 @@
                             </a>
                         </li>
 
+
+                        <li class="nav-item">
+                            <a class="nav-link menu_dashboard" onclick="getShowGuest('{{ route('getShowGuest') }}')"
+                                type="button" id="payroll_nav">
+                                <i class="fa-solid fa-hotel"></i>&nbsp;&nbsp;
+                                <p>
+                                    Registrar Huespedes
+                                </p>
+                            </a>
+                        </li>
+
                     </ul>
                 </nav>
             </div>
@@ -471,7 +482,8 @@
 <script src="{{asset('javascript/pusher.min.js')}}"></script>
 
     <!-- Page specific script -->
-    <script src="{{ asset('javascript/dashboard.js') }}"></script>
+<script src="{{ asset('javascript/dashboard.js') }}"></script>
+<script src="{{ asset('javascript/menuDashboard/guest.js') }}"></script>
 
 </body>
 

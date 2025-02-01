@@ -14,6 +14,7 @@ use App\Http\Controllers\createProductController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\historySellController;
 use App\Http\Controllers\employeFoodController;
+use App\Http\Controllers\guestController;
 
 
 
@@ -158,6 +159,7 @@ Route::post('/deleteCompound', [createProductController::class, 'deleteCompound'
 Route::get('/getShowEmployeeFood', [employeFoodController::class, 'getShowEmployeeFood'])->name("getShowEmployeeFood")->middleware(["verifyTokenHeader"]);
 
 Route::post('/insertFood', [employeFoodController::class, 'insertFood'])->name("insertFood")->middleware(["verifyTokenHeader"]);
+Route::post('/getShowGuest', [guestController::class, 'getShowGuest'])->name("getShowGuest")->middleware(["verifyTokenHeader"]);
 
 
 
