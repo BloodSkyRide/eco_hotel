@@ -30,7 +30,7 @@
             <div class="card-body login-card-body">
 
                 <center><b>
-                        <h3 class="title_intranet">Intranet Rapi Pollo</h3< /b>
+                        <h3 class="title_intranet">Intranet Parador rapi</h3>
                 </center>
 
                 <center>
