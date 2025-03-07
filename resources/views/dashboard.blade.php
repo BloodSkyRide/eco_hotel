@@ -361,7 +361,7 @@
                                 type="button" id="payroll_nav">
                                 <i class="fa-solid fa-hotel"></i>&nbsp;&nbsp;
                                 <p>
-                                    Registrar Huespedes
+                                    Hospedaje
                                 </p>
                             </a>
                         </li>

@@ -56,7 +56,6 @@ class historySellController extends Controller
 
         $total_venta_users = modelSell::getTotalForUsers($today);
 
-
         $render = view("menuDashboard.historySell", ["rol" => $rol, "historial" => $history_sells, "total" => $total_venta, "unificado" => $total_venta_unificada, "users" => $total_venta_users])->render();
 
         return response()->json(["status" => true, "html" => $render]);

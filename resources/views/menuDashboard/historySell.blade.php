@@ -159,8 +159,8 @@
                                         <td>{{ $item['id_user_cajero'] }}</td>
                                         <td>{{ $item['fecha'] }}</td>
                                         <td>
-                                            <i
-                                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_vendido'], 0, '', '.') }}
+                                            <i class="fa-solid fa-dollar-sign text-success">
+                                                </i>&nbsp;&nbsp;{{ number_format($item['total_vendido'], 0, '', '.') }}
                                         </td>
                                     </tr>
 
@@ -194,39 +194,42 @@
                         <h4 class="text-secondary">Ventas por usuario/día</h4>
                     </center>
                     <hr>
-                    <table class="table" id="history_sell_table_unit">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Cédula cajero</th>
-                                <th scope="col">Cajero Responsable</th>
-                                <th scope="col">Total unidades vendidas</th>
-                                <th scope="col">Total Vendido/Cajero</th>
-                            </tr>
-                        </thead>
-                        <tbody>
 
-                            @php
-                                $flagg = 1;
-                            @endphp
-
-                            @foreach ($users as $item)
+                    <div class="table-responsive">
+                        <table class="table" id="history_sell_table_unit">
+                            <thead class="thead-dark">
                                 <tr>
-                                    <th scope="row">{{ $flagg }}</th>
-                                    <th scope="row">{{ $item['id_user_cajero'] }}</th>
-                                    <td>{{ $item['nombre_cajero'] }}</td>
-                                    <td>{{ $item['total_unidades'] }}</td>
-                                    <td><i
-                                            class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_venta'], 0, '', '.') }}
-                                    </td>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Cédula cajero</th>
+                                    <th scope="col">Cajero Responsable</th>
+                                    <th scope="col">Total unidades vendidas</th>
+                                    <th scope="col">Total Vendido/Cajero</th>
                                 </tr>
-
+                            </thead>
+                            <tbody>
+    
                                 @php
-                                    $flagg++;
+                                    $flagg = 1;
                                 @endphp
-                            @endforeach
-                        </tbody>
-                    </table>
+    
+                                @foreach ($users as $item)
+                                    <tr>
+                                        <th scope="row">{{ $flagg }}</th>
+                                        <th scope="row">{{ $item['id_user_cajero'] }}</th>
+                                        <td>{{ $item['nombre_cajero'] }}</td>
+                                        <td>{{ $item['total_unidades'] }}</td>
+                                        <td><i
+                                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_venta'], 0, '', '.') }}
+                                        </td>
+                                    </tr>
+    
+                                    @php
+                                        $flagg++;
+                                    @endphp
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
 
                     <div class="row p-5">

@@ -13,7 +13,7 @@ class modelProducts extends Model
     use HasFactory;
 
     protected $table = "productos_venta";
-    protected $fillable = ["nombre_producto","precio","descripcion", "fecha_creacion", "url_imagen", "created_at", "updated_at" ];
+    protected $fillable = ["id_producto","nombre_producto","precio","descripcion", "fecha_creacion", "url_imagen", "created_at", "updated_at" ];
 
     public static function insertProduct($data){
 
@@ -110,4 +110,12 @@ class modelProducts extends Model
         ->value("nombre_producto");
 
     }
+
+    
+    public static function verifyProductSeller($id_producto){
+
+
+        return self::where("id_producto", $id_producto)
+        ->get();
+    } 
 }

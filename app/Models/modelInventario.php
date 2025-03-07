@@ -104,5 +104,13 @@ class modelInventario extends Model
         return self::where("id_item", $id_item)
         ->update(["unidades_disponibles" => $units]);
     }
+
+
+    public static function verifyPasadia($id_item){
+
+        return self::where("id_item", $id_item)
+        ->exists();
+
+    }
     
 }

@@ -47,31 +47,34 @@
                 <h3>Alimentación entregada</h3>
             </center>
 
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Nombre empleado</th>
-                        <th scope="col">Cajero responsable</th>
-                        <th scope="col">Cedula</th>
-                        <th scope="col">Producto</th>
-                        <th scope="col">Unidades</th>
-                        <th scope="col">Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach ($registers as $item)
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="thead-dark">
                         <tr>
-                            <td>{{$item['nombre_empleado']}}</td>
-                            <td>{{$item['nombre_cajero']}}</td>
-                            <td>{{$item['cedula']}}</td>
-                            <td>{{$item['item_producto']}}</td>
-                            <td>{{$item['unidades']}}</td>
-                            <td>{{$item['fecha']}}</td>
+                            <th scope="col">Nombre empleado</th>
+                            <th scope="col">Cajero responsable</th>
+                            <th scope="col">Cedula</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Unidades</th>
+                            <th scope="col">Fecha</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+    
+                        @foreach ($registers as $item)
+                            <tr>
+                                <td>{{$item['nombre_empleado']}}</td>
+                                <td>{{$item['nombre_cajero']}}</td>
+                                <td>{{$item['cedula']}}</td>
+                                <td>{{$item['item_producto']}}</td>
+                                <td>{{$item['unidades']}}</td>
+                                <td>{{$item['fecha']}}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
 
         </div>
 

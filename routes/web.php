@@ -14,7 +14,7 @@ use App\Http\Controllers\createProductController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\historySellController;
 use App\Http\Controllers\employeFoodController;
-use App\Http\Controllers\guestController;
+use App\Http\Controllers\guestController; 
 
 
 
@@ -160,6 +160,8 @@ Route::get('/getShowEmployeeFood', [employeFoodController::class, 'getShowEmploy
 
 Route::post('/insertFood', [employeFoodController::class, 'insertFood'])->name("insertFood")->middleware(["verifyTokenHeader"]);
 Route::post('/getShowGuest', [guestController::class, 'getShowGuest'])->name("getShowGuest")->middleware(["verifyTokenHeader"]);
+Route::post('/sendregister', [guestController::class, 'sendregister'])->name("sendregister")->middleware(["verifyTokenHeader"]);
+Route::post('/serachForRangeGuest', [guestController::class, 'getRange'])->name("serachForRangeGuest")->middleware(["verifyTokenHeader"]);
 
 
 
