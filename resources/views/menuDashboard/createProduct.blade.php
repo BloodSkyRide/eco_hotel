@@ -100,9 +100,6 @@
             <center>
                 <button class="btn btn-primary mt-3" onclick="saveProduct('{{ route('saveProduct') }}')"><i
                         class="fa-solid fa-square-plus"></i>&nbsp;&nbsp;Crear producto de Venta</button>
-
-                {{-- <button hidden class="btn btn-info mt-3" data-toggle="modal" data-target="#modal_change_product"><i
-                        class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Modificar producto</button> --}}
             </center>
 
             <hr>
@@ -228,74 +225,4 @@
       </div>
     </div>
   </div>
-    
-    <!-- Modal -->
-    <div class="modal fade" id="modal_change_product">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title" id="exampleModalLabel">Modificar producto compuesto</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-group">
-                        <label for="select_item">Seleccionar item venta:</label>
-                        <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" tabindex="100" 
-                        style="width: 100%;" id="select_item_compund">
-                            
-                            <option selected="selected" value="selected">Seleccionar item</option>
-
-                            @foreach ($compuestos as $compuesto)
-                                <option value="{{ $compuesto['id_producto'] }}">{{ $compuesto['nombre_producto'] }}
-                                </option>
-                            @endforeach
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="edit_price">Modificar nombre producto:</label>
-                        <input type="text" class="form-control" id="edit_name"
-                            placeholder="Modificar nombre item..." autocomplete="off" name="costo">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit_description">Descripción del producto:</label>
-                        <textarea name="descripcion" id="edit_description" cols="30" rows="2" class="form-control"
-                            autocomplete="off" placeholder="Descripción del producto..."></textarea>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="edit_price">Modificar costo:</label>
-                        <input type="number" class="form-control" id="edit_price"
-                            placeholder="Modificar precio de costo..." autocomplete="off" name="costo">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit_imagen_product">Modificar imagen de producto:</label>
-                        <input type="file" class="form-control" id="edit_imagen_product" name="imagen_product"
-                            autocomplete="off">
-                    </div>
-
-                    <div id="previewContainer">
-                        <center><img id="imagePreview2" src="" alt="Previsualización de imagen"
-                                style="display: none; max-width: 150px; margin-top: 10px; max-height: 150px"></center>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="deleteProductSeller('{{ route('deleteCompound') }}')"
-                        class="btn btn-danger" data-dismiss="modal"><i
-                            class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Eliminar</button>
-                    <button type="button" onclick="modifyItemCompound('{{ route('editProductCompund') }}')"
-                        class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Modificar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
