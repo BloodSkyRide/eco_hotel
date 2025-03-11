@@ -20,9 +20,9 @@ class modelCompuesto extends Model
 
     }
 
-    public static function getComposed($id_user){
+    public static function getComposed($id_product){
 
-        return self::where('id_producto_venta', $id_user)
+        return self::where('id_producto_venta', $id_product)
         ->get();
 
     }

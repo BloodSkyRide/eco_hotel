@@ -53,7 +53,11 @@ class createProductController extends Controller
             return response()->json(["status" => true]);
         }
 
-        return response()->json(["status" => false]);
+        $productos_inventario = modelInventario::getAllProducts();
+        $products_compound = modelProducts::getAllProducts();
+        $render = view("menuDashboard.createProduct", ["productos" => $productos_inventario, "compuestos" => $products_compound])->render();
+
+        return response()->json(["html" => $render,"status" => false]);
     }
 
 
@@ -100,7 +104,11 @@ class createProductController extends Controller
 
         $final = implode(', ', $confirm);
 
-        if(count($confirm) > 0) return response()->json(["status" => true, "message" => "Se editó de manera satisfactoria los siguientes cambios: ".$final]);
+        $productos_inventario = modelInventario::getAllProducts();
+        $products_compound = modelProducts::getAllProducts();
+        $render = view("menuDashboard.createProduct", ["productos" => $productos_inventario, "compuestos" => $products_compound])->render();
+
+        if(count($confirm) > 0) return response()->json(["html" => $render,"status" => true, "message" => "Se editó de manera satisfactoria los siguientes cambios: ".$final]);
         else return response()->json(["status" => false]);
 
         
@@ -324,5 +332,18 @@ class createProductController extends Controller
         }
 
         return ($aux === count($array)) ? response()->json(["status" => true]) : response()->json(["status" => false]);
+    }
+
+
+    public function informationProduct(Request $request){
+
+        $id_product_venta = $request->id_item;
+
+        $product_row = modelCompuesto::getComposed($id_product_venta);
+
+
+        return response()->json(["status" => true, "producto" => $product_row]);
+
+
     }
 }

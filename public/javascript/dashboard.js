@@ -2640,27 +2640,9 @@ function emptyCart() {
 
 async function modifyItemCompound(url){
 
-   
-    let item_compound = document.getElementById('select_item_compund');
+    let span = document.getElementById("span_id");
+    let item_compound = span.dataset.id;
 
-    if(item_compound.value === "selected"){
-
-
-        var Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-        });
-
-        Toast.fire({
-            icon: "error",
-            title: "Por favor selecciona un item de venta válido para modificar",
-        });
-
-        return 0;
-
-    }
     let edit_decription = document.getElementById("edit_description");
     let modify_cost = document.getElementById("edit_price");
     let image = document.getElementById("edit_imagen_product");
@@ -2668,7 +2650,7 @@ async function modifyItemCompound(url){
     const file = image.files[0];
     let form = new FormData(); /// aca
 
-    form.append("id_item_compund", item_compound.value);
+    form.append("id_item_compund", item_compound);
     form.append("edit_description", edit_decription.value);
     form.append("modify_cost", modify_cost.value);
     form.append("name", edit_name.value);
@@ -2702,14 +2684,15 @@ async function modifyItemCompound(url){
         });
 
 
-        item_compound.value = "selected";
         modify_cost.value = "";
         image.value = "";
         let imagePreview = document.getElementById("imagePreview2");
         edit_name.value = "";
         imagePreview.src = "";
 
-        $("#modal_change_product").modal("hide");
+        $("#modal_info").modal("hide");
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
 
     }
 
@@ -2717,7 +2700,8 @@ async function modifyItemCompound(url){
 
 async function deleteProductSeller(url){
 
-    let id_item = document.getElementById("select_item_compund");
+    let span = document.getElementById("span_id");
+    let id_item = span.dataset.id;
 
     const token = localStorage.getItem("access_token");
     let response = await fetch(url,{
@@ -2730,7 +2714,7 @@ async function deleteProductSeller(url){
         },
         body: JSON.stringify({
 
-            id_item: id_item.value
+            id_item: id_item
 
         })
 
@@ -2753,7 +2737,9 @@ async function deleteProductSeller(url){
             icon: "success",
             title: "Se eliminó satisfactoriamente el producto de venta!",
         });
-        id_item.value = "selected";
+        $("#modal_info").modal("hide");
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
 
     }
 }
@@ -2853,3 +2839,60 @@ async function discountFoodEmployee(url){
 
 
 }
+
+
+async function openModalInfo(id_item, info_tittle, url){
+
+    
+
+    let titulo_modal = document.getElementById("titulo_modal");
+
+    let span = document.getElementById("span_id");
+
+    span.dataset.id = id_item;
+
+    titulo_modal.innerHTML = "información de producto de venta "+info_tittle;
+
+
+    let token = localStorage.getItem("access_token");
+
+    let response = await fetch(url,{
+
+        method: "POST",
+        headers:{
+
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+
+            id_item: id_item
+        })
+    });
+
+    let data =   await response.json();
+
+    let text = "Informacion de la cantidad de productos asociados a "+info_tittle.toUpperCase();
+
+    if(data.status){
+
+
+        let body_table = document.getElementById("tbody_id");
+        let productos_compuestos = data.producto;
+        
+
+        span.innerText = text;
+
+
+        productos_compuestos.forEach((item) =>{
+
+            body_table.innerHTML = `<td><center>${item.nombre_compuesto}</center></td>
+            <td><center>${item.descuento}</center></td>`
+
+        });
+
+        $("#modal_info").modal("show");
+    }
+
+}
+

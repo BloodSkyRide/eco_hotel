@@ -163,5 +163,7 @@ Route::post('/getShowGuest', [guestController::class, 'getShowGuest'])->name("ge
 Route::post('/sendregister', [guestController::class, 'sendregister'])->name("sendregister")->middleware(["verifyTokenHeader"]);
 Route::post('/serachForRangeGuest', [guestController::class, 'getRange'])->name("serachForRangeGuest")->middleware(["verifyTokenHeader"]);
 
+Route::post('/informationProduct', [createProductController::class, 'informationProduct'])->name("informationProduct")->middleware(["verifyTokenHeader"]);
+
 
 
