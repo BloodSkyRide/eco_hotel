@@ -2691,8 +2691,31 @@ async function modifyItemCompound(url){
         imagePreview.src = "";
 
         $("#modal_info").modal("hide");
+
         let element_container = document.getElementById("container_menu");
         element_container.innerHTML = data.html;
+
+        $("#table_products_total").DataTable({
+            // Desactiva la paginación para mostrar todos los nodos
+            info: true,
+            responsive: true,
+            order: [[0, "asc"]],
+            lengthChange: false,
+            autoWidth: false,
+            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            language: {
+                search: "Buscar en la tabla:",
+                lengthMenu: "Mostrar _MENU_ registros",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior",
+                },
+                emptyTable: "No hay datos disponibles",
+            },
+        });
 
     }
 
@@ -2740,6 +2763,28 @@ async function deleteProductSeller(url){
         $("#modal_info").modal("hide");
         let element_container = document.getElementById("container_menu");
         element_container.innerHTML = data.html;
+
+        $("#table_products_total").DataTable({
+            // Desactiva la paginación para mostrar todos los nodos
+            info: true,
+            responsive: true,
+            order: [[0, "asc"]],
+            lengthChange: false,
+            autoWidth: false,
+            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            language: {
+                search: "Buscar en la tabla:",
+                lengthMenu: "Mostrar _MENU_ registros",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior",
+                },
+                emptyTable: "No hay datos disponibles",
+            },
+        });
 
     }
 }
