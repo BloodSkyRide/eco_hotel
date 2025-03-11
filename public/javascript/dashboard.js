@@ -2941,3 +2941,14 @@ async function openModalInfo(id_item, info_tittle, url){
 
 }
 
+function closeModalSecure(){
+
+    let body_table = document.getElementById("tbody_id");
+
+    body_table.innerHTML = "";
+
+    console.log("cerre");
+    $("#modal_info").modal("hide");
+
+}
+
