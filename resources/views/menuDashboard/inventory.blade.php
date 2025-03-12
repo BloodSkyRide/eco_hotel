@@ -77,7 +77,7 @@
                             @endphp
                             <tr>
                                 <th scope="row">{{ $flagg }}</th>
-                                <td><a onclick="openModalInfoInventory('{{$producto['id_item']}}', '{{ $producto['nombre'] }}')" title="Información/edición" type="button" class="btn btn-info"><i class="fa-solid fa-circle-info"></i></a></td>
+                                <td><a onclick="openModalInfoInventory('{{$producto['id_item']}}', '{{ $producto['nombre'] }}','{{ $producto['unidades_disponibles'] }}')" title="Información/edición" type="button" class="btn btn-info"><i class="fa-solid fa-circle-info"></i></a></td>
                                 <td>{{ $producto['nombre'] }}</td>
                                 <td><span class="{{$badge}}">{{ $producto['unidades_disponibles'] }}</span></td>
                                 <td>{{ $producto['fecha_creacion'] }}</td>
@@ -122,6 +122,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="adicion_unidades">Unidades disponibles:</label>
+                        <h2 class="badge badge-success" id="badge"></h2>
+                    </div>
 
                     <div class="form-group">
                         <label for="adicion_unidades">Cambiar nombre item inventario:</label>

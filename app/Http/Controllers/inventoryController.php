@@ -97,8 +97,9 @@ class inventoryController extends Controller
         $id_item = $request->id_item_inventory;
 
         $delete = modelInventario::deleteInventory($id_item);
+        $delete_compund = modelCompuesto::deleteCompound($id_item);
 
-        if($delete) return self::getShowInventory($request);
+        if($delete && $delete_compund) return self::getShowInventory($request);
         else return response()->json(["status" => false]);
 
     }

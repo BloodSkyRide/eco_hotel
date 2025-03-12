@@ -2461,7 +2461,8 @@ async function changeInventory(url) {
 }
 
 async function deleteInventory(url) {
-    let id_item_inventory = document.getElementById("select_item_inventory");
+    let container_id = document.getElementById("titulo_modal_inventario");
+    let id_item_inventory = container_id.dataset.id;
     const token = localStorage.getItem("access_token");
     let response = await fetch(url, {
         method: "POST",
@@ -2471,7 +2472,7 @@ async function deleteInventory(url) {
         },
 
         body: JSON.stringify({
-            id_item_inventory: id_item_inventory.value,
+            id_item_inventory: id_item_inventory,
         }),
     });
 
@@ -2971,9 +2972,10 @@ function closeModalSecure(){
 
 }
 
-function openModalInfoInventory(id_item, nombre_item){
+function openModalInfoInventory(id_item, nombre_item, unidades){
 
-
+    let unidades_disponibles = document.getElementById("badge");
+    unidades_disponibles.innerText = unidades;
     let titulo = document.getElementById("titulo_modal_inventario");
     titulo.innerText = "Editar inventario de "+nombre_item.toUpperCase();
 
