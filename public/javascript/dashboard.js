@@ -2948,10 +2948,9 @@ async function openModalInfo(id_item, info_tittle, url){
 
         span.innerText = text;
 
-
         productos_compuestos.forEach((item) =>{
 
-            body_table.innerHTML = `<td><center>${item.nombre_compuesto}</center></td>
+            body_table.innerHTML += `<td><center>${item.nombre_compuesto}</center></td>
             <td><center>${item.descuento}</center></td>`
 
         });
