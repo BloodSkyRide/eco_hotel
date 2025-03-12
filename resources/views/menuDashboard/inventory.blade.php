@@ -45,8 +45,6 @@
 
                 <button class="btn btn-primary" onclick="createInventory('{{ route('saveInventory') }}')"><i
                         class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;Crear inventario</button>
-                <button class="btn btn-info" data-toggle="modal" data-target="#modal_edit_inventory"><i
-                        class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar inventario</button>
             </center>
 
             <div class="table-responsive">
@@ -55,6 +53,7 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col">Información producto</th>
                             <th scope="col">Nombre Producto</th>
                             <th scope="col">Unidades Disponibles</th>
                             <th scope="col">Fecha Creación</th>
@@ -78,6 +77,7 @@
                             @endphp
                             <tr>
                                 <th scope="row">{{ $flagg }}</th>
+                                <td><a onclick="openModalInfoInventory('{{$producto['id_item']}}', '{{ $producto['nombre'] }}')" title="Información/edición" type="button" class="btn btn-info"><i class="fa-solid fa-circle-info"></i></a></td>
                                 <td>{{ $producto['nombre'] }}</td>
                                 <td><span class="{{$badge}}">{{ $producto['unidades_disponibles'] }}</span></td>
                                 <td>{{ $producto['fecha_creacion'] }}</td>
@@ -116,24 +116,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title" id="exampleModalLabel">Editar inventario</h5>
+                    <h5 class="modal-title" id="titulo_modal_inventario" data-id=""></h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-
-                    <div class="form-group">
-                        <label for="select_item">Seleccionar item inventario:</label>
-
-                        <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" tabindex="9999" style="width: 100%;" id="select_item_inventory">
-                            <option selected="selected" value="selected">Seleccionar item</option>
-                            @foreach ($productos as $producto)
-                                <option value="{{ $producto['id_item'] }}">{{ $producto['nombre'] }}</option>
-                            @endforeach
-
-                        </select>
-                    </div>
 
                     <div class="form-group">
                         <label for="adicion_unidades">Cambiar nombre item inventario:</label>

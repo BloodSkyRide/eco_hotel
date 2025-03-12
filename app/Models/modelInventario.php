@@ -100,9 +100,10 @@ class modelInventario extends Model
 
     public static function changeUnits($id_item, $units){
 
-
         return self::where("id_item", $id_item)
         ->update(["unidades_disponibles" => $units]);
+
+        
     }
 
 

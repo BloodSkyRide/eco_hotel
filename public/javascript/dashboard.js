@@ -2008,14 +2008,29 @@ async function saveProduct(url) {
             text: "¡¡El producto se guardo de manera exitosa!!",
             icon: "success",
         });
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
 
-        let container_tr = document.getElementById("container_tr");
-
-        container_tr.innerHTML = "";
-        nombre.value = "";
-        precio.value = "";
-        description.value = "";
-        input.value = "";
+        $("#table_inventory").DataTable({
+            info: true,
+            responsive: true,
+            order: [[0, "asc"]],
+            lengthChange: false,
+            autoWidth: false,
+            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            language: {
+                search: "Buscar en la tabla:",
+                lengthMenu: "Mostrar _MENU_ registros",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior",
+                },
+                emptyTable: "No hay datos disponibles",
+            },
+        });
     }
 }
 
@@ -2370,8 +2385,13 @@ async function createInventory(url) {
 }
 
 async function changeInventory(url) {
+
+
+
+
     let units = document.getElementById("adicion_unidades");
-    let id_item_inventory = document.getElementById("select_item_inventory");
+    let container_id = document.getElementById("titulo_modal_inventario");
+    let id_item_inventory = container_id.dataset.id;
     let price_cost = document.getElementById("price_costo");
     let unit_establishing = document.getElementById("establishing_units");
     let edit_name = document.getElementById("name_edit_inventory");
@@ -2385,7 +2405,7 @@ async function changeInventory(url) {
         },
         body: JSON.stringify({
             unidades: units.value,
-            id_inventory: id_item_inventory.value,
+            id_inventory: id_item_inventory,
             precio_costo: price_cost.value,
             nombre_inventario: edit_name.value,
             units_establishing: unit_establishing.value
@@ -2949,6 +2969,19 @@ function closeModalSecure(){
 
     console.log("cerre");
     $("#modal_info").modal("hide");
+
+}
+
+function openModalInfoInventory(id_item, nombre_item){
+
+
+    let titulo = document.getElementById("titulo_modal_inventario");
+    titulo.innerText = "Editar inventario de "+nombre_item.toUpperCase();
+
+    titulo.dataset.id = id_item;
+
+    $("#modal_edit_inventory").modal("show");
+
 
 }
 

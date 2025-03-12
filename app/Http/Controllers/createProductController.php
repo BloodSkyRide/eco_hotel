@@ -208,8 +208,12 @@ class createProductController extends Controller
             $insert_compound = modelCompuesto::insertCompound($insert_data);
         }
 
+        $productos_inventario = modelInventario::getAllProducts();
+        $products_compound = modelProducts::getAllProducts();
+        $render = view("menuDashboard.createProduct", ["productos" => $productos_inventario, "compuestos" => $products_compound])->render();
 
-        return response()->json(["status" => true]);
+
+        return response()->json(["status" => true, "html" => $render]);
     }
 
     public function getShowStore(Request $request)
