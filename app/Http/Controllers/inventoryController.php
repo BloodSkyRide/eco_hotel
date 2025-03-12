@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\modelInventario;
+use App\Models\modelCompuesto;
 use Illuminate\Http\Request;
 
 class inventoryController extends Controller
@@ -67,6 +68,7 @@ class inventoryController extends Controller
 
 
            modelInventario::changeName($id_inventory, $name_inventory);
+           modelCompuesto::changeNameCompound($id_inventory, $name_inventory);
 
 
         }
