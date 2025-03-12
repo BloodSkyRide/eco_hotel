@@ -62,7 +62,7 @@
                 </div>
               </div>
             <div class="d-flex justify-content-center">
-                <button class="btn btn-success mr-2" onclick="sellProducts('{{route('sell')}}')"><i class="fa-solid fa-check"></i>&nbsp;&nbsp;Vender productos</button>
+                <button class="btn btn-success mr-2" onclick="sellProducts('{{route('sell')}}')" id="button_sell"><i class="fa-solid fa-check"></i>&nbsp;&nbsp;Vender productos</button>
             <button class="btn btn-info" onclick="saveProduct('{{route('saveProduct')}}')"><i class="fa-solid fa-print"></i>&nbsp;&nbsp;Vender/Imprimir Recibo</button>
             <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#modal_cambio"><i class="fa-solid fa-repeat"></i>&nbsp;&nbsp;Cambio</button>
             </div>

@@ -2229,6 +2229,20 @@ async function sellProducts(url) {
 
     let data = await response.json();
 
+    let button = document.getElementById("button_sell");
+    button.setAttribute("disabled", "true");
+      let iterator = 15;
+    for (i = 1; i <= 15; i++) {
+        await retardoSell(iterator);
+
+        iterator--;
+
+        if (iterator === 0) {
+            button.innerHTML = `<i class="fa-solid fa-check"></i>&nbsp;&nbsp;Vender productos`;
+            button.removeAttribute("disabled");
+        }
+    }
+
     if (data.status) {
         var Toast = Swal.mixin({
             toast: true,
@@ -2984,5 +2998,21 @@ function openModalInfoInventory(id_item, nombre_item, unidades){
     $("#modal_edit_inventory").modal("show");
 
 
+}
+
+function retardoSell(iterator) {
+    return new Promise((resolve, reject) => {
+        let button = document.getElementById("button_sell");
+
+        setTimeout(() => {
+            button.innerHTML = `<i class="fa-solid fa-check"></i>&nbsp;&nbsp;Vendiendo (${
+                iterator - 1
+            })`;
+            // object_button.innerHTML = `<i class="fa-solid fa-clock" ></i> Cargando ... (${
+            //     iterator - 1
+            // })`;
+            resolve();
+        }, 1000);
+    });
 }
 
