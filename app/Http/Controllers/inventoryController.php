@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\modelInventario;
 use App\Models\modelCompuesto;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class inventoryController extends Controller
 {
@@ -11,11 +12,19 @@ class inventoryController extends Controller
 
     public function getShowInventory(Request $request){
 
+        $token_header = $request->header("Authorization");
+
+        $replace = str_replace("Bearer ","",$token_header);
+
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+
+        $rol = $decode_token["rol"];
+
         $productos_inventario = modelInventario::getAllProducts();
         $total_inventory = modelInventario::getTotalInventory();
 
 
-        $render = view("menuDashboard.inventory", ["productos" => $productos_inventario,"total" => $total_inventory])->render();
+        $render = view("menuDashboard.inventory", ["rol" => $rol, "productos" => $productos_inventario,"total" => $total_inventory])->render();
 
         return response()->json(["status" => true, "html" => $render]);
 

@@ -292,22 +292,36 @@
                                 type="button" id="payroll_nav">
                                 <i class="fa-solid fa-cart-plus"></i>&nbsp;&nbsp;
                                 <p>
-                                    Crear producto venta
+                                    Productos de venta
                                 </p>
                             </a>
                         </li>
+
+                        
+                        <li class="nav-item">
+                            <a class="nav-link menu_dashboard" onclick="getShowInventory('{{route('getShowInventory')}}')"
+                                type="button" id="payroll_nav">
+                                <i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;
+                                <p>
+                                        
+                                    Materia Prima
+
+                                </p>
+                            </a>
+                        </li>
+                        @else
 
                         <li class="nav-item">
                             <a class="nav-link menu_dashboard" onclick="getShowInventory('{{route('getShowInventory')}}')"
                                 type="button" id="payroll_nav">
                                 <i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;
                                 <p>
-                                    Crear materia prima
+                                        
+                                    inventario
+
                                 </p>
                             </a>
                         </li>
-
-                        @else
     
         
                         <li class="nav-item">

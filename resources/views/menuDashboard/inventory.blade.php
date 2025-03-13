@@ -1,13 +1,18 @@
 <div class="container-fluid">
-
+    @php
+        $texto = ($rol == "administrador") ? "Crear/Modificar Productos": "Inventario de productos";
+    @endphp
     <div class="card card-default">
         <div class="card-header" style="background-color: #0F318F">
             <h3 class="card-title" style="color: white; font-weight: bold;"><i
-                    class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;Crear productos</h3>
+                    class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;{{$texto}}</h3>
             <div class="card-tools"></div>
         </div>
 
         <div class="card-body">
+
+            @if ($rol == "administrador")
+                
             <hr>
             <center>
                 <h4 class="text-secondary"><i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;Crear productos materia prima</h4>
@@ -46,6 +51,7 @@
                 <button class="btn btn-primary" onclick="createInventory('{{ route('saveInventory') }}')"><i
                         class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;Crear inventario</button>
             </center>
+            @endif
 
             <div class="table-responsive">
 
@@ -53,7 +59,10 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">#</th>
+                            @if ($rol == "administrador")
+                                
                             <th scope="col">Información producto</th>
+                            @endif
                             <th scope="col">Nombre Producto</th>
                             <th scope="col">Unidades Disponibles</th>
                             <th scope="col">Fecha Creación</th>
@@ -77,7 +86,10 @@
                             @endphp
                             <tr>
                                 <th scope="row">{{ $flagg }}</th>
+                                @if ($rol == "administrador")
+                                    
                                 <td><a onclick="openModalInfoInventory('{{$producto['id_item']}}', '{{ $producto['nombre'] }}','{{ $producto['unidades_disponibles'] }}')" title="Información/edición" type="button" class="btn btn-info"><i class="fa-solid fa-circle-info"></i></a></td>
+                                @endif
                                 <td>{{ $producto['nombre'] }}</td>
                                 <td><span class="{{$badge}}">{{ $producto['unidades_disponibles'] }}</span></td>
                                 <td>{{ $producto['fecha_creacion'] }}</td>
