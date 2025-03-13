@@ -20,11 +20,11 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
-        $cedula = $request->input('cedula');
-        $password = $request->input('pass');
+        $cedula = $request->cedula;
+        $password = $request->pass;
 
         $token = modelUser::getuserAndPassword($cedula);
+        
         $pass_bd = $token->password;
         $validator = Hash::check($password, $pass_bd);
 
@@ -50,7 +50,7 @@ class AuthController extends Controller
             return response()->json(["access_token" => $create_token, "status" => true]);
         } else {
 
-            print("clave erronea");
+            return response()->json(["message" => "clave erronea", "status" => false]);
         }
 
         return response()->json(["status" => $cedula]);

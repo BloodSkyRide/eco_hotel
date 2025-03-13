@@ -1,13 +1,5 @@
 // Configura la URL base si es necesario
-window.onload = function() {
-    
-    const token = localStorage.getItem('access_token');
-    if(token){
 
-       // window.location.href = `/reloj/public/dashboard?token=${encodeURIComponent(token)}`; // Cambia la URL por la que desees
-    }
-    
-};
 
 
 const input_pass = document.getElementById("pass");
@@ -37,17 +29,34 @@ async function sendData() {
     console.log("Entra en la función: " + cedula);
 
     try {
-        const res = await $.ajax({
-            url: './login',
-            type: 'POST',
-            dataType: 'json',
-            data: { cedula, pass }
+        // const res = await $.ajax({
+        //     url: './login',
+        //     type: 'POST',
+        //     dataType: 'json',
+        //     data: { cedula, pass }
+        // });
+
+        let response = await fetch('./login',{
+
+            method: "POST",
+            headers: {
+
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+
+                cedula,
+                pass
+
+
+            })
         });
 
-        if (res.status) {
-            console.log("Éxitoso");
-            console.log(res.access_token);
-            localStorage.setItem('access_token', res.access_token);
+        let data = await response.json();
+
+        if (data.status) {
+
+            localStorage.setItem('access_token', data.access_token);
             const token = localStorage.getItem('access_token');
 
             console.log("Token a enviar: " + token);
@@ -61,14 +70,23 @@ async function sendData() {
         //     })
 
                  window.location.href = `./dashboard?token=${encodeURIComponent(token)}`;
-            
 
-            if (!res.ok) {
-                throw new Error('Error en la respuesta del dashboard');
-            }
+            console.log(data);
+        }else{
 
-            const dashboardData = await res.json();
-            console.log(dashboardData);
+            var Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 6000,
+            });
+
+    
+            Toast.fire({
+                icon: "error",
+                title: "Clave erronea, por favor intenta nuevamente!",
+            });
+            throw new Error('Error en la respuesta del dashboard');
         }
     } catch (error) {
         console.error('Error:', error);
