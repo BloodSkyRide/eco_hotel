@@ -47,7 +47,7 @@ class contabilityController extends Controller
                 $data = modelContability::getContabilityForMonth($year, $month, $day);
 
                 $total_venta = modelContability::getTotalSell($year,$month, $today);
-                dd($total_venta);
+
                 $render = view("menuDashboard.contability", ["data" => $data, "total" => $total_venta])->render();
     
                 return response()->json(["status" => true, "html" => $render]);
