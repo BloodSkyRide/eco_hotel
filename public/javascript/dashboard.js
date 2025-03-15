@@ -3016,3 +3016,62 @@ function retardoSell(iterator) {
     });
 }
 
+
+async function getShowContability(url){
+
+    let token = localStorage.getItem("access_token");
+    let response = await fetch(url,{
+
+        method: "GET",
+        headers:{
+
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+        
+    });
+
+
+    let data = await response.json();
+
+
+    if(data.status  == true){
+
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
+
+    }else if(data.status == "error"){
+
+        console.log("vea parce");
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+        });
+
+        Toast.fire({
+            icon: "error",
+            title: data.message,
+        });
+
+    }else{
+
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+        });
+
+        Toast.fire({
+            icon: "error",
+            title: data.message,
+        });
+
+
+    }
+
+
+}
+

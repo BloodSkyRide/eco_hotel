@@ -380,6 +380,17 @@
                             </a>
                         </li>
 
+
+                        <li class="nav-item">
+                            <a class="nav-link menu_dashboard" onclick="getShowContability('{{ route('contability') }}')"
+                                type="button" id="payroll_nav">
+                                <i class="fa-solid fa-calculator"></i>&nbsp;&nbsp;
+                                <p>
+                                    Contabilidad
+                                </p>
+                            </a>
+                        </li>
+
                     </ul>
                 </nav>
             </div>

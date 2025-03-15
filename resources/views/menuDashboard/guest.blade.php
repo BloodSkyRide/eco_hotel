@@ -129,6 +129,7 @@
                                                 <option value="206">207 TRIPLE SENCILLA</option>
                                                 <option value="208">208 PAREJA TINA</option>
                                                 <option value="209">209 FAMILIAR SENCILLA</option>
+                                                <option value="camping">CAMPING LIBRE</option>
                                             </select>
         
                                         </div>

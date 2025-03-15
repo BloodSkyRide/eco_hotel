@@ -38,10 +38,10 @@ class modelSell extends Model
         //     ->get();
 
         return self::join('productos_venta', 'historial_ventas.id_producto_venta', '=', 'productos_venta.id_producto') // INNER JOIN con la tabla 'users'
-        ->where('historial_ventas.fecha', $fecha)
-        ->orderBy('historial_ventas.hora', 'desc') 
-        ->get();
-        
+            ->where('historial_ventas.fecha', $fecha)
+            ->orderBy('historial_ventas.hora', 'desc')
+            ->get();
+
         // return self::where('historial_ventas.fecha', $fecha)
         //     ->orderBy('historial_ventas.hora', 'desc') 
         //     ->get();
@@ -73,13 +73,14 @@ class modelSell extends Model
         )
             ->join("productos_venta", "historial_ventas.id_producto_venta", "=", "productos_venta.id_producto")
             ->whereDate('fecha', $fecha)
-            ->groupBy('id_producto_venta') 
+            ->groupBy('id_producto_venta')
             ->get();
     }
 
 
 
-    public static function getTotalForUsers($fecha){
+    public static function getTotalForUsers($fecha)
+    {
 
 
         return self::select(
@@ -88,12 +89,18 @@ class modelSell extends Model
             DB::raw('SUM(unidades_venta) AS total_unidades'),
             DB::raw('SUM(total_venta) AS total_venta')
         )
-        ->where("fecha", $fecha)
-        ->groupBy('id_user_cajero', 'nombre_cajero') 
-        ->get();
-
+            ->where("fecha", $fecha)
+            ->groupBy('id_user_cajero', 'nombre_cajero')
+            ->get();
     }
 
+    public static function getContability($month, $year,$today) {
 
 
+        $startDate = "$year-$month-01"; // Primer día del mes
+        $endDate = "$year-$month-$today"; // Día actual dentro del mes
+    
+        return self::whereBetween("fecha", [$startDate, $endDate])
+            ->sum("total_venta");
+    }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\historySellController;
 use App\Http\Controllers\employeFoodController;
 use App\Http\Controllers\guestController; 
+use App\Http\Controllers\contabilityController; 
 
 
 
@@ -164,6 +165,8 @@ Route::post('/sendregister', [guestController::class, 'sendregister'])->name("se
 Route::post('/serachForRangeGuest', [guestController::class, 'getRange'])->name("serachForRangeGuest")->middleware(["verifyTokenHeader"]);
 
 Route::post('/informationProduct', [createProductController::class, 'informationProduct'])->name("informationProduct")->middleware(["verifyTokenHeader"]);
+
+Route::get('/contability', [contabilityController::class, 'getShowContability'])->name("contability")->middleware(["verifyTokenHeader"]);
 
 
 
