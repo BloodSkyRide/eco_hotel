@@ -509,6 +509,7 @@
     <!-- Page specific script -->
 <script src="{{ asset('javascript/dashboard.js') }}"></script>
 <script src="{{ asset('javascript/menuDashboard/guest.js') }}"></script>
+<script src="{{ asset('javascript/menuDashboard/egress.js') }}"></script>
 
 </body>
 
