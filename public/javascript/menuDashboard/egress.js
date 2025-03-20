@@ -145,7 +145,6 @@ async function searchForRangeEgress(url){
         let new_date = document.getElementById("fecha_rango");
 
         new_date.value = fecha.value;
-
     }
 
 }

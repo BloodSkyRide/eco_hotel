@@ -38,7 +38,7 @@
                 <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill"
                         href="#tab_egress" role="tab" aria-controls="custom-tabs-one-messages"
-                        aria-selected="false"><i class="fa-solid fa-upload"></i>&nbsp;&nbsp;Egresos Detallados</a>
+                        aria-selected="false"><i class="fa-solid fa-magnifying-glass"></i>&nbsp;&nbsp;Egresos Detallados</a>
                 </li>
             </ul>
         </div>
