@@ -169,6 +169,7 @@ Route::post('/informationProduct', [createProductController::class, 'information
 Route::get('/contability', [contabilityController::class, 'getShowContability'])->name("contability")->middleware(["verifyTokenHeader"]);
 
 Route::post('/upload-egress', [contabilityController::class, 'uploadEgress'])->name("uploadEgress")->middleware(["verifyTokenHeader"]);
+Route::post('/egress-date', [contabilityController::class, 'egressForDate'])->name("egressDate")->middleware(["verifyTokenHeader"]);
 
 
 

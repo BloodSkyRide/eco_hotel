@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class modelEgress extends Model
+class modelEgressTotal extends Model
 {
     use HasFactory;
 
-    protected $table = "egresos";
-    protected $fillable = ["id_egress", "fecha", "valor", "descripcion", "url_imagen", "created_at", "updated_at"];
+    protected $table = "egresos_totales";
+    protected $fillable = ["id_egreso_totales", "fecha", "valor", "created_at", "updated_at"];
 
 
     public static function insertEgress($data){
@@ -68,15 +68,4 @@ class modelEgress extends Model
             ->sum("valor");
 
     }
-
-
-    public static function getEgressForDate($date){
-
-
-        return self::where("fecha", $date)
-        ->get();
-    }
-
-
-
 }

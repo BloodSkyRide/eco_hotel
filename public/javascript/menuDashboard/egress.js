@@ -111,3 +111,41 @@ function listenEvent(){
     }
 });
 }
+
+
+
+async function searchForRangeEgress(url){
+
+    let token = localStorage.getItem("access_token");
+    let fecha = document.getElementById("fecha_rango");
+    let response = await fetch(url,{
+
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+
+        body: JSON.stringify({
+
+            fecha: fecha.value
+
+        })
+
+    });
+
+    let data = await response.json();
+
+
+    if(data.status){
+
+
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
+        let new_date = document.getElementById("fecha_rango");
+
+        new_date.value = fecha.value;
+
+    }
+
+}

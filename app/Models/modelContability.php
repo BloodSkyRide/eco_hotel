@@ -18,6 +18,7 @@ class modelContability extends Model
         $endDate = "$year-$month-$today"; // Día actual dentro del mes
     
         return self::whereBetween("fecha", [$startDate, $endDate])
+            ->orderBy("fecha", "desc")
             ->get();
 
 
