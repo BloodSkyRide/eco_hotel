@@ -47,6 +47,18 @@
                 <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel"
                     aria-labelledby="custom-tabs-one-home-tab">
 
+                    <div class="row p-5">
+
+                        <div class="col-sm">
+                            <h3>Dinero disponible:</h3>
+                        </div>
+                        <div class="col-sm d-flex justify-content-center">
+                            <h3><i
+                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total - $total_egreso, 0, '', '.') }}
+                            </h3>
+                        </div>
+                    </div>
+
                     <div class="table-responsive mt-3">
                         <table class="table">
                             <thead class="thead-dark">
