@@ -189,7 +189,7 @@ function verifySend(){
 }
 
 
-function verifyInputs(){
+function verifyInputs2(){
 
 
     let room = document.getElementById("room").value;
