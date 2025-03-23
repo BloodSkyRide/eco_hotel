@@ -68,7 +68,7 @@ function addGuest(){
 
     let number_contact = document.getElementById("contacto");
 
-    let verify = verifyInputs();
+    let verify = verifyInputs2();
 
 
     if(verify){
