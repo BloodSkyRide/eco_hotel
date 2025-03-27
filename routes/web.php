@@ -16,6 +16,7 @@ use App\Http\Controllers\historySellController;
 use App\Http\Controllers\employeFoodController;
 use App\Http\Controllers\guestController; 
 use App\Http\Controllers\contabilityController; 
+use App\Http\Controllers\transfersController; 
 
 
 
@@ -170,6 +171,7 @@ Route::get('/contability', [contabilityController::class, 'getShowContability'])
 
 Route::post('/upload-egress', [contabilityController::class, 'uploadEgress'])->name("uploadEgress")->middleware(["verifyTokenHeader"]);
 Route::post('/egress-date', [contabilityController::class, 'egressForDate'])->name("egressDate")->middleware(["verifyTokenHeader"]);
+Route::get('/show-transfers', [transfersController::class, 'egressForDate'])->name("egressDate")->middleware(["verifyTokenHeader"]);
 
 
 

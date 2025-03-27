@@ -172,37 +172,10 @@ class contabilityController extends Controller
     
     private function optimizeImage($image, $destination)
     {
-        $src = imagecreatefromjpeg($image->getPathname()); // Solo JPG
-        list($width, $height) = getimagesize($image);
+        $src = imagecreatefromjpeg($image->getPathname()); 
+        imagejpeg($src, $destination, 50); 
     
-        // 📌 **Corregir rotación si es necesario**
-        $exif = @exif_read_data($image->getPathname()); // Leer metadatos EXIF
-        if ($exif && isset($exif['Orientation'])) {
-            switch ($exif['Orientation']) {
-                case 3:
-                    $src = imagerotate($src, 180, 0); // Rotar 180°
-                    break;
-                case 6:
-                    $src = imagerotate($src, -90, 0); // Rotar 90° izquierda
-                    break;
-                case 8:
-                    $src = imagerotate($src, 90, 0); // Rotar 90° derecha
-                    break;
-            }
-        }
-    
-        // Redimensionar
-        $newWidth = 800;
-        $newHeight = ($height / $width) * $newWidth;
-        $dst = imagecreatetruecolor($newWidth, $newHeight);
-        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-    
-        // Guardar imagen optimizada
-        imagejpeg($dst, $destination, 75);
-    
-        // Liberar memoria
         imagedestroy($src);
-        imagedestroy($dst);
     }
 
     private function sumEgress()

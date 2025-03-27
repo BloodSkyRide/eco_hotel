@@ -391,6 +391,16 @@
                             </a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link menu_dashboard" onclick="getShowContability('{{ route('contability') }}')"
+                                type="button" id="payroll_nav">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i>&nbsp;&nbsp;
+                                <p>
+                                    Transferencias
+                                </p>
+                            </a>
+                        </li>
+
                     </ul>
                 </nav>
             </div>
@@ -510,6 +520,7 @@
 <script src="{{ asset('javascript/dashboard.js') }}"></script>
 <script src="{{ asset('javascript/menuDashboard/guest.js') }}"></script>
 <script src="{{ asset('javascript/menuDashboard/egress.js') }}"></script>
+<script src="{{ asset('javascript/menuDashboard/transfers.js') }}"></script>
 
 </body>
 
