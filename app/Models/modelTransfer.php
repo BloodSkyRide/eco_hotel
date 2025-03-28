@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class modelTransfer extends Model
 {
     protected $table = "transferencias";
-    protected $fillable = ["fecha", "hora", "cajero_responsable", "valor", "url_imagen", "created_at", "updated_at"];
+    protected $fillable = ["fecha", "hora", "cajero_responsable", "valor", "url_imagen", "created_at", "updated_at", "description"];
 
 
     public static function insertTransfer($data){

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger("valor")->nullable();
             $table->text("url_imagen")->nullable();
             $table->text("entidad")->nullable();
+            $table->text("descripcion")->nullable();
             $table->timestamps();
             
         });

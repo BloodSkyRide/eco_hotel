@@ -159,7 +159,7 @@
 
                             <div class="form-group">
                                 <label for="descripcion_egreso">Descripcion transferencia:</label>
-                                <textarea name="descripcion_transferencia" placeholder="Descripcion transferencia..." id="descripcion_egreso" cols="30"
+                                <textarea name="descripcion_transferencia" placeholder="Descripcion transferencia..." id="descripcion_transferencia" cols="30"
                                     rows="1" class="form-control" autocomplete="off"></textarea>
                             </div>
 
@@ -173,7 +173,7 @@
                     </div>
 
 
-                    <button onclick="sendEgress('{{ route('uploadEgress') }}')"
+                    <button onclick="insertTransfer('{{ route('insertTransfer') }}')"
                         class="btn btn-block bg-gradient-primary mt-2"><i class="fa-solid fa-arrow-right-arrow-left"></i>&nbsp;&nbsp;Registrar Transferencia</button>
 
 

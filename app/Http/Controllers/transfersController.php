@@ -28,7 +28,7 @@ class transfersController extends Controller
     }
 
 
-    public function insertTransferencia(Request $request){
+    public function insertTransfer(Request $request){
 
         $token_header = $request->header("Authorization");
 
@@ -42,9 +42,57 @@ class transfersController extends Controller
 
         $rol = $decode_token["rol"];
 
+        $description = $request->descripcion;
+
+        $entity_bank = $request->entidad;
+
+        $value = $request->valor;
+
+        $image = $request->image;
+
+        $date = Carbon::now()->format("Y-m-d");
+        $time = Carbon::now()->format("H:i:s");
+
+        $url_image = self::saveImageTransfer($request);
+
+        $data_insert = ["fecha"  => $date, "hora" => $time, "cajero_responsable" => $self_name, "valor" => $value, 
+        "url_imagen" => $url_image, "entidad" => $entity_bank, "descripcion" => $description];
 
 
+        $insert_data = modelTransfer::insertTransfer($data_insert);
 
+        if($data_insert){
+
+
+            return response()->json(["status" => true]);
+        }
+
+
+    }
+
+
+    private function saveImageTransfer($request){
+
+        $imagen = $request->file("image");
+    
+        // Nombre final del archivo
+        $name_final = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME) . "_" . Carbon::now()->format('Y-m-d_H-i-s') . ".jpg";
+        $full_path = storage_path("app/public/transfers/" . $name_final);
+    
+        // Optimizar imagen antes de guardarla
+        $this->optimizeImage($imagen, $full_path);
+    
+        return "storage/transfers/" . $name_final;
+
+
+    }
+
+    private function optimizeImage($image, $destination)
+    {
+        $src = imagecreatefromjpeg($image->getPathname()); 
+        imagejpeg($src, $destination, 50); 
+    
+        imagedestroy($src);
     }
 
 

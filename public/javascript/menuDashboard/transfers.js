@@ -49,3 +49,51 @@ function listenEvent(){
     }
 });
 }
+
+
+async function insertTransfer(url){
+
+    let token = localStorage.getItem("access_token");
+    let value_trans = document.getElementById("valor_transferencia");
+    let entity_bank = document.getElementById("entidad"); 
+    let trans_description = document.getElementById("descripcion_transferencia");
+    let image = document.getElementById("comprobante_transferencia");
+
+    let formData = new FormData();
+    formData.append("image", image.files[0]); // Agregar la imagen al FormData
+    formData.append("valor", value_trans.value); // Si necesitas enviar otro campo
+    formData.append("descripcion", trans_description.value); // Si necesitas enviar otro campo
+    formData.append("entidad", entity_bank.value);
+
+    let response = await fetch(url,{
+
+        method: "POST",
+        headers: {
+
+            "Authorization": `Bearer ${token}`
+        },
+        body: formData
+    });
+
+
+    let data = await response.json();
+
+    if(data.status){
+
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+        });
+
+        Toast.fire({
+            icon: "success",
+            title: "Transferencia guardada de manera exitosa!",
+        });
+
+
+    }
+
+
+}
