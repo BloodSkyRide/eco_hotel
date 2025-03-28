@@ -10,7 +10,7 @@ class modelEgressTotal extends Model
     use HasFactory;
 
     protected $table = "egresos_totales";
-    protected $fillable = ["id_egreso_totales", "fecha", "valor", "created_at", "updated_at"];
+    protected $fillable = ["id_egreso_totales", "fecha", "valor","respuesto", "created_at", "updated_at"];
 
 
     public static function insertEgress($data){
@@ -51,12 +51,6 @@ class modelEgressTotal extends Model
         return self::whereBetween("fecha", [$startDate, $endDate])
             ->orderBy("fecha","desc")
             ->get();
-
-    //     return self::selectRaw("fecha, SUM(valor) as total_venta")
-    // ->whereBetween("fecha", [$startDate, $endDate])
-    // ->orderBy("fecha", "desc")
-    // ->groupBy("fecha")
-    // ->get();
      }
 
     public static function getTotalEgress($year,$month, $today){

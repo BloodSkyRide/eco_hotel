@@ -9,7 +9,7 @@ use App\Models\modelSell;
 use App\Models\modelContability;
 use App\Models\modelEgress;
 use App\Models\modelEgressTotal;
-use Spatie\Image\Image;
+
 
 class contabilityController extends Controller
 {
@@ -29,6 +29,8 @@ class contabilityController extends Controller
 
         $self_id = $decode_token["cedula"];
 
+        $self_name = $decode_token["nombre"];
+
         $rol = $decode_token["rol"];
 
         $confirm = in_array($self_id, $this->permited_users);
@@ -46,7 +48,7 @@ class contabilityController extends Controller
 
             if ($confirmation) {
 
-                self::sumEgress();
+                self::sumEgress($self_name);
                 $data = modelContability::getContabilityForMonth($year, $month, $day);
 
                 $total_venta = modelContability::getTotalSell($year, $month, $day);
@@ -161,7 +163,7 @@ class contabilityController extends Controller
         $imagen = $request->file("image");
     
         // Nombre final del archivo
-        $name_final = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME) . "_" . Carbon::now()->format('Y-m-d') . ".jpg";
+        $name_final = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME) . "_" . Carbon::now()->format('Y-m-d_H-i-s') . ".jpg";
         $full_path = storage_path("app/public/egress/" . $name_final);
     
         // Optimizar imagen antes de guardarla
@@ -178,7 +180,7 @@ class contabilityController extends Controller
         imagedestroy($src);
     }
 
-    private function sumEgress()
+    private function sumEgress($name)
     {
 
 
@@ -203,7 +205,7 @@ class contabilityController extends Controller
             } else {
 
                 $egress_actually = modelEgress::totalEgress($build_date);
-                $data_insert = ["fecha" => $build_date, "valor" => $egress_actually];
+                $data_insert = ["fecha" => $build_date, "valor" => $egress_actually, "respuesto" => $name];
                 $insert = modelEgressTotal::insertEgress($data_insert);
             }
 
@@ -228,7 +230,10 @@ class contabilityController extends Controller
 
         $self_id = $decode_token["cedula"];
 
+        $self_name = $decode_token["nombre"];
+
         $rol = $decode_token["rol"];
+        
 
         $confirm = in_array($self_id, $this->permited_users);
 
@@ -245,7 +250,7 @@ class contabilityController extends Controller
 
             if ($confirmation) {
 
-                self::sumEgress();
+                self::sumEgress($self_name);
                 $data = modelContability::getContabilityForMonth($year, $month, $day);
 
                 $total_venta = modelContability::getTotalSell($year, $month, $day);

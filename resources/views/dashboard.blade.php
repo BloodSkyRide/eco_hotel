@@ -392,7 +392,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu_dashboard" onclick="getShowContability('{{ route('contability') }}')"
+                            <a class="nav-link menu_dashboard" onclick="getShowTransfers('{{ route('getShowTransfers') }}')"
                                 type="button" id="payroll_nav">
                                 <i class="fa-solid fa-arrow-right-arrow-left"></i>&nbsp;&nbsp;
                                 <p>

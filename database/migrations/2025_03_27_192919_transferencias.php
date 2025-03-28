@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('egresos_totales', function (Blueprint $table) {
+        Schema::create('transferencias', function (Blueprint $table) {
 
-            $table->id("id_egreso_total");
+            $table->id("id_transferencias");
             $table->date("fecha")->nullable();
-            $table->bigInteger("valor")->nullable();
+            $table->time("hora")->nullable();
             $table->string("cajero_responsable",255)->nullable();
-            $table->text("respuesto")->nullable();
+            $table->bigInteger("valor")->nullable();
+            $table->text("url_imagen")->nullable();
+            $table->text("entidad")->nullable();
             $table->timestamps();
             
         });
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('egresos_totales');
+        Schema::dropIfExists('transferencias');
     }
 };

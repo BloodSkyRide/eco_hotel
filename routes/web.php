@@ -171,7 +171,7 @@ Route::get('/contability', [contabilityController::class, 'getShowContability'])
 
 Route::post('/upload-egress', [contabilityController::class, 'uploadEgress'])->name("uploadEgress")->middleware(["verifyTokenHeader"]);
 Route::post('/egress-date', [contabilityController::class, 'egressForDate'])->name("egressDate")->middleware(["verifyTokenHeader"]);
-Route::get('/show-transfers', [transfersController::class, 'egressForDate'])->name("egressDate")->middleware(["verifyTokenHeader"]);
+Route::get('/show-transfers', [transfersController::class, 'getShowTransfers'])->name("getShowTransfers")->middleware(["verifyTokenHeader"]);
 
 
 
