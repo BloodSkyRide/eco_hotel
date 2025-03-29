@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class modelTransfer extends Model
 {
     protected $table = "transferencias";
-    protected $fillable = ["fecha", "hora", "cajero_responsable", "valor", "url_imagen", "created_at", "updated_at", "description"];
+    protected $fillable = ["fecha", "hora", "cajero_responsable", "valor", "url_imagen", "created_at", "updated_at", "descripcion"];
 
 
     public static function insertTransfer($data){
@@ -25,6 +25,35 @@ class modelTransfer extends Model
             ->orderBy("fecha","desc")
             ->get();
 
+    }
+
+
+    public static function existsTransfers($date){
+
+
+        return self::where("fecha", $date)
+        ->exists();
+
+    }
+
+
+
+
+
+    public static function sumTransfers($date){
+
+        return self::where("fecha", $date)
+        ->sum("valor");
+
+    }
+
+
+    public static function getTransfersForDay($today){
+
+
+        return self::where("fecha", $today)
+        ->orderBy("fecha","desc")
+        ->get();
     }
 
 

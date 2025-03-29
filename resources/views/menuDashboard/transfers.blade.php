@@ -47,27 +47,13 @@
                 <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel"
                     aria-labelledby="custom-tabs-one-home-tab">
 
-                    <div class="row p-5">
-
-                        <div class="col-sm">
-                            <h3>Dinero disponible transferencias:</h3>
-                        </div>
-                        <div class="col-sm d-flex justify-content-center">
-                            <h3><i
-                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;
-                            </h3>
-                        </div>
-                    </div>
-
                     <div class="table-responsive mt-3">
                         <table class="table">
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">FECHA</th>
-                                    <th scope="col">HORA</th>
-                                    <th scope="col">CAJERO RESPONSABLE</th>
                                     <th scope="col">VALOR</th>
-                                    <th scope="col">ENTIDAD BANCARIA</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,9 +61,9 @@
                                 @foreach ($transferencias_mes as $item)
                                     
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-
+                                    <td>{{$item['fecha']}}</td>
+                                    <td><i class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;<span
+                                        class="badge badge-success">{{ number_format($item['valor'], 0, '', '.') }}</span></td>
                                 </tr>
                                 @endforeach
 
@@ -88,11 +74,11 @@
                     <div class="row p-5">
 
                         <div class="col-sm">
-                            <h3>Total venta del mes:</h3>
+                            <h3>Total transferencias mes:</h3>
                         </div>
                         <div class="col-sm d-flex justify-content-end">
                             <h3><i
-                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;
+                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total_transferencias, 0, '', '.') }}
                             </h3>
                         </div>
                     </div>
@@ -184,21 +170,37 @@
                     aria-labelledby="tab_egress">
 
 
-                <div class="table-responsive mt-3">
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">FECHA</th>
-                                <th scope="col">VALOR</th>
-                                <th scope="col">DESCRIPCION</th>
-                                <th scope="col">COMPROBANTE</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        
-                        </tbody>
-                    </table>
-                </div>
+                    <div class="table-responsive mt-3">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">FECHA</th>
+                                    <th scope="col">HORA</th>
+                                    <th scope="col">DESCRIPCION</th>
+                                    <th scope="col">CAJERO RESPONSABLE</th>
+                                    <th scope="col">VALOR</th>
+                                    <th scope="col">ENTIDAD BANCARIA</th>
+                                    <th scope="col">COMPROBANTE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($transfers_today as $item)
+                                    
+                                <tr>
+                                    <td>{{$item['fecha']}}</td>
+                                    <td>{{$item['hora']}}</td>
+                                    <td>{{$item['descripcion']}}</td>
+                                    <td>{{$item['cajero_responsable']}}</td>
+                                    <td>{{$item['valor']}}</td>
+                                    <td>{{$item['entidad']}}</td>
+                                    <td><a target="_blank" type="button" href="{{$item['url_imagen']}}"><i style="font-size: 25px" class="fa-solid fa-file-image"></i></a></td>
+                                </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
 
                 <div class="row p-5">
 

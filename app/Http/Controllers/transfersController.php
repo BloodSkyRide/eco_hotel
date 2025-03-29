@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\modelTransfer;
+use App\Models\transfersTotalModel;
 use Carbon\Carbon;
 
 class transfersController extends Controller
 {
-    public function getShowTransfers(Request $request){
+    public function getShowTransfers(Request $request)
+    {
 
         $fechaActual = Carbon::now();
         $today = Carbon::now()->format('Y-m-d');
@@ -18,17 +20,29 @@ class transfersController extends Controller
         $month = $fechaActual->month;
         $day = $fechaActual->day;
 
-        $get_transfers_month = modelTransfer::getTransfersForMonth($year, $month, $today);
+        self::sumTransfers();
 
-        $render = view("menuDashboard.transfers",["transferencias_mes" => $get_transfers_month])->render();
+
+
+        $get_transfers_month = transfersTotalModel::getTransfersForMonth($year, $month, $day);
+        $get_detail_transfers = modelTransfer::getTransfersForDay($today);
+
+        $total_detail = modelTransfer::sumTransfers($today);
+
+        $total_transfers = transfersTotalModel::totalSum($year, $month, $day);
+
+        $render = view("menuDashboard.transfers", ["transferencias_mes" => $get_transfers_month, 
+        "transfers_today" => $get_detail_transfers,
+        "total_detail" => $total_detail,
+        "total_transferencias" => $total_transfers])->render();
 
 
         return response()->json(["status" => true, "html" => $render]);
-
     }
 
 
-    public function insertTransfer(Request $request){
+    public function insertTransfer(Request $request)
+    {
 
         $token_header = $request->header("Authorization");
 
@@ -55,23 +69,27 @@ class transfersController extends Controller
 
         $url_image = self::saveImageTransfer($request);
 
-        $data_insert = ["fecha"  => $date, "hora" => $time, "cajero_responsable" => $self_name, "valor" => $value, 
-        "url_imagen" => $url_image, "entidad" => $entity_bank, "descripcion" => $description];
+        $data_insert = [
+            "fecha"  => $date,
+            "hora" => $time,
+            "cajero_responsable" => $self_name,
+            "valor" => $value,
+            "url_imagen" => $url_image,
+            "entidad" => $entity_bank,
+            "descripcion" => $description
+        ];
 
 
         $insert_data = modelTransfer::insertTransfer($data_insert);
 
-        if($data_insert){
-
+        if ($insert_data) {
 
             return response()->json(["status" => true]);
         }
-
-
     }
 
-
-    private function saveImageTransfer($request){
+    private function saveImageTransfer($request)
+    {
 
         $imagen = $request->file("image");
     
@@ -83,17 +101,45 @@ class transfersController extends Controller
         $this->optimizeImage($imagen, $full_path);
     
         return "storage/transfers/" . $name_final;
-
-
     }
 
     private function optimizeImage($image, $destination)
     {
-        $src = imagecreatefromjpeg($image->getPathname()); 
-        imagejpeg($src, $destination, 50); 
-    
+        $src = imagecreatefromjpeg($image->getPathname());
+        imagejpeg($src, $destination, 50);
+
         imagedestroy($src);
     }
 
 
+    private function sumTransfers()
+    {
+
+
+        $fechaActual = Carbon::now();
+
+        $day = Carbon::now()->day;
+        $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
+
+
+
+        for ($i = 1; $i <= $day; $i++) {
+
+            $date_format = "$year-$month-$i";
+
+            $exists_trasnfers = transfersTotalModel::existsTransfers($date_format);
+
+
+            if ($exists_trasnfers) {
+
+                $sum_total_transfers = modelTransfer::sumTransfers($date_format);
+                $insert_update = transfersTotalModel::updateTransfers($date_format, $sum_total_transfers);
+            } else {
+
+                $sum_total_transfers = modelTransfer::sumTransfers($date_format);
+                $insert_update = transfersTotalModel::insertTransfer(["fecha" => $date_format, "valor" => $sum_total_transfers]);
+            }
+        }
+    }
 }
