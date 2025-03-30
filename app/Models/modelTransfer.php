@@ -57,4 +57,14 @@ class modelTransfer extends Model
     }
 
 
+
+    public static function searchForRangeTransfers($date){
+
+        return self::where("fecha", $date)
+        ->orderBy("fecha","desc")
+        ->get();
+
+    }
+
+
 }

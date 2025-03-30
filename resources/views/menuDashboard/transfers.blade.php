@@ -5,12 +5,12 @@
 
             <label>Fecha:</label>
             <div class="input-group date" data-target-input="nearest">
-                <input type="date" class="form-control" data-target="#reservationdate" id="fecha_rango">
+                <input type="date" class="form-control" data-target="#reservationdate" id="range_search">
                 <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>
 
-                <button onclick="getForRangeGuests('{{ route('egressDate') }}')" class="btn btn-primary ml-2"
+                <button onclick="serachForRangeTransfers('{{ route('search-range-transfers') }}')" class="btn btn-primary ml-2"
                     style=""><i class="fa-regular fa-calendar-days"></i>&nbsp;&nbsp;Buscar transferencias por
                     fecha</button>
             </div>
@@ -205,11 +205,11 @@
                 <div class="row p-5">
 
                     <div class="col-sm">
-                        <h3>Total egresos día:</h3>
+                        <h3>Total transferencias día:</h3>
                     </div>
                     <div class="col-sm d-flex justify-content-end">
                         <h3><i
-                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;
+                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total_detail, 0, '', '.') }}
                         </h3>
                     </div>
                 </div>

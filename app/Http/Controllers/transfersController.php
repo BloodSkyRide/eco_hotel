@@ -142,4 +142,53 @@ class transfersController extends Controller
             }
         }
     }
+
+
+
+
+    public function searchForRangeTransfers(Request $request){
+        
+
+
+        $token_header = $request->header("Authorization");
+
+        $replace = str_replace("Bearer ", "", $token_header);
+
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+
+        $self_id = $decode_token["cedula"];
+
+        $self_name = $decode_token["nombre"];
+
+        $date = $request->range;
+
+
+
+        $fechaActual = Carbon::now();
+        $today = Carbon::now()->format('Y-m-d');
+
+        $year = $fechaActual->year;
+        $month = $fechaActual->month;
+        $day = $fechaActual->day;
+
+        self::sumTransfers();
+
+
+
+        $get_transfers_month = transfersTotalModel::getTransfersForMonth($year, $month, $day);
+        $get_detail_transfers = modelTransfer::searchForRangeTransfers($date);
+
+        $total_detail = modelTransfer::sumTransfers($date);
+
+        $total_transfers = transfersTotalModel::totalSum($year, $month, $day);
+
+        $render = view("menuDashboard.transfers", ["transferencias_mes" => $get_transfers_month, 
+        "transfers_today" => $get_detail_transfers,
+        "total_detail" => $total_detail,
+        "total_transferencias" => $total_transfers])->render();
+
+
+        return response()->json(["status" => true, "html" => $render]);
+
+    }
 }

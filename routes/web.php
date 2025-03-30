@@ -173,5 +173,5 @@ Route::post('/upload-egress', [contabilityController::class, 'uploadEgress'])->n
 Route::post('/egress-date', [contabilityController::class, 'egressForDate'])->name("egressDate")->middleware(["verifyTokenHeader"]);
 Route::get('/show-transfers', [transfersController::class, 'getShowTransfers'])->name("getShowTransfers")->middleware(["verifyTokenHeader"]);
 Route::post('/insert-transfer', [transfersController::class, 'insertTransfer'])->name("insertTransfer")->middleware(["verifyTokenHeader"]);
-
+Route::post('/search-range', [transfersController::class, 'searchForRangeTransfers'])->name("search-range-transfers")->middleware(["verifyTokenHeader"]);
 

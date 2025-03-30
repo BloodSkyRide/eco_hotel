@@ -53,32 +53,54 @@ function listenEvent(){
 
 async function insertTransfer(url){
 
-    let token = localStorage.getItem("access_token");
     let value_trans = document.getElementById("valor_transferencia");
-    let entity_bank = document.getElementById("entidad"); 
-    let trans_description = document.getElementById("descripcion_transferencia");
-    let image = document.getElementById("comprobante_transferencia");
-
-    let formData = new FormData();
-    formData.append("image", image.files[0]); // Agregar la imagen al FormData
-    formData.append("valor", value_trans.value); // Si necesitas enviar otro campo
-    formData.append("descripcion", trans_description.value); // Si necesitas enviar otro campo
-    formData.append("entidad", entity_bank.value);
-
-    let response = await fetch(url,{
-
-        method: "POST",
-        headers: {
-
-            "Authorization": `Bearer ${token}`
-        },
-        body: formData
-    });
 
 
-    let data = await response.json();
+    if(value_trans.value !== ""){
+        
+        let token = localStorage.getItem("access_token");
+        let entity_bank = document.getElementById("entidad"); 
+        let trans_description = document.getElementById("descripcion_transferencia");
+        let image = document.getElementById("comprobante_transferencia");
+    
+        let formData = new FormData();
+        formData.append("image", image.files[0]); // Agregar la imagen al FormData
+        formData.append("valor", value_trans.value); // Si necesitas enviar otro campo
+        formData.append("descripcion", trans_description.value); // Si necesitas enviar otro campo
+        formData.append("entidad", entity_bank.value);
+    
+        let response = await fetch(url,{
+    
+            method: "POST",
+            headers: {
+    
+                "Authorization": `Bearer ${token}`
+            },
+            body: formData
+        });
+    
+    
+        let data = await response.json();
+    
+        if(data.status){
+    
+            var Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+            });
+    
+            Toast.fire({
+                icon: "success",
+                title: "Transferencia guardada de manera exitosa!",
+            });
+    
+    
+        }
 
-    if(data.status){
+    }else{
+
 
         var Toast = Swal.mixin({
             toast: true,
@@ -88,12 +110,46 @@ async function insertTransfer(url){
         });
 
         Toast.fire({
-            icon: "success",
-            title: "Transferencia guardada de manera exitosa!",
+            icon: "error",
+            title: "Por favor recuerda ponerle un precio a la transferencia!",
         });
-
-
     }
 
 
+}
+
+
+async function serachForRangeTransfers(url){
+
+    let token = localStorage.getItem("access_token");
+
+    let search = document.getElementById("range_search");
+
+    let response = await fetch(url,{
+
+        method: "POST",
+        headers: {
+
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            
+            range: search.value
+        })
+
+
+    });
+
+    let data = await response.json();
+
+    if(data.status){
+
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
+
+        let new_date = document.getElementById("range_search");
+        new_date.value = search.value;
+
+    }
 }
