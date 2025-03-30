@@ -159,7 +159,7 @@
                     </div>
 
 
-                    <button onclick="insertTransfer('{{ route('insertTransfer') }}')"
+                    <button id="button_insert_transfers" onclick="insertTransfer('{{ route('insertTransfer') }}')"
                         class="btn btn-block bg-gradient-primary mt-2"><i class="fa-solid fa-arrow-right-arrow-left"></i>&nbsp;&nbsp;Registrar Transferencia</button>
 
 

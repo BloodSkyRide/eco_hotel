@@ -18,15 +18,15 @@ async function getShowTransfers(url){
        
         let element_container = document.getElementById("container_menu");
         element_container.innerHTML = data.html;
-        listenEvent();
+        listenEvent2();
     }
 }
 
-function listenEvent(){
-    var input_image = document.getElementById("comprobante_transferencia");
-    input_image.addEventListener("change", (e) => {
+function listenEvent2(){
+    var input_image2 = document.getElementById("comprobante_transferencia");
+    input_image2.addEventListener("change", (e) => {
         let container_image = document.getElementById("container_image");
-        let image_preview = document.getElementById("container_image");
+        
 
         
         const file = e.target.files[0];
@@ -81,6 +81,21 @@ async function insertTransfer(url){
     
     
         let data = await response.json();
+
+        
+    let button = document.getElementById("button_insert_transfers");
+    button.setAttribute("disabled", "true");
+      let iterator = 15;
+    for (i = 1; i <= 15; i++) {
+        await retardoTransfer(iterator);
+
+        iterator--;
+
+        if (iterator === 0) {
+            button.innerHTML = `<i class="fa-solid fa-check"></i>&nbsp;&nbsp;Registrar Egreso`;
+            button.removeAttribute("disabled");
+        }
+    }
     
         if(data.status){
     
@@ -143,6 +158,8 @@ async function serachForRangeTransfers(url){
 
     let data = await response.json();
 
+
+
     if(data.status){
 
         let element_container = document.getElementById("container_menu");
@@ -152,4 +169,21 @@ async function serachForRangeTransfers(url){
         new_date.value = search.value;
 
     }
+}
+
+
+function retardoTransfer(iterator) {
+    return new Promise((resolve, reject) => {
+        let button = document.getElementById("button_insert_transfers");
+
+        setTimeout(() => {
+            button.innerHTML = `<i class="fa-solid fa-upload"></i>&nbsp;&nbsp;Subiendo Transferencia... (${
+                iterator - 1
+            })`;
+            // object_button.innerHTML = `<i class="fa-solid fa-clock" ></i> Cargando ... (${
+            //     iterator - 1
+            // })`;
+            resolve();
+        }, 1000);
+    });
 }

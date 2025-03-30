@@ -44,11 +44,29 @@ async function getShowContability(url) {
 }
 
 async function sendEgress(url) {
+    let amount = document.getElementById("valor");
+
+    if (amount.value == "") {
+
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+        });
+
+        Toast.fire({
+            icon: "error",
+            title: "Por favor recuerda ponerle un precio al egreso!",
+        });
+        return;
+
+    }
+
     let token = localStorage.getItem("access_token");
 
     let image = document.getElementById("comprobante");
 
-    let amount = document.getElementById("valor");
 
     let description = document.getElementById("descripcion_egreso");
 
@@ -66,6 +84,21 @@ async function sendEgress(url) {
     });
 
     let data = await response.json();
+
+
+    let button = document.getElementById("button_insert_egress");
+    button.setAttribute("disabled", "true");
+      let iterator = 15;
+    for (i = 1; i <= 15; i++) {
+        await retardoEgress(iterator);
+
+        iterator--;
+
+        if (iterator === 0) {
+            button.innerHTML = `<i class="fa-solid fa-check"></i>&nbsp;&nbsp;Vender productos`;
+            button.removeAttribute("disabled");
+        }
+    }
 
     if (data.status) {
 
@@ -88,7 +121,6 @@ function listenEvent(){
     var input_image = document.getElementById("comprobante");
     input_image.addEventListener("change", (e) => {
         let container_image = document.getElementById("container_image");
-        let image_preview = document.getElementById("container_image");
 
         
         const file = e.target.files[0];
@@ -147,4 +179,23 @@ async function searchForRangeEgress(url){
         new_date.value = fecha.value;
     }
 
+}
+
+
+
+
+function retardoEgress(iterator) {
+    return new Promise((resolve, reject) => {
+        let button = document.getElementById("button_insert_egress");
+
+        setTimeout(() => {
+            button.innerHTML = `<i class="fa-solid fa-upload"></i>&nbsp;&nbsp;Subiendo Egreso... (${
+                iterator - 1
+            })`;
+            // object_button.innerHTML = `<i class="fa-solid fa-clock" ></i> Cargando ... (${
+            //     iterator - 1
+            // })`;
+            resolve();
+        }, 1000);
+    });
 }

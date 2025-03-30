@@ -168,7 +168,7 @@
                         <input type="file" class="form-control" id="comprobante" name="nombre">
                     </div>
                     <div class="d-flex justify-content-center" id="container_image"></div>
-                    <button onclick="sendEgress('{{ route('uploadEgress') }}')"
+                    <button id="button_insert_egress" onclick="sendEgress('{{ route('uploadEgress') }}')"
                         class="btn btn-block bg-gradient-primary mt-2"><i
                             class="fa-solid fa-paper-plane"></i>&nbsp;&nbsp;Registrar Egreso</button>
 
