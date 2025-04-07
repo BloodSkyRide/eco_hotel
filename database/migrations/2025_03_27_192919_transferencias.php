@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date("fecha")->nullable();
             $table->time("hora")->nullable();
             $table->string("cajero_responsable",255)->nullable();
+            $table->string("id_cajero",255)->nullable();
             $table->bigInteger("valor")->nullable();
             $table->text("url_imagen")->nullable();
             $table->text("entidad")->nullable();

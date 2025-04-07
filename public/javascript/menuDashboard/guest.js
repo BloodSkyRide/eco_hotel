@@ -291,7 +291,10 @@ async function registerGuest(url){
             let deletes = document.getElementById("container_tr");
             
             deletes.innerHTML = "";
-            
+
+            let room = document.getElementById("room");
+
+            room.disabled = false;
             
     
         }

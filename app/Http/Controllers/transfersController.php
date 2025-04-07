@@ -76,7 +76,8 @@ class transfersController extends Controller
             "valor" => $value,
             "url_imagen" => $url_image,
             "entidad" => $entity_bank,
-            "descripcion" => $description
+            "descripcion" => $description,
+            "id_cajero" => $self_id
         ];
 
 

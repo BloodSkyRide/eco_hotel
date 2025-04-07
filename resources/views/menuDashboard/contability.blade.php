@@ -123,7 +123,7 @@
                         <div class="row p-5">
 
                             <div class="col-sm">
-                                <h3>Total venta del mes:</h3>
+                                <h3>Total egresos del mes:</h3>
                             </div>
                             <div class="col-sm d-flex justify-content-end">
                                 <h3><i
