@@ -46,6 +46,10 @@ async function getShowContability(url) {
 async function sendEgress(url) {
     let amount = document.getElementById("valor");
 
+    let caja = document.getElementById("caja");
+
+    
+
     if (amount.value == "") {
 
         var Toast = Swal.mixin({
@@ -74,6 +78,7 @@ async function sendEgress(url) {
     formData.append("image", image.files[0]); // Agregar la imagen al FormData
     formData.append("valor", amount.value); // Si necesitas enviar otro campo
     formData.append("descripcion", description.value); // Si necesitas enviar otro campo
+    formData.append("caja", caja.value);
     
     let response = await fetch(url, {
         method: "POST",

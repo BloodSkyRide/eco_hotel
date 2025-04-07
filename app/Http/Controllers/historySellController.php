@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\modelSell;
 use App\Models\modelTransfer;
+use App\Models\modelEgress;
 use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -36,13 +37,16 @@ class historySellController extends Controller
 
         $total_venta_users = modelSell::getTotalForUsers($today);
 
+        $total_caja_egress = modelEgress::getEgressCaja($today, $self_id);
+
 
         $render = view("menuDashboard.historySell", ["rol" => $rol, 
         "historial" => $history_sells, 
         "total" => $total_venta, "unificado" => $total_venta_unificada, 
         "users" => $total_venta_users,
         "self_transfers" => $self_transfers,
-        "name" => $self_name])->render();
+        "name" => $self_name,
+        "my_egress" => $total_caja_egress])->render();
 
         return response()->json(["status" => true, "html" => $render]);
 

@@ -124,15 +124,28 @@ class contabilityController extends Controller
 
         if ($request->hasFile("image")) {
 
+            $token_header = $request->header("Authorization");
+
+            $replace = str_replace("Bearer ", "", $token_header);
+    
+            $decode_token = JWTAuth::setToken($replace)->authenticate();
+    
+            $self_id = $decode_token["cedula"];
+    
+            $self_name = $decode_token["nombre"];
+
             $path = self::saveEgressImage($request);
 
             $description = $request->descripcion;
 
             $value = $request->valor;
 
+            $caja = $request->caja;
+
             $today = Carbon::now()->format('Y-m-d');
 
-            $data = ["fecha" => $today, "valor" => $value, "descripcion" => $description, "url_imagen" => $path];
+            $data = ["fecha" => $today, "valor" => $value, "descripcion" => $description, "url_imagen" => $path,
+             "caja" => $caja, "nombre" => $self_name, "cedula" => $self_id ];
 
             $save_data = modelEgress::insertEgress($data);
 

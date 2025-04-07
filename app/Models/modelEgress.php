@@ -10,7 +10,8 @@ class modelEgress extends Model
     use HasFactory;
 
     protected $table = "egresos";
-    protected $fillable = ["id_egress", "fecha", "valor", "descripcion", "url_imagen", "created_at", "updated_at"];
+    protected $fillable = ["id_egress", 
+    "fecha", "valor", "descripcion", "url_imagen", "created_at", "updated_at", "caja", "nombre", "cedula"];
 
 
     public static function insertEgress($data){
@@ -77,6 +78,14 @@ class modelEgress extends Model
         ->get();
     }
 
+    public static function getEgressCaja($date, $self_id){
+
+        return self::where("fecha", $date)
+        ->where("cedula", $self_id)
+        ->where("caja", 1)
+        ->sum("valor");
+
+    }
 
 
 }

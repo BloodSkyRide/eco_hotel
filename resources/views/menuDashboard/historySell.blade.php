@@ -127,6 +127,18 @@
                             </h3>
                         </div>
                     </div>
+
+                    <div class="row p-5">
+
+                        <div class="col-sm">
+                            <h3>Total egresos registrados por {{$name}}:</h3>
+                        </div>
+                        <div class="col-sm d-flex justify-content-end">
+                            <h3><i
+                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_egress, 0, '', '.') }}
+                            </h3>
+                        </div>
+                    </div>
                     <div class="row p-5">
 
                         <div class="col-sm">
@@ -134,7 +146,7 @@
                         </div>
                         <div class="col-sm d-flex justify-content-end">
                             <h3><i
-                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total - $self_transfers, 0, '', '.') }}
+                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total - ($self_transfers + $my_egress), 0, '', '.') }}
                             </h3>
                         </div>
                     </div>

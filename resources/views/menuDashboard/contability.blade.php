@@ -149,6 +149,12 @@
                                 <input type="number" class="form-control" id="valor"
                                     placeholder="Valor del egreso..." name="nombre" autocomplete="off">
                             </div>
+
+                            <div class="form-group">
+                                <label for="valor">Adjuntar imagen egreso:</label>
+                                <input type="file" class="form-control" id="comprobante" name="nombre">
+                            </div>
+                            <div class="d-flex justify-content-center" id="container_image"></div>
                         </div>
 
 
@@ -159,15 +165,23 @@
                                 <textarea name="descripcion_egreso" placeholder="Descripcion del egreso..." id="descripcion_egreso" cols="30"
                                     rows="1" class="form-control" autocomplete="off"></textarea>
                             </div>
+
+                            <div class="form-group">
+
+                                <label for="">Egreso caja:</label>
+                                <select class="form-control select2 select2-danger" name="caja" id="caja">
+                                    <option selected value="0">No</option>
+                                    <option value="1">Si</option>
+                                </select>
+                                
+                            </div>
+
                         </div>
 
                     </div>
 
-                    <div class="form-group">
-                        <label for="valor">Adjuntar imagen egreso:</label>
-                        <input type="file" class="form-control" id="comprobante" name="nombre">
-                    </div>
-                    <div class="d-flex justify-content-center" id="container_image"></div>
+
+
                     <button id="button_insert_egress" onclick="sendEgress('{{ route('uploadEgress') }}')"
                         class="btn btn-block bg-gradient-primary mt-2"><i
                             class="fa-solid fa-paper-plane"></i>&nbsp;&nbsp;Registrar Egreso</button>
@@ -186,7 +200,10 @@
                             <tr>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">VALOR</th>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">CEDULA</th>
                                 <th scope="col">DESCRIPCION</th>
+                                <th scope="col">CAJA</th>
                                 <th scope="col">COMPROBANTE</th>
                             </tr>
                         </thead>
@@ -197,7 +214,16 @@
                                     <td><i class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;<span
                                             class="badge badge-success">{{ number_format($item['valor'], 0, '', '.') }}</span>
                                     </td>
+                                    <td>{{$item['nombre']}}</td>
+                                    <td>{{$item['cedula']}}</td>
                                     <td>{{$item['descripcion']}}</td>
+                                    <td>
+                                        @php
+                                            $caja = ($item['caja'] == 1) ? "SI" : "NO";
+                                            $badge = ($caja === "SI") ? "success" : "danger";
+                                        @endphp
+                                        <span class="badge badge-{{$badge}}">{{$caja}}</span>
+                                    </td>
                                     <td><a href="{{$item['url_imagen']}}" type="button" target="_blank"><i style="font-size: 25px" class="fa-solid fa-file-image"></i></a></td>
                                 </tr>
                             @endforeach

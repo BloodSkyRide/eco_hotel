@@ -17,8 +17,10 @@ return new class extends Migration
             $table->date("fecha")->nullable();
             $table->bigInteger("valor")->nullable();
             $table->text("descripcion")->nullable();
-            $table->string("cajero_responsable",255)->nullable();
             $table->text("url_imagen")->nullable();
+            $table->string("nombre",255)->nullable();
+            $table->string("cedula",255)->nullable();
+            $table->boolean("caja")->nullable();
             $table->timestamps();
             
         });
