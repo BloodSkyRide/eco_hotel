@@ -39,6 +39,8 @@ class historySellController extends Controller
 
         $total_caja_egress = modelEgress::getEgressCaja($today, $self_id);
 
+        $self_sell = modelSell::getMySell($today, $self_id);
+
 
         $render = view("menuDashboard.historySell", ["rol" => $rol, 
         "historial" => $history_sells, 
@@ -46,7 +48,8 @@ class historySellController extends Controller
         "users" => $total_venta_users,
         "self_transfers" => $self_transfers,
         "name" => $self_name,
-        "my_egress" => $total_caja_egress])->render();
+        "my_egress" => $total_caja_egress,
+        "my_sell" => $self_sell])->render();
 
         return response()->json(["status" => true, "html" => $render]);
 

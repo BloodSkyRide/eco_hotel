@@ -103,4 +103,14 @@ class modelSell extends Model
         return self::whereBetween("fecha", [$startDate, $endDate])
             ->sum("total_venta");
     }
+
+
+
+    public static function getMySell($date, $self_id){
+
+
+        return self::where("fecha", $date)
+        ->where("id_user_cajero", $self_id)
+        ->sum("total_venta");
+    }
 }

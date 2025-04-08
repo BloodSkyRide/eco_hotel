@@ -108,7 +108,7 @@
                     <div class="row p-5">
 
                         <div class="col-sm">
-                            <h3>Total vendido:</h3>
+                            <h3>Total venta:</h3>
                         </div>
                         <div class="col-sm d-flex justify-content-end">
                             <h3><i
@@ -116,40 +116,50 @@
                             </h3>
                         </div>
                     </div>
-                    <div class="row p-5">
+                    <hr>
+                    
+                    <center> <h3 class="text text-secondary">Cuadre de caja</h3></center>
 
-                        <div class="col-sm">
-                            <h3>Total transferencias registradas por {{$name}}:</h3>
-                        </div>
-                        <div class="col-sm d-flex justify-content-end">
-                            <h3><i
-                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($self_transfers, 0, '', '.') }}
-                            </h3>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Total venta global</th>
+                                    <th scope="col">ventas de {{$name}}</th>
+                                    <th scope="col">Transferencias hechas por {{$name}}</th>
+                                    <th scope="col">Egresos de caja de {{$name}}</th>
+                                    <th scope="col">Efectivo que debe tener {{$name}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h3><i
+                                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total, 0, '', '.') }}
+                                        </h3>
+                                    </td>
+                                    <td>
+                                        <h3><i
+                                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_sell, 0, '', '.') }}
+                                        </h3>
+                                    </td>
+                                    <td><h3><i
+                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($self_transfers, 0, '', '.') }}
+                                </h3></td>
+                                    <td><h3><i
+                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_egress, 0, '', '.') }}
+                                </h3></td>
+    
+                                    <td>
+                                        <h3><i
+                                            class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_sell - ($self_transfers + $my_egress), 0, '', '.') }}
+                                    </h3>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div class="row p-5">
-
-                        <div class="col-sm">
-                            <h3>Total egresos registrados por {{$name}}:</h3>
-                        </div>
-                        <div class="col-sm d-flex justify-content-end">
-                            <h3><i
-                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_egress, 0, '', '.') }}
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="row p-5">
-
-                        <div class="col-sm">
-                            <h3>Debes tener en efectivo:</h3>
-                        </div>
-                        <div class="col-sm d-flex justify-content-end">
-                            <h3><i
-                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total - ($self_transfers + $my_egress), 0, '', '.') }}
-                            </h3>
-                        </div>
-                    </div>
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel"
                     aria-labelledby="custom-tabs-two-profile-tab">
@@ -194,7 +204,7 @@
                                         <td>{{ $item['fecha'] }}</td>
                                         <td>
                                             <i class="fa-solid fa-dollar-sign text-success">
-                                                </i>&nbsp;&nbsp;{{ number_format($item['total_vendido'], 0, '', '.') }}
+                                            </i>&nbsp;&nbsp;{{ number_format($item['total_vendido'], 0, '', '.') }}
                                         </td>
                                     </tr>
 
@@ -241,11 +251,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-    
+
                                 @php
                                     $flagg = 1;
                                 @endphp
-    
+
                                 @foreach ($users as $item)
                                     <tr>
                                         <th scope="row">{{ $flagg }}</th>
@@ -256,7 +266,7 @@
                                                 class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_venta'], 0, '', '.') }}
                                         </td>
                                     </tr>
-    
+
                                     @php
                                         $flagg++;
                                     @endphp
