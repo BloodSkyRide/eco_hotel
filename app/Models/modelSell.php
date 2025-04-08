@@ -113,4 +113,13 @@ class modelSell extends Model
         ->where("id_user_cajero", $self_id)
         ->sum("total_venta");
     }
+
+
+    public static function verify_sell($date){
+
+        return self::where("fecha", $date)
+        ->distinct()
+        ->pluck("id_user_cajero");
+
+    }
 }

@@ -6,11 +6,44 @@ use Illuminate\Http\Request;
 use App\Models\modelSell;
 use App\Models\modelTransfer;
 use App\Models\modelEgress;
+use App\Models\modelUser;
 use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class historySellController extends Controller
 {
+
+
+
+    private function getCashPerson($date){
+
+        $verify_sell = modelSell::verify_sell($date);
+
+        $data_list = [];
+        foreach($verify_sell as $item){
+
+
+            $name = modelUser::getUserName($item);
+            $last_name = modelUser::getLastName($item);
+            $total_venta = modelSell::getMySell($date, $item);
+            $total_transferencias = modelTransfer::getSumTransfersforUser($item, $date);
+            $total_egresos = modelEgress::getEgressCaja($date, $item);
+
+            array_push($data_list,[
+
+                "cedula" => $item,
+                "nombre" => $name->nombre,
+                "apellido" => $last_name->apellido,
+                "total_venta" => $total_venta,
+                "total_transferencia" =>  $total_transferencias,
+                "total_egresos" => $total_egresos
+            ]);
+
+        }
+
+        return $data_list;
+
+    }
     public function getShowHistorySell(Request $request){
 
 
@@ -41,17 +74,41 @@ class historySellController extends Controller
 
         $self_sell = modelSell::getMySell($today, $self_id);
 
+        
+        if($self_id === "1093228865"){
+            
+            $total_sells_for_user = self::getCashPerson($today);
+            $render = view("menuDashboard.historySell", ["rol" => $rol, 
+            "historial" => $history_sells, 
+            "total" => $total_venta, 
+            "unificado" => $total_venta_unificada, 
+            "users" => $total_venta_users,
+            "self_transfers" => $self_transfers,
+            "name" => $self_name,
+            "my_egress" => $total_caja_egress,
+            "my_sell" => $self_sell,
+            "total_users" => $total_sells_for_user,
+            "self_id" => $self_id])->render();
 
-        $render = view("menuDashboard.historySell", ["rol" => $rol, 
-        "historial" => $history_sells, 
-        "total" => $total_venta, "unificado" => $total_venta_unificada, 
-        "users" => $total_venta_users,
-        "self_transfers" => $self_transfers,
-        "name" => $self_name,
-        "my_egress" => $total_caja_egress,
-        "my_sell" => $self_sell])->render();
+            return response()->json(["status" => true, "html" => $render]);
 
-        return response()->json(["status" => true, "html" => $render]);
+        }else{
+
+            $render = view("menuDashboard.historySell", ["rol" => $rol, 
+            "historial" => $history_sells, 
+            "total" => $total_venta, 
+            "unificado" => $total_venta_unificada, 
+            "users" => $total_venta_users,
+            "self_transfers" => $self_transfers,
+            "name" => $self_name,
+            "my_egress" => $total_caja_egress,
+            "my_sell" => $self_sell,
+            "self_id" => $self_id])->render();
+    
+            return response()->json(["status" => true, "html" => $render]);
+
+
+        }
 
     }
 

@@ -117,48 +117,118 @@
                         </div>
                     </div>
                     <hr>
-                    
-                    <center> <h3 class="text text-secondary">Cuadre de caja</h3></center>
 
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Total venta global</th>
-                                    <th scope="col">ventas de {{$name}}</th>
-                                    <th scope="col">Transferencias hechas por {{$name}}</th>
-                                    <th scope="col">Egresos de caja de {{$name}}</th>
-                                    <th scope="col">Efectivo que debe tener {{$name}}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <h3><i
-                                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total, 0, '', '.') }}
-                                        </h3>
-                                    </td>
-                                    <td>
-                                        <h3><i
-                                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_sell, 0, '', '.') }}
-                                        </h3>
-                                    </td>
-                                    <td><h3><i
-                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($self_transfers, 0, '', '.') }}
-                                </h3></td>
-                                    <td><h3><i
-                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_egress, 0, '', '.') }}
-                                </h3></td>
-    
-                                    <td>
-                                        <h3><i
-                                            class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_sell - ($self_transfers + $my_egress), 0, '', '.') }}
-                                    </h3>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <center>
+                        <h3 class="text text-secondary">Cuadre de caja</h3>
+                    </center>
+
+
+                    @if ($self_id == '1093228865')
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Cédula</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Apellido</th>
+                                        <th scope="col">Venta Total</th>
+                                        <th scope="col">Transferencias</th>
+                                        <th scope="col">Egresos</th>
+                                        <th scope="col">Efectivo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach ($total_users as $item)
+                                        <tr>
+                                            <td>
+                                                <h4>&nbsp;&nbsp;{{ $item['cedula'] }}
+                                                </h4>
+                                            </td>
+                                            <td>
+                                                <h4>&nbsp;&nbsp;{{ $item['nombre'] }}
+                                                    </h4>
+                                            </td>
+                                            <td>
+                                                <h4>&nbsp;&nbsp;{{ $item['apellido'] }}
+                                                    </h4>
+                                            </td>
+
+                                            <td>
+                                                <h4><i
+                                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_venta'], 0, '', '.') }}
+                                                </h4>
+                                            </td>
+
+                                            <td>
+                                                <h4><i
+                                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_transferencia'], 0, '', '.') }}
+                                                </h4>
+                                            </td>
+
+                                            <td>
+                                                <h4><i
+                                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_egresos'], 0, '', '.') }}
+                                                </h4>
+                                            </td>
+
+                                            <td>
+                                                <h4><i
+                                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_venta'] - ($item['total_egresos'] + $item['total_transferencia']), 0, '', '.') }}
+                                                </h4>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Total venta global</th>
+                                        <th scope="col">ventas de {{ $name }}</th>
+                                        <th scope="col">Transferencias hechas por {{ $name }}</th>
+                                        <th scope="col">Egresos de caja de {{ $name }}</th>
+                                        <th scope="col">Efectivo que debe tener {{ $name }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <h3><i
+                                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($total, 0, '', '.') }}
+                                            </h3>
+                                        </td>
+                                        <td>
+                                            <h3><i
+                                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_sell, 0, '', '.') }}
+                                            </h3>
+                                        </td>
+                                        <td>
+                                            <h3><i
+                                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($self_transfers, 0, '', '.') }}
+                                            </h3>
+                                        </td>
+                                        <td>
+                                            <h3><i
+                                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_egress, 0, '', '.') }}
+                                            </h3>
+                                        </td>
+
+                                        <td>
+                                            <h3><i
+                                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($my_sell - ($self_transfers + $my_egress), 0, '', '.') }}
+                                            </h3>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    @endif
 
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel"
