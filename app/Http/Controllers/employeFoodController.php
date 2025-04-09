@@ -13,14 +13,20 @@ class employeFoodController extends Controller
 {
     public function getShowEmployeeFood(Request $request){
 
-
+        $token_header = $request->header("Authorization");
+        
+        $replace = str_replace("Bearer ", "", $token_header);
+        
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+        
+        $rol = $decode_token["rol"];
 
         $products = modelProducts::getAllProducts();
         $hoy = date("Y-m-d");
 
         $table_registers = modelFoodEmployee::getRegisterActual($hoy);
 
-        $render = view("menuDashboard.employeeFood",["products" => $products, "registers" => $table_registers])->render();
+        $render = view("menuDashboard.employeeFood",["products" => $products, "registers" => $table_registers, "rol" => $rol])->render();
 
 
         return response()->json(["status" => true, "html" => $render]);
@@ -85,6 +91,34 @@ class employeFoodController extends Controller
 
             return self::getShowEmployeeFood($request);
         }
+
+
+
+    }
+
+
+
+    public function searchForRangeFood(Request $request){
+
+        $fecha = $request->fecha;
+
+        $products = modelProducts::getAllProducts();
+
+        $token_header = $request->header("Authorization");
+        
+        $replace = str_replace("Bearer ", "", $token_header);
+        
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+        
+        $rol = $decode_token["rol"];
+        
+
+        $table_registers = modelFoodEmployee::getRegisterActual($fecha);
+
+        $render = view("menuDashboard.employeeFood",["products" => $products, "registers" => $table_registers, "rol" => $rol])->render();
+
+
+        return response()->json(["status" => true, "html" => $render]);
 
 
 

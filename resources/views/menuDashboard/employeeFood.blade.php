@@ -47,6 +47,24 @@
                 <h3>Alimentación entregada</h3>
             </center>
 
+            @if ($rol === 'administrador')
+            <div class="form-group d-flex mt-2 mb-2">
+                <div>
+    
+                    <label>Fecha:</label>
+                    <div class="input-group date" data-target-input="nearest">
+                        <input type="date" class="form-control" data-target="#reservationdate" id="reservationdate">
+                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+    
+                        <button onclick="searchforRangeFood('{{ route('search-range-food') }}')" class="btn btn-primary ml-2"
+                            style=""><i class="fa-regular fa-calendar-days"></i>&nbsp;&nbsp;Buscar fechas</button>
+                    </div>
+                </div>
+            </div>
+        @endif
+
             <div class="table-responsive">
                 <table class="table">
                     <thead class="thead-dark">

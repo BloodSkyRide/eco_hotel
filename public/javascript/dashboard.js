@@ -2877,6 +2877,46 @@ async function getShowEmployeeFood(url){
 
 }
 
+
+async function searchforRangeFood(url){
+
+    let token = localStorage.getItem("access_token");
+
+    let response = await fetch(url,{
+
+        method: "POST",
+        headers:{
+
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            
+        },
+        body: JSON.stringify({
+
+            fecha: document.getElementById("reservationdate").value
+
+        })
+
+    });
+
+
+    let data = await response.json();
+
+
+    if(data.status){
+
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
+        $(".select2").select2();
+        $(".select2bs4").select2({
+            theme: "bootstrap4",
+        });
+
+    }
+
+
+}
+
 async function discountFoodEmployee(url){
 
     let id_item_sell = document.getElementById("select_item_sell");

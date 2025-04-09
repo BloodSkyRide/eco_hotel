@@ -159,6 +159,7 @@ Route::post('/editCompund', [createProductController::class, 'editProductCompund
 Route::post('/deleteCompound', [createProductController::class, 'deleteCompound'])->name("deleteCompound")->middleware(["verifyTokenHeader"]);
 
 Route::get('/getShowEmployeeFood', [employeFoodController::class, 'getShowEmployeeFood'])->name("getShowEmployeeFood")->middleware(["verifyTokenHeader"]);
+Route::post('/search-range-food', [employeFoodController::class, 'searchForRangeFood'])->name("search-range-food")->middleware(["verifyTokenHeader"]);
 
 Route::post('/insertFood', [employeFoodController::class, 'insertFood'])->name("insertFood")->middleware(["verifyTokenHeader"]);
 Route::post('/getShowGuest', [guestController::class, 'getShowGuest'])->name("getShowGuest")->middleware(["verifyTokenHeader"]);
