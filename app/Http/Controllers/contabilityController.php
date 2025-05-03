@@ -43,8 +43,8 @@ class contabilityController extends Controller
             $year = $fechaActual->year;
             $month = $fechaActual->month;
             $day = $fechaActual->day;
-
-            $confirmation = self::editDataContability($today);
+            $date_back = false;
+            $confirmation = self::editDataContability($month,$date_back);
 
             if ($confirmation) {
 
@@ -80,7 +80,7 @@ class contabilityController extends Controller
     }
 
 
-    private function editDataContability($today)
+    private function editDataContability($month, $date_month)
     {
 
 
@@ -89,8 +89,8 @@ class contabilityController extends Controller
         $today = Carbon::now()->format('Y-m-d');
 
         $year = $fechaActual->year;
-        $month = $fechaActual->month;
-        $day = $fechaActual->day;
+        $ultimate_date = "$year-$month-01";
+        $day = ($date_month) ?  Carbon::parse($ultimate_date)->endOfMonth()->day : $fechaActual->day;
         $flag = 0;
 
         for ($i = 1; $i <= $day; $i++) {
@@ -254,23 +254,28 @@ class contabilityController extends Controller
 
             $fechaActual = Carbon::now();
             $today = Carbon::now()->format('Y-m-d');
-
+            $mes =  Carbon::parse($fecha_buscar)->format('m');
+            $date_back = true;
             $year = $fechaActual->year;
             $month = $fechaActual->month;
             $day = $fechaActual->day;
 
-            $confirmation = self::editDataContability($today);
+            $anio = Carbon::parse($fecha_buscar)->format('Y');
+            $mes = Carbon::parse($fecha_buscar)->format('m');
+            $dia = Carbon::parse($fecha_buscar)->endOfMonth()->day;
+
+            $confirmation = self::editDataContability($mes,$date_back);
 
             if ($confirmation) {
 
                 self::sumEgress($self_name);
-                $data = modelContability::getContabilityForMonth($year, $month, $day);
+                $data = modelContability::getContabilityForMonth($anio, $mes, $dia);
 
-                $total_venta = modelContability::getTotalSell($year, $month, $day);
+                $total_venta = modelContability::getTotalSellforMonth($anio, $mes, $dia);
 
-                $get_egresos = modelEgressTotal::getEgressForMonth($year, $month, $day);
+                $get_egresos = modelEgressTotal::getEgressForMonth($anio, $mes, $dia);
 
-                $get_total_egress = modelEgress::getTotalEgress($year, $month, $day);
+                $get_total_egress = modelEgress::getTotalEgress($anio, $mes, $dia);
 
                 $get_egress_deatail = modelEgress::getEgressForDate($fecha_buscar);
 

@@ -54,4 +54,14 @@ class modelContability extends Model
             ->sum("total_venta_dia");
 
     }
+
+    public static function getTotalSellforMonth($year,$month, $today){
+
+        $startDate = "$year-$month-01"; // Primer día del mes
+        $endDate = "$year-$month-$today"; // Día actual dentro del mes
+        
+        return self::whereBetween("fecha", [$startDate, $endDate])
+            ->sum("total_venta_dia");
+
+    }
 }
