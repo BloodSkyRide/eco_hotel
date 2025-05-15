@@ -175,4 +175,8 @@ Route::post('/egress-date', [contabilityController::class, 'egressForDate'])->na
 Route::get('/show-transfers', [transfersController::class, 'getShowTransfers'])->name("getShowTransfers")->middleware(["verifyTokenHeader"]);
 Route::post('/insert-transfer', [transfersController::class, 'insertTransfer'])->name("insertTransfer")->middleware(["verifyTokenHeader"]);
 Route::post('/search-range', [transfersController::class, 'searchForRangeTransfers'])->name("search-range-transfers")->middleware(["verifyTokenHeader"]);
+Route::post('/make-reservation', [guestController::class, 'makeReservation'])->name("reservation")->middleware(["verifyTokenHeader"]);
+Route::post('/search-reservation', [guestController::class, 'searchReservation'])->name("searchReservation")->middleware(["verifyTokenHeader"]);
+Route::post('/redeem-code', [guestController::class, 'redeemCode'])->name("redeemCode")->middleware(["verifyTokenHeader"]);
+
 
