@@ -35,7 +35,7 @@
                             aria-selected="false"><i class="fa-solid fa-bed"></i>&nbsp;&nbsp;Huespedes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#reservation"
+                        <a class="nav-link" id="custom-tabs-one-profile-reservation" data-toggle="pill" href="#reservation"
                             role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false"><i
                                 class="fa-solid fa-passport"></i>&nbsp;&nbsp;Reservaciones</a>
                     </li>
@@ -227,7 +227,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
-                        aria-labelledby="custom-tabs-one-profile-tab">
+                        aria-labelledby="custom-tabs-one-profile-reservation">
 
                         <div class="table-responsive">
 
@@ -289,8 +289,8 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade active show" id="reservation" role="tabpanel"
-                        aria-labelledby="custom-tabs-one-home-tab">
+                    <div class="tab-pane fade" id="reservation" role="tabpanel"
+                        aria-labelledby="custom-tabs-one-profile-reservation">
 
                         <div class="form-group">
 
@@ -475,10 +475,10 @@
 
                                         </tbody>
                                     </table>
-
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

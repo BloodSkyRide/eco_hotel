@@ -394,14 +394,14 @@ async function makeReservation(url) {
 
             modal_id_body.innerHTML = `<div class="row">
 
-            <div class="col">
+            <div class="col-sm">
                 <label for="">Reservacion hecha por:</label> <span>${data.datos.titular}</span>
         <br>
         <label for="">cedula:</label> <span>${data.datos.cedula}</span>
         <br>
         <label for="">Abono reservado: <i class="fa-solid fa-dollar-sign text-success"></i></label><span>${data.datos.monto_reservado}</span>
         <br>
-        <label for="">Adeduda: <i class="fa-solid fa-dollar-sign text-success"></i></label><span>${data.datos.monto_adeudado}</span>
+        <label for="">Adeuda: <i class="fa-solid fa-dollar-sign text-success"></i></label><span>${data.datos.monto_adeudado}</span>
         <br>
         <label for="">Medio de pago:</label> <span>${data.datos.medio_pago}</span>
         <br>
@@ -409,7 +409,7 @@ async function makeReservation(url) {
         <br>
         <label for="">Descripción:</label> <span>${data.datos.descripcion_reserva}</span>
             </div>
-            <div class="col">
+            <div class="col-sm">
 
                 <label for="">Valor total de la reservación:</label> <span><i class="fa-solid fa-dollar-sign text-success"></i>${data.datos.valor_paquete}</span>
         <br>
@@ -428,6 +428,7 @@ async function makeReservation(url) {
         
             </div>
         </div>
+        <hr>
         <p>Nota: guarda esta informacion para canjear tu reservación, lo puedes hacer con el codigo de reserva.</p>`;
         }
     }else{
@@ -514,14 +515,14 @@ async function searchReservation(url) {
 
             modal_id_body.innerHTML = `<div class="row">
 
-            <div class="col">
+            <div class="col-sm">
                 <label for="">Reservacion hecha por:</label> <span>${data.datos.titular}</span>
         <br>
         <label for="">cedula:</label> <span>${data.datos.cedula}</span>
         <br>
         <label for="">Abono reservado: <i class="fa-solid fa-dollar-sign text-success"></i></label><span>${data.datos.monto_reservado}</span>
         <br>
-        <label for="">Adeduda: <i class="fa-solid fa-dollar-sign text-success"></i></label><span>${data.datos.monto_adeudado}</span>
+        <label for="">Adeuda: <i class="fa-solid fa-dollar-sign text-success"></i></label><span>${data.datos.monto_adeudado}</span>
         <br>
         <label for="">Medio de pago:</label> <span>${data.datos.medio_pago}</span>
         <br>
@@ -529,7 +530,7 @@ async function searchReservation(url) {
         <br>
         <label for="">Descripción:</label> <span>${data.datos.descripcion_reserva}</span>
             </div>
-            <div class="col">
+            <div class="col-sm">
 
                 <label for="">Valor total de la reservación:</label> <span><i class="fa-solid fa-dollar-sign text-success"></i>${data.datos.valor_paquete}</span>
         <br>
@@ -548,6 +549,7 @@ async function searchReservation(url) {
         
             </div>
         </div>
+        <hr>
         <p>Nota: guarda esta informacion para canjear tu reservación, lo puedes hacer con el codigo de reserva.</p>`;
 
         }else{
