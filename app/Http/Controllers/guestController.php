@@ -194,7 +194,7 @@ class guestController extends Controller
     private function createIdUnit()
     {
 
-        $codigo = 'RES-' . strtoupper(Str::random(4)) . '-' . rand(1000, 9999);
+        $codigo = rand(10000, 99999);
         return $codigo;
     }
 
