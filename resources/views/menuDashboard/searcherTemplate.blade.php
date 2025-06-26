@@ -16,9 +16,10 @@
     </div>
     <div class="col-sm d-flex align-items-center">
       <button id="button_dataset_{{$producto['id_producto']}}" data-price="{{$producto['precio']}}" onclick="lessAndPlus('-','{{$producto['id_producto']}}')" class="btn btn-danger mr-2"><i class="fa-solid fa-minus"></i></button><input type="text" id="content_input-{{$producto['id_producto']}}" class="form-control input_info"  value="1"><button onclick="lessAndPlus('+','{{$producto['id_producto']}}')" class="btn btn-success ml-2"><i class="fa-solid fa-plus"></i></button><br>
-      <button class="btn btn-success ml-2" onclick="addProductToCar('{{$producto['nombre_producto']}}','{{$producto['descripcion']}}','{{$producto['id_producto']}}','{{$producto['url_imagen']}}','{{$producto['precio']}}')"><i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Añadir producto</button>
+      <button class="btn btn-success ml-2" onclick="addProductToCar('{{$producto['nombre_producto']}}','{{$producto['descripcion']}}','{{$producto['id_producto']}}','{{$producto['url_imagen']}}','{{$producto['precio']}}', '{{$producto['categoria']}}')"><i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Añadir producto</button>
     </div>
-
 </div>
 @endforeach
+
+trabajando
 

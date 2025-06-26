@@ -1,56 +1,77 @@
 <div class="container-fluid">
     @php
-        $texto = ($rol == "administrador") ? "Crear/Modificar Productos": "Inventario de productos";
+        $texto = $rol == 'administrador' ? 'Crear/Modificar Productos' : 'Inventario de productos';
     @endphp
     <div class="card card-default">
         <div class="card-header" style="background-color: #0F318F">
             <h3 class="card-title" style="color: white; font-weight: bold;"><i
-                    class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;{{$texto}}</h3>
+                    class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;{{ $texto }}</h3>
             <div class="card-tools"></div>
         </div>
 
         <div class="card-body">
 
-            @if ($rol == "administrador")
+            @if ($rol == 'administrador')
+                <hr>
+                <center>
+                    <h4 class="text-secondary"><i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;Crear productos
+                        materia prima</h4>
+                </center>
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="nombre_producto_inventario">Nombre producto:</label>
+                            <input type="text" class="form-control" id="nombre_producto_inventario"
+                                placeholder="Nombre producto..." name="nombre" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="unidades_inventario">Unidades disponibles:</label>
+                            <input type="number" class="form-control" id="unidades_inventario"
+                                placeholder="Ingresa la cantidad de unidades" name="unidades" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="tope_min">Tope minimo notificación:</label>
+                            <input type="number" class="form-control" id="tope_min" name="imagen_product"
+                                placeholder="Tope minimio..." autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imagen_product">Precio costo:</label>
+                            <input type="number" class="form-control" id="costo" name="imagen_product"
+                                placeholder="Precio costo..." autocomplete="off">
+                        </div>
+                    </div>
+
+                    
+                </div>
+
+
+                <center>
+
+                    <div class="form-group" style="width: 50%;">
+                        <label for="categoria">Categoria:</label>
+
+                        <select class="form-control" id="categoria" name="categoria">
+                            <option value="">Seleccione una categoria</option>
+                            <option value="tienda">Tienda</option>
+                            <option value="tienda">Cocina</option>
+                        </select>
+
+                    </div>
+
+                </center>
                 
-            <hr>
-            <center>
-                <h4 class="text-secondary"><i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;Crear productos materia prima</h4>
-            </center>
-            <hr>
+                <center>
 
-            <div class="row">
-
-                <div class="col-sm">
-                    <div class="form-group">
-                        <label for="nombre_producto_inventario">Nombre producto:</label>
-                        <input type="text" class="form-control" id="nombre_producto_inventario" placeholder="Nombre producto..." name="nombre" autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label for="unidades_inventario">Unidades disponibles:</label>
-                        <input type="number" class="form-control" id="unidades_inventario" placeholder="Ingresa la cantidad de unidades" name="unidades" autocomplete="off">
-                    </div>
-                </div>
-
-                <div class="col-sm">
-                    <div class="form-group">
-                        <label for="tope_min">Tope minimo notificación:</label>
-                        <input type="number" class="form-control" id="tope_min" name="imagen_product" placeholder="Tope minimio..." autocomplete="off">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="imagen_product">Precio costo:</label>
-                        <input type="number" class="form-control" id="costo" name="imagen_product" placeholder="Precio costo..." autocomplete="off">
-                    </div>
-                </div>
-
-            </div>
-
-            <center>
-
-                <button class="btn btn-primary" onclick="createInventory('{{ route('saveInventory') }}')"><i
-                        class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;Crear inventario</button>
-            </center>
+                    <button class="btn btn-primary" onclick="createInventory('{{ route('saveInventory') }}')"><i
+                            class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;Crear inventario</button>
+                </center>
             @endif
 
             <div class="table-responsive">
@@ -59,9 +80,8 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">#</th>
-                            @if ($rol == "administrador")
-                                
-                            <th scope="col">Información producto</th>
+                            @if ($rol == 'administrador')
+                                <th scope="col">Información producto</th>
                             @endif
                             <th scope="col">Nombre Producto</th>
                             <th scope="col">Unidades Disponibles</th>
@@ -69,14 +89,15 @@
                             <th scope="col">Tope Minimo</th>
                             <th scope="col">Precio Costo</th>
                             <th scope="col">Total/Producto</th>
+                            <th scope="col">Categoría</th>
                         </tr>
                     </thead>
                     <tbody>
-        
+
                         @php
                             $flagg = 1;
                         @endphp
-        
+
                         @foreach ($productos as $producto)
                             @php
                                 $badge =
@@ -86,24 +107,36 @@
                             @endphp
                             <tr>
                                 <th scope="row">{{ $flagg }}</th>
-                                @if ($rol == "administrador")
-                                    
-                                <td><a onclick="openModalInfoInventory('{{$producto['id_item']}}', '{{ $producto['nombre'] }}','{{ $producto['unidades_disponibles'] }}')" title="Información/edición" type="button" class="btn btn-info"><i class="fa-solid fa-circle-info"></i></a></td>
+                                @if ($rol == 'administrador')
+                                    <td><a onclick="openModalInfoInventory('{{ $producto['id_item'] }}', '{{ $producto['nombre'] }}','{{ $producto['unidades_disponibles'] }}')"
+                                            title="Información/edición" type="button" class="btn btn-info"><i
+                                                class="fa-solid fa-circle-info"></i></a></td>
                                 @endif
                                 <td>{{ $producto['nombre'] }}</td>
-                                <td><span class="{{$badge}}">{{ $producto['unidades_disponibles'] }}</span></td>
+                                <td><span class="{{ $badge }}">{{ $producto['unidades_disponibles'] }}</span>
+                                </td>
                                 <td>{{ $producto['fecha_creacion'] }}</td>
                                 <td><span class="badge badge-warning">{{ $producto['tope_min'] }}</span></td>
-                                <td><i class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{number_format($producto['precio_costo'], 0, '', '.')}}</td>
-                                <td><i class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{number_format($producto['unidades_disponibles'] *  $producto['precio_costo'], 0, '', '.')}}</td>
+                                <td><i
+                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($producto['precio_costo'], 0, '', '.') }}
+                                </td>
+                                <td><i
+                                        class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($producto['unidades_disponibles'] * $producto['precio_costo'], 0, '', '.') }}
+                                </td>
+
+                                @php
+                                    $badge2 = $producto['categoria'] == 'tienda' ? 'badge badge-primary' : 'badge badge-warning';
+                                @endphp
+
+                                <td><span class="{{$badge2}}">{{ucfirst($producto['categoria'])}}</span></td>
                             </tr>
-        
+
                             @php
                                 $flagg++;
                             @endphp
                         @endforeach
                     </tbody>
-                </table>    
+                </table>
             </div>
 
             <div class="row p-5">
@@ -164,10 +197,14 @@
                             placeholder="Modificar precio de costo..." autocomplete="off" name="costo">
                     </div>
 
-                    <span class="text-secondary">Si desea eliminar un item de inventario recuerde que puede haber otros productos de venta asociados a dicho item...</span>
+                    <span class="text-secondary">Si desea eliminar un item de inventario recuerde que puede haber otros
+                        productos de venta asociados a dicho item...</span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="deleteInventory('{{route('deleteInventory')}}')" data-target="#modal_edit_inventory"><i class="fa-solid fa-xmark" ></i>&nbsp;&nbsp;Eliminar</button>
+                    <button type="button" class="btn btn-danger"
+                        onclick="deleteInventory('{{ route('deleteInventory') }}')"
+                        data-target="#modal_edit_inventory"><i
+                            class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Eliminar</button>
                     <button type="button" onclick="changeInventory('{{ route('editInventory') }}')"
                         class="btn btn-success"><i class="fa-solid fa-check"></i>&nbsp;&nbsp;Modificar</button>
                 </div>

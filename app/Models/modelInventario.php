@@ -11,9 +11,8 @@ class modelInventario extends Model
 
     use HasFactory;
     protected $table = "inventario";
-    protected $fillable = [ "id_item", "nombre", "unidades_disponibles", "fecha_creacion", "hora_creacion", "tope_min",
-    
-    "abastecimiento", "estado", "created_at", "updated_at"];
+    protected $fillable = [ "id_item", "nombre", "unidades_disponibles", "fecha_creacion", "hora_creacion", "tope_min",  
+    "abastecimiento", "estado", "categoria", "created_at", "updated_at"];
 
 
     public static function createProduct($data){

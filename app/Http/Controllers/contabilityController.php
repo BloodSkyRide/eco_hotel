@@ -14,7 +14,7 @@ use App\Models\modelEgressTotal;
 class contabilityController extends Controller
 {
 
-    protected $permited_users = ["1093228865", "1091272724", "25164634"];
+    protected $permited_users = ["1093228865", "1091272724"];
 
 
     public function getShowContability(Request $request)

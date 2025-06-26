@@ -1,36 +1,36 @@
-// Pusher.logToConsole = true;
+Pusher.logToConsole = true;
 
-// // sistema de escucha de eventos para notificaciones en tiempo real
-// var echo = new Echo({
-//     broadcaster: "pusher",
-//     cluster: "mt1",
-//     key: "p91ggxwl09aprwmrkr38", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
-//     wsHost: "localhost",
-//     wsPort: 8080,
-//     forceTLS: false,
-//     enabledTransports: ["ws", "wss"], // Solo WebSockets ws:http wss: https
-//     disabledTransports: ["xhr_polling", "xhr_streaming"], // Deshabilita otras opciones y evita el cors
-//     auth: {
-//         headers: {
-//             Authorization: `Bearer ${localStorage.getItem("access_token")}`, // Reemplaza con tu token real
-//         },
-//     },
-// });
+// sistema de escucha de eventos para notificaciones en tiempo real
+var echo = new Echo({
+    broadcaster: "pusher",
+    cluster: "mt1",
+    key: "base64:Oi8PxoallslFi0thF2JHoG1T5YnU6mxhHZP12", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
+    wsHost: "localhost",
+    wsPort: 8080,
+    forceTLS: false,
+    enabledTransports: ["ws", "wss"], // Solo WebSockets ws:http wss: https
+    disabledTransports: ["xhr_polling", "xhr_streaming"], // Deshabilita otras opciones y evita el cors
+    auth: {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`, // Reemplaza con tu token real
+        },
+    },
+});
 
-// echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo que usas en el backend
-//     .listen(".eventNotifications", function (data) {
-//         let role = document.getElementById("role_h1").textContent;
+echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo que usas en el backend
+    .listen(".eventNotifications", function (data) {
+        let role = document.getElementById("role_h1").textContent;
 
-//         if (role === "administrador") {
-//             playNotificationSound();
-//             $(document).Toasts("create", {
-//                 class: "bg-info",
-//                 title: "Solicitud hora extra",
-//                 subtitle: "Notificación",
-//                 body: data.message,
-//             });
-//         }
-//     });
+        if (role === "administrador") {
+            playNotificationSound();
+            $(document).Toasts("create", {
+                class: "bg-info",
+                title: "Solicitud hora extra",
+                subtitle: "Notificación",
+                body: data.message,
+            });
+        }
+    });
 
 function startChannelPrivate(id_user) {
     echo.connector.pusher.config.auth = {
@@ -52,6 +52,54 @@ function startChannelPrivate(id_user) {
         });
     });
 }
+
+function deleteItemsforStore(array_items){
+
+    array_items.forEach((item) => {
+        // Lógica para eliminar cada item del carrito
+        let itemElement = document.getElementById(`row_product_${item.id_item}`);
+        if (itemElement) {
+            itemElement.remove();
+        }
+    });
+}
+
+
+function prueba(){
+
+    let data_convert = convertArrayKkitchen();
+    deleteItemsforStore(data_convert);
+}
+async function orderByKitchen(url){
+    
+    let token = localStorage.getItem("access_token");
+
+    let data_convert = convertArrayKkitchen();
+
+    let response = await fetch(url,{
+
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            products_kitchen: data_convert,
+        }),
+        
+    });
+
+    let data = await response.json();
+
+    if(data.status){
+
+
+        deleteItemsforStore(data_convert);
+        // si es verdad y se realizo el pedido a cocina entonces deberemos borrar los items del carrito de compras
+
+    }
+}
+
 
 function playNotificationSound() {
     const audio = document.getElementById("notificationSound");
@@ -1978,6 +2026,7 @@ async function saveProduct(url) {
     let precio = document.getElementById("precio_producto");
     let dato = getDataProduct();
     let description = document.getElementById("descripcion_textarea");
+    let categoria = document.getElementById("category");
     // let form_image = getImagen();
 
     let input = document.getElementById("imagen_product");
@@ -1989,6 +2038,7 @@ async function saveProduct(url) {
     formData.append("precio", precio.value);
     formData.append("array", JSON.stringify(dato));
     formData.append("description", description.value);
+    formData.append("categoria", categoria.value);
 
     const token = localStorage.getItem("access_token");
 
@@ -2160,7 +2210,7 @@ function deleteUnitsCart(id_nodo, price_product, units){
     nodo_delete.remove();
 }
 
-function addProductToCar(name, description, identifier, url_image, price_unit) {
+function addProductToCar(name, description, identifier, url_image, price_unit, category) {
     let result = document.getElementById(`content_input-${identifier}`);
 
     if (result.value < 1) {
@@ -2182,13 +2232,12 @@ function addProductToCar(name, description, identifier, url_image, price_unit) {
     let amunt = document.getElementById(`content_input-${identifier}`);
     let price_finally = document.getElementById(`price-${identifier}`);
     let convert_price = price_finally.textContent;
-    let data_product = `<tr id="row_product_${identifier}" class="row_product" data-date="${identifier}-${
-        amunt.value
-    }">
+    let data_product = `<tr id="row_product_${identifier}" class="row_product" data-date="${identifier}-${amunt.value}-${category}">
                     <th><img src='${url_image}' alt='Imagen pollo' width='60' height='60'></th>
                     <td>${name}</td>
                     <td>${description}</td>
                     <td>${amunt.value}</td>
+                    <td>${category}</td>
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${(+price_unit).toLocaleString("es")}</td>
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${convert_price.toLocaleString("es")}</td>
                     <td><center><a onclick="deleteUnitsCart('${identifier}','${price_unit}', ${amunt.value})" type='button' title="Eliminar item"><i class="fa-solid fa-xmark text-danger"></i></a></center></td>
@@ -2271,6 +2320,32 @@ async function sellProducts(url) {
     }
 }
 
+
+
+
+function convertArrayKkitchen(){
+
+        let products = document.querySelectorAll(".row_product");
+
+    let array_producto = [];
+
+    products.forEach((element) => {
+
+        let id_product = element.dataset.date.split("-");
+
+        if(id_product[2] === "cocina"){
+
+            array_producto.push({
+                id_item: id_product[0],
+                cantidad: id_product[1],
+                categoria: id_product[2],
+            });
+        }
+    });
+    
+    return array_producto;
+}
+
 function convertArray() {
     let products = document.querySelectorAll(".row_product");
 
@@ -2332,11 +2407,38 @@ async function getShowInventory(url) {
     }
 }
 
+function validatorinputs(){
+
+    let nombre_producto = document.getElementById("nombre_producto_inventario").value;
+    let unidades = document.getElementById("unidades_inventario").value;
+    let tope_min = document.getElementById("tope_min").value;
+    let precio_costo = document.getElementById("costo").value;
+    let categoria = document.getElementById("categoria").value;
+
+    let array = [nombre_producto, unidades, tope_min, precio_costo, categoria];
+
+    array.forEach((element) => {
+        if (element === "") {
+            Swal.fire({
+                title: "¡Uuuuups!",
+                text: "¡¡Parece que hay campos vacios, por favor revisa!!",
+                icon: "error",
+            });
+            throw new Error("Campos vacios");
+        }
+    });
+
+
+}
+
 async function createInventory(url) {
+
+    validatorinputs();
     let nombre_producto = document.getElementById("nombre_producto_inventario");
     let unidades = document.getElementById("unidades_inventario");
     let tope_min = document.getElementById("tope_min");
     let precio_costo = document.getElementById("costo");
+    let categoria = document.getElementById("categoria");
 
     const token = localStorage.getItem("access_token");
     let response = await fetch(url, {
@@ -2350,6 +2452,7 @@ async function createInventory(url) {
             unidades: unidades.value,
             tope_min: tope_min.value,
             precio_costo: precio_costo.value,
+            categoria: categoria.value,
         }),
     });
 

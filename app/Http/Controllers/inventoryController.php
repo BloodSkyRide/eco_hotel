@@ -36,12 +36,13 @@ class inventoryController extends Controller
         $unidades = $request->unidades;
         $tope_min = $request->tope_min;
         $precio_costo = $request->precio_costo;
+        $categoria = $request->categoria;
 
         $fecha = date("Y-m-d");
         $hour = date('h:i:s');
         
         $data_inventory = ["nombre" => $nombre_producto, "unidades_disponibles" => $unidades, "fecha_creacion" => $fecha, "hora_creacion" => $hour, "tope_min" => $tope_min,
-        "abastecimiento" => "ABASTECIDO", "precio_costo" => $precio_costo, "estado" => "DISPONIBLE"];
+        "abastecimiento" => "ABASTECIDO", "precio_costo" => $precio_costo, "estado" => "DISPONIBLE", "categoria" => $categoria];
 
         $insert_product_inventory = modelInventario::createProduct($data_inventory);
 

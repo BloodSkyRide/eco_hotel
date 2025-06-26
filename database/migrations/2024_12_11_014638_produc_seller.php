@@ -16,11 +16,11 @@ return new class extends Migration
             $table->id("id_producto");
             $table->string("nombre_producto",255);
             $table->bigInteger("precio")->nullable();
+            $table->string("categoria",100)->nullable();
             $table->text("descripcion")->nullable();
             $table->date('fecha_creacion')->nullable();
             $table->text('url_imagen')->nullable();
             $table->timestamps();
-            
         });
     }
 

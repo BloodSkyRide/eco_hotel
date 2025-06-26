@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('abastecimiento')->nullable();
             $table->float('precio_costo')->nullable();
             $table->string('estado',100)->nullable();
+            $table->string('categoria',100)->nullable();
             $table->timestamps();
             
         });

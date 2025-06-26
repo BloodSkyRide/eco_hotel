@@ -176,6 +176,7 @@ class createProductController extends Controller
         $nombre = $request->nombre;
         $precio_producto = $request->precio;
         $description = $request->description;
+        $category = $request->categoria;
         $hoy = date("Y-m-d");
 
         $image = $request->image;
@@ -190,8 +191,7 @@ class createProductController extends Controller
         }else $url_image = self::saveImageProduct($image);
 
 
-
-        $data = ["nombre_producto" => $nombre, "precio" => $precio_producto, "descripcion" => $description, "fecha_creacion" => $hoy, "url_imagen" => $url_image];
+        $data = ["nombre_producto" => $nombre, "categoria" => $category ,"precio" => $precio_producto, "descripcion" => $description, "fecha_creacion" => $hoy, "url_imagen" => $url_image];
 
 
         $insert_product = modelProducts::insertProduct($data);
@@ -263,6 +263,34 @@ class createProductController extends Controller
         $render = view("menuDashboard.searcherTemplate", ["productos" => $search])->render();
 
         return response()->json(["status" => true, "html" => $render]);
+    }
+
+
+    public function kitchenOrder(Request $request)
+    {
+
+        $token_header = $request->header("Authorization");
+
+        $replace = str_replace("Bearer ", "", $token_header);
+
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+
+        $self_id = $decode_token["cedula"];
+
+        $self_name = $decode_token["nombre"] . " " . $decode_token["apellido"];
+
+        $array = $request->data;
+        $aux = 0;
+
+        foreach ($array as $item) {
+            $aux++;
+            modelSell::updateStateOrder($item['id_item'], "EN PREPARACIÓN");
+        }
+
+        return ($aux === count($array)) ? response()->json(["status" => true]) : response()->json(["status" => false]); 
+
+
+
     }
 
     public function sell(Request $request)

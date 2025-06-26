@@ -186,7 +186,8 @@ class guestController extends Controller
         $rol = $decode_token["rol"];
         $guests = modelGuest::getGuest($fecha);
         $total_guests_sell = modelGuest::totalSellGuests($fecha);
-        $render = view("menuDashboard.guest", ["rol" => $rol, "guests" => $guests, "total" => $total_guests_sell])->render();
+        $reserevations = modelReservations::getReservations($fecha);
+        $render = view("menuDashboard.guest", ["rol" => $rol, "guests" => $guests, "total" => $total_guests_sell, "reservations" => $reserevations])->render();
 
         return response()->json(["status" => true, "html" => $render]);
     }

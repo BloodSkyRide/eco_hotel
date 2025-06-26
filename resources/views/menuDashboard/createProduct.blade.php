@@ -40,9 +40,22 @@
                     <div id="previewContainer">
                         <center><img id="imagePreview" src="" alt="Previsualización de imagen"
                                 style="display: none; max-width: 300px; margin-top: 10px;"></center>
+                </div>
+
+                                    <div class="form-group">
+
+                        <label for="categoria">Categoria:</label>
+
+                        <select class="form-control" id="category" name="category">
+                            <option value="">Seleccione una categoria</option>
+                            <option value="tienda">Tienda</option>
+                            <option value="cocina">Cocina</option>
+                        </select>
+
                     </div>
 
                 </div>
+
 
                 {{-- COLUMNA 2 --}}
                 <div class="col">
@@ -117,6 +130,7 @@
                         <th scope="col">Descripción</th>
                         <th scope="col">Fecha creación</th>
                         <th scope="col">Precio</th>
+                        <th scope="col">Categoría</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -133,6 +147,15 @@
                           <td>{{$item['descripcion']}}</td>
                           <td>{{$item['fecha_creacion']}}</td>
                           <td><i class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;<span class="badge badge-success">{{number_format($item['precio'], 0, '', '.')}}</span></td>
+                          <td>
+
+                            @php
+                                $badge =  $item['categoria'] == 'tienda' ? 'badge badge-primary' : 'badge badge-warning';
+                            @endphp
+
+                            <span class="{{$badge}}">{{ucfirst($item['categoria'])}}</span>
+
+                          </td>
                         </tr>
     
                         @php
