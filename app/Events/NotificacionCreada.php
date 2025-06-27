@@ -14,21 +14,51 @@ class NotificacionCreada implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $mensaje;
+    public $nombre_producto;
+    public $cantidad;
+    public $cajero;
+    public $id_cajero;
+    public $description;
+    public $hora;
+    public $fecha;
+    public $image_product;
 
-    public function __construct($mensaje)
+    public function __construct($nombre,$cantidad,$cajero, $id_cajero, $description,$hora,$fecha, $image_product)
     {
-        $this->mensaje = $mensaje;
+        $this->nombre_producto = $nombre;
+        $this->cantidad = $cantidad;
+        $this->cajero = $cajero;
+        $this->id_cajero = $id_cajero;
+        $this->description = $description;
+        $this->hora = $hora;
+        $this->fecha = $fecha;
+        $this->image_product = $image_product;
     }
 
-    public function broadcastOn()
+    public function broadcastOn(): Channel
     {
-        return new Channel('notificaciones-channel');
+        return new Channel('realtime-channel');  // Aquí defines el canal
     }
 
     // Opcional: cambiar el nombre que se usa en JS para escuchar el evento
     public function broadcastAs()
     {
-        return 'notificacionCreada';
+        return 'orderKitchen';
+    }
+
+        public function broadcastWith()
+    {   // aqui definimos los datos que seran enviados al frontend
+        
+        return [
+            
+            'name_product' => $this->nombre_producto,
+            'amount' => $this->cantidad,
+            'name_shopkeeper' => $this->cajero,
+            'id_shopkeeper' => $this->id_cajero,
+            'description' => $this->description,
+            'hora' => $this->hora,
+            'fecha' => $this->fecha,
+            'image_product'=> $this->image_product
+        ];
     }
 }

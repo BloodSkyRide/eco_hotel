@@ -4,7 +4,7 @@ Pusher.logToConsole = true;
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
-    key: "base64:Oi8PxoallslFi0thF2JHoG1T5YnU6mxhHZP12", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
+    key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
     wsHost: "localhost",
     wsPort: 8080,
     forceTLS: false,
@@ -17,19 +17,35 @@ var echo = new Echo({
     },
 });
 
-echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo que usas en el backend
-    .listen(".eventNotifications", function (data) {
-        let role = document.getElementById("role_h1").textContent;
 
-        if (role === "administrador") {
+echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo que usas en el backend
+    .listen(".orderKitchen", function (data) {
+
+        let role = document.getElementById("role_h1").textContent; 
+        
+          if(role === "administrador"){
+
             playNotificationSound();
             $(document).Toasts("create", {
-                class: "bg-info",
-                title: "Solicitud hora extra",
-                subtitle: "Notificación",
-                body: data.message,
-            });
-        }
+                class: 'bg-white text-dark',
+        body: `<strong>Nombre producto:</strong> ${(data.name_product).toUpperCase()}<br>
+                <strong>Cantidad:</strong> ${(data.amount).toUpperCase()}<br>
+                <strong>Hora orden:</strong> ${data.hora}<br>
+                <strong>Nombre Cajero:</strong> ${(data.name_shopkeeper).toUpperCase()}<br>
+                <strong>Identificacion cajero:</strong> ${(data.id_shopkeeper).toUpperCase()}<br><br>
+                <strong>Descripcion:</strong> ${(data.description).toUpperCase()}<br><br><hr>
+                <center><button class="btn btn-primary ml-2">Preparado</button>
+                <button class="btn btn-info">Despachado</button></center>
+                `,
+        title: 'Nueva orden',
+        subtitle: data.fecha,
+        image: data.image_product,
+        imageAlt: data.name_product,
+      });
+
+          }
+
+        
     });
 
 function startChannelPrivate(id_user) {
@@ -94,7 +110,7 @@ async function orderByKitchen(url){
     if(data.status){
 
 
-        deleteItemsforStore(data_convert);
+        //deleteItemsforStore(data_convert);
         // si es verdad y se realizo el pedido a cocina entonces deberemos borrar los items del carrito de compras
 
     }
@@ -2238,6 +2254,7 @@ function addProductToCar(name, description, identifier, url_image, price_unit, c
                     <td>${description}</td>
                     <td>${amunt.value}</td>
                     <td>${category}</td>
+                    ${category === "cocina" ? `<td><button class="btn btn-warning" title="Nota de pedido" data-toggle="modal" data-target="#modal_description"><i class="fa-solid fa-file-pen"></i></button></td>`:"<td>N/A</td>"}
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${(+price_unit).toLocaleString("es")}</td>
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${convert_price.toLocaleString("es")}</td>
                     <td><center><a onclick="deleteUnitsCart('${identifier}','${price_unit}', ${amunt.value})" type='button' title="Eliminar item"><i class="fa-solid fa-xmark text-danger"></i></a></center></td>

@@ -20,6 +20,3 @@
     </div>
 </div>
 @endforeach
-
-trabajando
-

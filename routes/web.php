@@ -15,8 +15,10 @@ use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\historySellController;
 use App\Http\Controllers\employeFoodController;
 use App\Http\Controllers\guestController; 
-use App\Http\Controllers\contabilityController; 
-use App\Http\Controllers\transfersController; 
+use App\Http\Controllers\contabilityController;
+use App\Http\Controllers\kitchenController;
+use App\Http\Controllers\transfersController;
+ 
 
 
 
@@ -178,5 +180,7 @@ Route::post('/search-range', [transfersController::class, 'searchForRangeTransfe
 Route::post('/make-reservation', [guestController::class, 'makeReservation'])->name("reservation")->middleware(["verifyTokenHeader"]);
 Route::post('/search-reservation', [guestController::class, 'searchReservation'])->name("searchReservation")->middleware(["verifyTokenHeader"]);
 Route::post('/redeem-code', [guestController::class, 'redeemCode'])->name("redeemCode")->middleware(["verifyTokenHeader"]);
+Route::post('/orderkitchen', [kitchenController::class, 'orderkitchen'])->name("orderkitchen")->middleware(["verifyTokenHeader"]);
+
 
 
