@@ -13,13 +13,14 @@ class kitchenController extends Controller
 
 
     public $state_preparation = "preparacion";
-    public function orderKitchen(Request $request){
+    public function orderKitchen(Request $request)
+    {
 
 
         $array = $request->products_kitchen;
         $token_header = $request->header("Authorization");
 
-        $replace = str_replace("Bearer ","",$token_header);
+        $replace = str_replace("Bearer ", "", $token_header);
 
         $decode_token = JWTAuth::setToken($replace)->authenticate();
         $cajero = $decode_token["nombre"];
@@ -28,25 +29,61 @@ class kitchenController extends Controller
         $hora = date('H:i:s');
         $fecha_actual = date('Y-m-d');
 
-        foreach($array as $item){
+        foreach ($array as $item) {
 
             $nombre_producto = modelProducts::getNameProduct($item['id_item'])->first()->nombre_producto;
             $cantidad = $item['cantidad'];
 
-            $data_insert = ["nombre_producto" => $nombre_producto,
-        "cantidad" => $cantidad,"descripcion" =>  25000, "hora" => $hora, "estado" => $this->state_preparation,
-        "fecha" => $fecha_actual, "nombre_cajero" => $cajero, "id_cajero" => $id_cajero];
+            $data_insert = [
+                "nombre_producto" => $nombre_producto,
+                "cantidad" => $cantidad,
+                "descripcion" =>  25000,
+                "hora" => $hora,
+                "estado" => $this->state_preparation,
+                "fecha" => $fecha_actual,
+                "nombre_cajero" => $cajero,
+                "id_cajero" => $id_cajero
+            ];
 
-        $image_product = modelProducts::getProduct($item['id_item'])->url_imagen;
+            $image_product = modelProducts::getProduct($item['id_item'])->url_imagen;
 
             modelKitchen::insertOrderKitchen($data_insert);
-            
-            broadcast(new NotificacionCreada($nombre_producto,$cantidad,$cajero, 
-            $id_cajero, $description, $hora,$fecha_actual, $image_product));
+
+            broadcast(new NotificacionCreada(
+                $nombre_producto,
+                $cantidad,
+                $cajero,
+                $id_cajero,
+                $description,
+                $hora,
+                $fecha_actual,
+                $image_product
+            ));
             sleep(1);
         }
 
         return response()->json(["status" => "evento emitido satisfactoriamente"]);
+    }
 
+
+    public function getShowKitchen(Request $request)
+    {
+
+
+        $token_header = $request->header("Authorization");
+
+        $replace = str_replace("Bearer ", "", $token_header);
+
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+
+        $cedula = $decode_token['cedula'];
+        $today = date('Y-m-d');
+
+        $orders = modelKitchen::getOrdersToday($today);
+
+        $render = view("menuDashboard.historyOrderKitchen", ["orders" => $orders, 'id' => $cedula])->render();
+
+
+        return response()->json(["status" => true, "html" => $render]);
     }
 }

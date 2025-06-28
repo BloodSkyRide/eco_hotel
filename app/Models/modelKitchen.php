@@ -14,4 +14,12 @@ class modelKitchen extends Model
         return self::insert($data_insert);
 
     }
+
+
+    public static function getOrdersToday($today){
+
+        return self::where("fecha", $today)
+        ->get();
+
+    }
 }

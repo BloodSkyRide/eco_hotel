@@ -181,6 +181,7 @@ Route::post('/make-reservation', [guestController::class, 'makeReservation'])->n
 Route::post('/search-reservation', [guestController::class, 'searchReservation'])->name("searchReservation")->middleware(["verifyTokenHeader"]);
 Route::post('/redeem-code', [guestController::class, 'redeemCode'])->name("redeemCode")->middleware(["verifyTokenHeader"]);
 Route::post('/orderkitchen', [kitchenController::class, 'orderkitchen'])->name("orderkitchen")->middleware(["verifyTokenHeader"]);
+Route::get('/cocina', [kitchenController::class, 'getShowKitchen'])->name("showKitchen")->middleware(["verifyTokenHeader"]);
 
 
 

@@ -4,7 +4,7 @@ Pusher.logToConsole = true;
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
-    key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
+    key: "cgsqr9uchge3qv2ad37z", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
     wsHost: "localhost",
     wsPort: 8080,
     forceTLS: false,
@@ -47,6 +47,30 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
 
         
     });
+
+async function showOrderKitchen(url){
+
+    let token = localStorage.getItem("access_token");
+
+    let response = await fetch(url, {
+
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+
+    let data = await response.json();
+
+    if(data.status){
+
+
+
+
+    }
+}
 
 function startChannelPrivate(id_user) {
     echo.connector.pusher.config.auth = {
@@ -191,6 +215,17 @@ async function sendUser(url) {
             }
         }
     }
+}
+
+
+function openModalKitchen(id_order){
+
+    $("#modal_state_kitchen").modal("show");
+
+    let data_set = document.getElementById("content_modal_state_kitchen");
+
+    data_set.dataset.id = id_order;
+
 }
 
 // async function showManageLabor(url) {
