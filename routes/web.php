@@ -183,5 +183,7 @@ Route::post('/redeem-code', [guestController::class, 'redeemCode'])->name("redee
 Route::post('/orderkitchen', [kitchenController::class, 'orderkitchen'])->name("orderkitchen")->middleware(["verifyTokenHeader"]);
 Route::get('/cocina', [kitchenController::class, 'getShowKitchen'])->name("showKitchen")->middleware(["verifyTokenHeader"]);
 
+Route::post('/cambiar-estado-cocina', [kitchenController::class, 'changeState'])->name("changeState")->middleware(["verifyTokenHeader"]);
+
 
 

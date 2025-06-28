@@ -86,4 +86,25 @@ class kitchenController extends Controller
 
         return response()->json(["status" => true, "html" => $render]);
     }
+
+
+    public function changeState(Request $request){
+
+        $id_order = $request->id_order;
+
+        $state = $request->state;
+
+        $change_state = modelKitchen::changeStateForId($id_order, $state);
+
+
+        if($change_state){
+
+            return self::getShowKitchen($request);
+
+        }
+
+        else return response()->json(["status" => true]);
+
+
+    }
 }

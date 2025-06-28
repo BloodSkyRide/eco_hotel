@@ -4,7 +4,7 @@ Pusher.logToConsole = true;
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
-    key: "cgsqr9uchge3qv2ad37z", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
+    key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
     wsHost: "localhost",
     wsPort: 8080,
     forceTLS: false,
@@ -17,58 +17,45 @@ var echo = new Echo({
     },
 });
 
-
 echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo que usas en el backend
     .listen(".orderKitchen", function (data) {
+        let role = document.getElementById("role_h1").textContent;
 
-        let role = document.getElementById("role_h1").textContent; 
-        
-          if(role === "administrador"){
-
+        if (role === "administrador") {
             playNotificationSound();
             $(document).Toasts("create", {
-                class: 'bg-white text-dark',
-        body: `<strong>Nombre producto:</strong> ${(data.name_product).toUpperCase()}<br>
-                <strong>Cantidad:</strong> ${(data.amount).toUpperCase()}<br>
+                class: "bg-white text-dark",
+                body: `<strong>Nombre producto:</strong> ${data.name_product.toUpperCase()}<br>
+                <strong>Cantidad:</strong> ${data.amount.toUpperCase()}<br>
                 <strong>Hora orden:</strong> ${data.hora}<br>
-                <strong>Nombre Cajero:</strong> ${(data.name_shopkeeper).toUpperCase()}<br>
-                <strong>Identificacion cajero:</strong> ${(data.id_shopkeeper).toUpperCase()}<br><br>
-                <strong>Descripcion:</strong> ${(data.description).toUpperCase()}<br><br><hr>
+                <strong>Nombre Cajero:</strong> ${data.name_shopkeeper.toUpperCase()}<br>
+                <strong>Identificacion cajero:</strong> ${data.id_shopkeeper.toUpperCase()}<br><br>
+                <strong>Descripcion:</strong> ${data.description.toUpperCase()}<br><br><hr>
                 <center><button class="btn btn-primary ml-2">Preparado</button>
                 <button class="btn btn-info">Despachado</button></center>
                 `,
-        title: 'Nueva orden',
-        subtitle: data.fecha,
-        image: data.image_product,
-        imageAlt: data.name_product,
-      });
-
-          }
-
-        
-    });
-
-async function showOrderKitchen(url){
-
-    let token = localStorage.getItem("access_token");
-
-    let response = await fetch(url, {
-
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+                title: "Nueva orden",
+                subtitle: data.fecha,
+                image: data.image_product,
+                imageAlt: data.name_product,
+            });
         }
     });
 
+async function showOrderKitchen(url) {
+    let token = localStorage.getItem("access_token");
+
+    let response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
     let data = await response.json();
 
-    if(data.status){
-
-
-
-
+    if (data.status) {
     }
 }
 
@@ -93,53 +80,41 @@ function startChannelPrivate(id_user) {
     });
 }
 
-function deleteItemsforStore(array_items){
-
+function deleteItemsforStore(array_items) {
     array_items.forEach((item) => {
         // Lógica para eliminar cada item del carrito
-        let itemElement = document.getElementById(`row_product_${item.id_item}`);
+        let itemElement = document.getElementById(
+            `row_product_${item.id_item}`
+        );
         if (itemElement) {
             itemElement.remove();
         }
     });
 }
 
-
-function prueba(){
-
-    let data_convert = convertArrayKkitchen();
-    deleteItemsforStore(data_convert);
-}
-async function orderByKitchen(url){
-    
+async function orderByKitchen(url) {
     let token = localStorage.getItem("access_token");
 
     let data_convert = convertArrayKkitchen();
 
-    let response = await fetch(url,{
-
+    let response = await fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
             products_kitchen: data_convert,
         }),
-        
     });
 
     let data = await response.json();
 
-    if(data.status){
-
-
-        //deleteItemsforStore(data_convert);
+    if (data.status) {
+        deleteItemsforStore(data_convert);
         // si es verdad y se realizo el pedido a cocina entonces deberemos borrar los items del carrito de compras
-
     }
 }
-
 
 function playNotificationSound() {
     const audio = document.getElementById("notificationSound");
@@ -217,15 +192,53 @@ async function sendUser(url) {
     }
 }
 
+async function sendStateKitchen(url) {
+    let token = localStorage.getItem("access_token");
 
-function openModalKitchen(id_order){
+    let id_modal = document.getElementById("content_modal_state_kitchen");
 
+    let id_order = id_modal.dataset.id;
+
+    let state = document.getElementById("state_kitchen");
+
+    if (state.value === "") {
+        Swal.fire({
+            title: "Uuuups!",
+            text: "Elige un estado!",
+            icon: "error",
+        });
+    }
+
+    let response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+
+            id_order: id_order,
+            state: state.value,
+        }),
+    });
+
+    let data = await response.json();
+
+    if (data.status) {
+
+        $("#modal_state_kitchen").modal("hide");
+
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
+    }
+}
+
+function openModalKitchen(id_order) {
     $("#modal_state_kitchen").modal("show");
 
     let data_set = document.getElementById("content_modal_state_kitchen");
 
     data_set.dataset.id = id_order;
-
 }
 
 // async function showManageLabor(url) {
@@ -1961,11 +1974,9 @@ async function createProduct(url) {
             }
         });
 
-
         const input2 = document.getElementById("edit_imagen_product");
 
-        input2.addEventListener("change", (event) =>{
-
+        input2.addEventListener("change", (event) => {
             const file = event.target.files[0];
             let imagePreview = document.getElementById("imagePreview2");
             if (file) {
@@ -1982,7 +1993,6 @@ async function createProduct(url) {
                 // Si no hay archivo, ocultar la previsualización
                 imagePreview.style.display = "none";
             }
-
         });
 
         $("#table_products_total").DataTable({
@@ -2006,8 +2016,6 @@ async function createProduct(url) {
                 emptyTable: "No hay datos disponibles",
             },
         });
-
-
     }
 }
 
@@ -2243,16 +2251,13 @@ function lessAndPlus(operator, identifier) {
     }
 }
 
-
-function deleteUnitsCart(id_nodo, price_product, units){
-
+function deleteUnitsCart(id_nodo, price_product, units) {
     let nodo_delete = document.getElementById(`row_product_${id_nodo}`);
     let price_total = document.getElementById("price_total_car");
     let price_format_container = document.getElementById("container_shop");
-    let price_convert = (price_total.textContent).replace(/\./g, "");
+    let price_convert = price_total.textContent.replace(/\./g, "");
 
-    let operation_resta = +price_convert - (price_product * units);
-
+    let operation_resta = +price_convert - price_product * units;
 
     price_format_container.dataset.precio = operation_resta;
 
@@ -2261,7 +2266,14 @@ function deleteUnitsCart(id_nodo, price_product, units){
     nodo_delete.remove();
 }
 
-function addProductToCar(name, description, identifier, url_image, price_unit, category) {
+function addProductToCar(
+    name,
+    description,
+    identifier,
+    url_image,
+    price_unit,
+    category
+) {
     let result = document.getElementById(`content_input-${identifier}`);
 
     if (result.value < 1) {
@@ -2283,16 +2295,28 @@ function addProductToCar(name, description, identifier, url_image, price_unit, c
     let amunt = document.getElementById(`content_input-${identifier}`);
     let price_finally = document.getElementById(`price-${identifier}`);
     let convert_price = price_finally.textContent;
-    let data_product = `<tr id="row_product_${identifier}" class="row_product" data-date="${identifier}-${amunt.value}-${category}">
+    let data_product = `<tr id="row_product_${identifier}" class="row_product" data-date="${identifier}-${
+        amunt.value
+    }-${category}">
                     <th><img src='${url_image}' alt='Imagen pollo' width='60' height='60'></th>
                     <td>${name}</td>
                     <td>${description}</td>
                     <td>${amunt.value}</td>
                     <td>${category}</td>
-                    ${category === "cocina" ? `<td><button class="btn btn-warning" title="Nota de pedido" data-toggle="modal" data-target="#modal_description"><i class="fa-solid fa-file-pen"></i></button></td>`:"<td>N/A</td>"}
-                    <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${(+price_unit).toLocaleString("es")}</td>
-                    <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${convert_price.toLocaleString("es")}</td>
-                    <td><center><a onclick="deleteUnitsCart('${identifier}','${price_unit}', ${amunt.value})" type='button' title="Eliminar item"><i class="fa-solid fa-xmark text-danger"></i></a></center></td>
+                    ${
+                        category === "cocina"
+                            ? `<td><button class="btn btn-warning" title="Nota de pedido" data-toggle="modal" data-target="#modal_description"><i class="fa-solid fa-file-pen"></i></button></td>`
+                            : "<td>N/A</td>"
+                    }
+                    <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${(+price_unit).toLocaleString(
+                        "es"
+                    )}</td>
+                    <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${convert_price.toLocaleString(
+                        "es"
+                    )}</td>
+                    <td><center><a onclick="deleteUnitsCart('${identifier}','${price_unit}', ${
+        amunt.value
+    })" type='button' title="Eliminar item"><i class="fa-solid fa-xmark text-danger"></i></a></center></td>
                   </tr>`;
 
     let convert_price_final = parseInt(convert_price.replace(/\./g, ""), 10);
@@ -2332,7 +2356,7 @@ async function sellProducts(url) {
 
     let button = document.getElementById("button_sell");
     button.setAttribute("disabled", "true");
-      let iterator = 15;
+    let iterator = 15;
     for (i = 1; i <= 15; i++) {
         await retardoSell(iterator);
 
@@ -2372,21 +2396,15 @@ async function sellProducts(url) {
     }
 }
 
-
-
-
-function convertArrayKkitchen(){
-
-        let products = document.querySelectorAll(".row_product");
+function convertArrayKkitchen() {
+    let products = document.querySelectorAll(".row_product");
 
     let array_producto = [];
 
     products.forEach((element) => {
-
         let id_product = element.dataset.date.split("-");
 
-        if(id_product[2] === "cocina"){
-
+        if (id_product[2] === "cocina") {
             array_producto.push({
                 id_item: id_product[0],
                 cantidad: id_product[1],
@@ -2394,7 +2412,7 @@ function convertArrayKkitchen(){
             });
         }
     });
-    
+
     return array_producto;
 }
 
@@ -2459,9 +2477,10 @@ async function getShowInventory(url) {
     }
 }
 
-function validatorinputs(){
-
-    let nombre_producto = document.getElementById("nombre_producto_inventario").value;
+function validatorinputs() {
+    let nombre_producto = document.getElementById(
+        "nombre_producto_inventario"
+    ).value;
     let unidades = document.getElementById("unidades_inventario").value;
     let tope_min = document.getElementById("tope_min").value;
     let precio_costo = document.getElementById("costo").value;
@@ -2479,12 +2498,9 @@ function validatorinputs(){
             throw new Error("Campos vacios");
         }
     });
-
-
 }
 
 async function createInventory(url) {
-
     validatorinputs();
     let nombre_producto = document.getElementById("nombre_producto_inventario");
     let unidades = document.getElementById("unidades_inventario");
@@ -2554,10 +2570,6 @@ async function createInventory(url) {
 }
 
 async function changeInventory(url) {
-
-
-
-
     let units = document.getElementById("adicion_unidades");
     let container_id = document.getElementById("titulo_modal_inventario");
     let id_item_inventory = container_id.dataset.id;
@@ -2577,7 +2589,7 @@ async function changeInventory(url) {
             id_inventory: id_item_inventory,
             precio_costo: price_cost.value,
             nombre_inventario: edit_name.value,
-            units_establishing: unit_establishing.value
+            units_establishing: unit_establishing.value,
         }),
     });
 
@@ -2812,7 +2824,7 @@ async function searchRange(url) {
                 emptyTable: "No hay datos disponibles",
             },
         });
-        
+
         let new_date = document.getElementById("reservationdate");
         new_date.value = aux;
     }
@@ -2828,8 +2840,7 @@ function emptyCart() {
     total_cambio.textContent = 0;
 }
 
-async function modifyItemCompound(url){
-
+async function modifyItemCompound(url) {
     let span = document.getElementById("span_id");
     let item_compound = span.dataset.id;
 
@@ -2849,18 +2860,15 @@ async function modifyItemCompound(url){
     const token = localStorage.getItem("access_token");
     let response = await fetch(url, {
         method: "POST",
-        headers:{
+        headers: {
             Authorization: `Bearer ${token}`,
         },
-        body: form
-
+        body: form,
     });
 
     let data = await response.json();
 
-
-    if (data.status){
-
+    if (data.status) {
         var Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -2872,7 +2880,6 @@ async function modifyItemCompound(url){
             icon: "success",
             title: data.message,
         });
-
 
         modify_cost.value = "";
         image.value = "";
@@ -2906,39 +2913,28 @@ async function modifyItemCompound(url){
                 emptyTable: "No hay datos disponibles",
             },
         });
-
     }
-
 }
 
-async function deleteProductSeller(url){
-
+async function deleteProductSeller(url) {
     let span = document.getElementById("span_id");
     let id_item = span.dataset.id;
 
     const token = localStorage.getItem("access_token");
-    let response = await fetch(url,{
-
+    let response = await fetch(url, {
         method: "POST",
         headers: {
-
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-
-            id_item: id_item
-
-        })
-
+            id_item: id_item,
+        }),
     });
-
 
     let data = await response.json();
 
-
-    if(data.status){
-
+    if (data.status) {
         var Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -2975,22 +2971,19 @@ async function deleteProductSeller(url){
                 emptyTable: "No hay datos disponibles",
             },
         });
-
     }
 }
 
-
-function change(){
-
+function change() {
     let price_car = document.getElementById("price_total_car");
 
     let price_total = price_car.textContent;
 
-    let price_convert = price_total.replace(/\./g, '');
+    let price_convert = price_total.replace(/\./g, "");
 
     let int_price = +price_convert;
 
-    let change = document.getElementById("cambio").value
+    let change = document.getElementById("cambio").value;
 
     let less = +change - int_price;
 
@@ -2998,201 +2991,148 @@ function change(){
 
     total_cambio.textContent = less.toLocaleString("es-ES");
 
-
     $("#modal_cambio").modal("hide");
-
-
 }
-async function getShowEmployeeFood(url){
-
+async function getShowEmployeeFood(url) {
     const token = localStorage.getItem("access_token");
-    let response = await fetch(url,{
+    let response = await fetch(url, {
         method: "GET",
-        headers:{
-
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        }
+            Authorization: `Bearer ${token}`,
+        },
     });
-
 
     let data = await response.json();
 
-
-    if(data.status){
-
+    if (data.status) {
         let element_container = document.getElementById("container_menu");
         element_container.innerHTML = data.html;
         $(".select2").select2();
         $(".select2bs4").select2({
             theme: "bootstrap4",
         });
-
     }
-
 }
 
-
-async function searchforRangeFood(url){
-
+async function searchforRangeFood(url) {
     let token = localStorage.getItem("access_token");
 
-    let response = await fetch(url,{
-
+    let response = await fetch(url, {
         method: "POST",
-        headers:{
-
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-            
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-
-            fecha: document.getElementById("reservationdate").value
-
-        })
-
+            fecha: document.getElementById("reservationdate").value,
+        }),
     });
-
 
     let data = await response.json();
 
-
-    if(data.status){
-
+    if (data.status) {
         let element_container = document.getElementById("container_menu");
         element_container.innerHTML = data.html;
         $(".select2").select2();
         $(".select2bs4").select2({
             theme: "bootstrap4",
         });
-
     }
-
-
 }
 
-async function discountFoodEmployee(url){
-
+async function discountFoodEmployee(url) {
     let id_item_sell = document.getElementById("select_item_sell");
     let name_employee = document.getElementById("name_employee");
     let units = document.getElementById("units_employee");
 
     const token = localStorage.getItem("access_token");
-    let response = await fetch(url,{
+    let response = await fetch(url, {
         method: "POST",
-        headers:{
-
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-
             id_item: id_item_sell.value,
             name_employee: name_employee.value,
-            units: units.value
-
-
-        })
+            units: units.value,
+        }),
     });
-
 
     let data = await response.json();
 
-
-    if(data.status){
-
+    if (data.status) {
         let element_container = document.getElementById("container_menu");
         element_container.innerHTML = data.html;
         $(".select2").select2();
         $(".select2bs4").select2({
             theme: "bootstrap4",
         });
-
-
     }
-
-
 }
 
-
-async function openModalInfo(id_item, info_tittle, url){
-
-    
-
+async function openModalInfo(id_item, info_tittle, url) {
     let titulo_modal = document.getElementById("titulo_modal");
 
     let span = document.getElementById("span_id");
 
     span.dataset.id = id_item;
 
-    titulo_modal.innerHTML = "información de producto de venta "+info_tittle;
-
+    titulo_modal.innerHTML = "información de producto de venta " + info_tittle;
 
     let token = localStorage.getItem("access_token");
 
-    let response = await fetch(url,{
-
+    let response = await fetch(url, {
         method: "POST",
-        headers:{
-
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-
-            id_item: id_item
-        })
+            id_item: id_item,
+        }),
     });
 
-    let data =   await response.json();
+    let data = await response.json();
 
-    let text = "Informacion de la cantidad de productos asociados a "+info_tittle.toUpperCase();
+    let text =
+        "Informacion de la cantidad de productos asociados a " +
+        info_tittle.toUpperCase();
 
-    if(data.status){
-
-
+    if (data.status) {
         let body_table = document.getElementById("tbody_id");
         let productos_compuestos = data.producto;
-        
 
         span.innerText = text;
 
-        productos_compuestos.forEach((item) =>{
-
+        productos_compuestos.forEach((item) => {
             body_table.innerHTML += `<td><center>${item.nombre_compuesto}</center></td>
-            <td><center>${item.descuento}</center></td>`
-
+            <td><center>${item.descuento}</center></td>`;
         });
 
         $("#modal_info").modal("show");
     }
-
 }
 
-function closeModalSecure(){
-
+function closeModalSecure() {
     let body_table = document.getElementById("tbody_id");
 
     body_table.innerHTML = "";
 
     console.log("cerre");
     $("#modal_info").modal("hide");
-
 }
 
-function openModalInfoInventory(id_item, nombre_item, unidades){
-
+function openModalInfoInventory(id_item, nombre_item, unidades) {
     let unidades_disponibles = document.getElementById("badge");
     unidades_disponibles.innerText = unidades;
     let titulo = document.getElementById("titulo_modal_inventario");
-    titulo.innerText = "Editar inventario de "+nombre_item.toUpperCase();
+    titulo.innerText = "Editar inventario de " + nombre_item.toUpperCase();
 
     titulo.dataset.id = id_item;
 
     $("#modal_edit_inventory").modal("show");
-
-
 }
 
 function retardoSell(iterator) {
@@ -3210,5 +3150,3 @@ function retardoSell(iterator) {
         }, 1000);
     });
 }
-
-

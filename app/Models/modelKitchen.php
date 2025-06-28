@@ -22,4 +22,13 @@ class modelKitchen extends Model
         ->get();
 
     }
+
+
+    public static function changeStateForId($id_order, $state){
+
+
+        return self::where("id_pedido", $id_order)
+        ->update(["estado" => $state]);
+
+    }
 }

@@ -47,15 +47,17 @@
                                     if ($item['estado'] === 'preparacion') {
                                         $class = 'warning';
                                     } elseif ($item['estado'] === 'preparado') {
-                                        $class = 'success';
-                                    } else {
                                         $class = 'info';
+                                    } 
+                                    else if($item['estado'] === 'rechazado') $class = "danger";
+                                    else {
+                                        $class = 'success';
                                     }
 
                                     $button_start = '';
                                     $button_end = '';
                                     if ($id == '1093228865' || $id == '1091272724') {
-                                        $button_start = '<a type="button" title="cambiar estado">';
+                                        $button_start = '<a type="button" title="cambiar estado" onclick="openModalKitchen(' . $item["id_pedido"] . ')">';
                                         $button_end = '</a>';
                                     }
                                 @endphp
@@ -76,11 +78,11 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modal_state_kitchen" tabindex="-1">
+    <div class="modal fade" id="modal_state_kitchen" tabindex="-9999" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title" id="exampleModalLabel">Solicitud de hora extra</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Cambiar estado de Pedido</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -92,20 +94,16 @@
                     <select class="form-control" id="state_kitchen" name="state_kitchen">
                         <option value="">Seleccione un estado</option>
                         <option value="preparacion">Preparación</option>
-                        <option value="preparado">preparado</option>
-                        <option value="despachado">despachado</option>
-                        <option value="rechazado">rechazado</option>
+                        <option value="preparado">Preparado</option>
+                        <option value="despachado">Despachado</option>
+                        <option value="rechazado">Rechazado</option>
                     </select>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button"
-                        onclick="changeStateNotification('{{ route('changeStateOverTime') }}', 'Rechazar')"
-                        class="btn btn-danger" data-dismiss="modal"><i
-                            class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Rechazar</button>
-                    <button type="button"
-                        onclick="changeStateNotification('{{ route('changeStateOverTime') }}', 'Aceptar')"
-                        class="btn btn-success"><i class="fa-solid fa-check"></i>&nbsp;&nbsp;Aceptar</button>
+                        onclick="sendStateKitchen('{{ route('changeState') }}', 'Aceptar')"
+                        class="btn btn-success"><i class="fa-solid fa-check"></i>&nbsp;&nbsp;Enviar</button>
                 </div>
             </div>
         </div>
