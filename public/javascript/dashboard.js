@@ -1,10 +1,11 @@
 Pusher.logToConsole = true;
 
+let route = "http://localhost/cambiar_estado_button";
 // sistema de escucha de eventos para notificaciones en tiempo real
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
-    key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
+    key: "cgsqr9uchge3qv2ad37z", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
     wsHost: "localhost",
     wsPort: 8080,
     forceTLS: false,
@@ -31,8 +32,15 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
                 <strong>Nombre Cajero:</strong> ${data.name_shopkeeper.toUpperCase()}<br>
                 <strong>Identificacion cajero:</strong> ${data.id_shopkeeper.toUpperCase()}<br><br>
                 <strong>Descripcion:</strong> ${data.description.toUpperCase()}<br><br><hr>
-                <center><button class="btn btn-primary ml-2">Preparado</button>
-                <button class="btn btn-info">Despachado</button></center>
+                <center><button class="btn btn-primary ml-2" onclick="buttonChangeState('${
+                    data.id_order
+                }','preparado')">Preparado</button>
+                <button class="btn btn-info" onclick="buttonChangeState('${
+                    data.id_order
+                }','despachado')">Despachado</button></center>
+                <button class="btn btn-info" onclick="buttonChangeState('${
+                    data.id_order
+                }','rechazado')">Rechazar</button></center>
                 `,
                 title: "Nueva orden",
                 subtitle: data.fecha,
@@ -41,6 +49,33 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
             });
         }
     });
+
+async function buttonChangeState(id_order, state) {
+    let token = localStorage.getItem("access_token");
+
+    let response = await fetch(route, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            id_order,
+            state,
+        }),
+    });
+
+    let data = await response.json();
+
+    if (data.status) {
+
+        Swal.fire({
+            title: "Excelente!",
+            text: "Ahora tu orden esta "+ state.toUpperCase(),
+            icon: "success",
+        });
+    }
+}
 
 async function showOrderKitchen(url) {
     let token = localStorage.getItem("access_token");
@@ -216,7 +251,6 @@ async function sendStateKitchen(url) {
             Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-
             id_order: id_order,
             state: state.value,
         }),
@@ -225,7 +259,6 @@ async function sendStateKitchen(url) {
     let data = await response.json();
 
     if (data.status) {
-
         $("#modal_state_kitchen").modal("hide");
 
         let element_container = document.getElementById("container_menu");

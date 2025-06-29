@@ -22,8 +22,9 @@ class NotificacionCreada implements ShouldBroadcast
     public $hora;
     public $fecha;
     public $image_product;
+    public $id_order;
 
-    public function __construct($nombre,$cantidad,$cajero, $id_cajero, $description,$hora,$fecha, $image_product)
+    public function __construct($nombre,$cantidad,$cajero, $id_cajero, $description,$hora,$fecha, $image_product, $id_order)
     {
         $this->nombre_producto = $nombre;
         $this->cantidad = $cantidad;
@@ -33,6 +34,7 @@ class NotificacionCreada implements ShouldBroadcast
         $this->hora = $hora;
         $this->fecha = $fecha;
         $this->image_product = $image_product;
+        $this->id_order = $id_order;
     }
 
     public function broadcastOn(): Channel
@@ -58,7 +60,8 @@ class NotificacionCreada implements ShouldBroadcast
             'description' => $this->description,
             'hora' => $this->hora,
             'fecha' => $this->fecha,
-            'image_product'=> $this->image_product
+            'image_product'=> $this->image_product,
+            'id_order' => $this->id_order
         ];
     }
 }

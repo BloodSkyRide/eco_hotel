@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class modelKitchen extends Model
 {
     protected $table = "cocina_pedidos";
-    protected $fillable = ["nombre_producto", "cantidad", "descripcion", "auxiliar", "hora", "estado", "fecha", "nombre_cajero", "id_cajero", "created_at", "updated_at"];
+    protected $primaryKey = 'id_pedido';
+    protected $fillable = ["id_pedido","nombre_producto", "cantidad", "descripcion", "auxiliar", "hora", "estado", "fecha", "nombre_cajero", "id_cajero", "created_at", "updated_at"];
 
     public static function insertOrderKitchen($data_insert){
 
-        return self::insert($data_insert);
+    $order = self::create($data_insert);
+    return $order->id_pedido;
 
     }
 

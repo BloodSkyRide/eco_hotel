@@ -47,7 +47,8 @@ class kitchenController extends Controller
 
             $image_product = modelProducts::getProduct($item['id_item'])->url_imagen;
 
-            modelKitchen::insertOrderKitchen($data_insert);
+            $id_order = modelKitchen::insertOrderKitchen($data_insert);
+            
 
             broadcast(new NotificacionCreada(
                 $nombre_producto,
@@ -57,7 +58,8 @@ class kitchenController extends Controller
                 $description,
                 $hora,
                 $fecha_actual,
-                $image_product
+                $image_product,
+                $id_order
             ));
             sleep(1);
         }
@@ -105,6 +107,20 @@ class kitchenController extends Controller
 
         else return response()->json(["status" => true]);
 
+
+    }
+
+
+
+    public function changeStateButton(Request $request){
+
+        $id_order = $request->id_order;
+        $state = $request->state;
+
+        $change_state = modelKitchen::changeStateForId($id_order, $state);
+
+        if($change_state) return response()->json(["status" => true]);
+        else return response()->json(["status" => false]);
 
     }
 }
