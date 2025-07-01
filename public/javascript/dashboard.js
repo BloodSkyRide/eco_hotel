@@ -5,7 +5,7 @@ let route = "http://localhost/cambiar-estado-button";
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
-    key: "cgsqr9uchge3qv2ad37z", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
+    key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
     wsHost: "localhost",
     wsPort: 8080,
     forceTLS: false,
@@ -51,6 +51,7 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
                 body: `<strong>Nombre producto:</strong> ${data.name_product.toUpperCase()}<br>
                 <strong>Cantidad:</strong> ${data.amount}<br>
                 <strong>Hora preparación:</strong> ${data.hora}<br>
+                <center><i class="fa-solid fa-check" style="color: #63E6BE; font-size: 35px"></i></center><br>
                 <h3>¡YA ESTA PREPARADO!</h3>
                 `,
                 title: "Tu pedido ya esta listo",
@@ -185,15 +186,15 @@ function startChannelPrivate(id_user) {
     });
 }
 
-function deleteItemsforStore(array_items) {
-    array_items.forEach((item) => {
-        // Lógica para eliminar cada item del carrito
-        let itemElement = document.getElementById(
-            `row_product_${item.id_item}`
-        );
-        if (itemElement) {
-            itemElement.remove();
-        }
+function deleteItemsforStore() {
+
+    let products = document.querySelectorAll(".row_product");``
+
+    products.forEach((element) => {
+        let product_category = element.dataset.date.split("-");
+
+
+        if(product_category[2] === "cocina") element.remove();
     });
 }
 
@@ -216,7 +217,7 @@ async function orderByKitchen(url) {
     let data = await response.json();
 
     if (data.status) {
-        deleteItemsforStore(data_convert);
+        deleteItemsforStore();
         // si es verdad y se realizo el pedido a cocina entonces deberemos borrar los items del carrito de compras
     }
 }
@@ -2405,11 +2406,14 @@ function addProductToCar(
         return 0;
     }
 
+    let aleatorio = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+
+
     let car = document.getElementById("container_shop");
     let amunt = document.getElementById(`content_input-${identifier}`);
     let price_finally = document.getElementById(`price-${identifier}`);
     let convert_price = price_finally.textContent;
-    let data_product = `<tr id="row_product_${identifier}" class="row_product" data-date="${identifier}-${amunt.value}-${category}" data-description="">
+    let data_product = `<tr id="row_product_${identifier * aleatorio}" class="row_product" data-date="${identifier}-${amunt.value}-${category}" data-description="">
                     <th><img src='${url_image}' alt='Imagen ${name}' width='60' height='60'></th>
                     <td>${name}</td>
                     <td>${description}</td>
@@ -2417,7 +2421,7 @@ function addProductToCar(
                     <td>${category}</td>
                     ${
                         category === "cocina"
-                            ? `<td><button class="btn btn-warning" title="Nota de pedido" onclick="openModalDescription('${identifier}')"><i class="fa-solid fa-file-pen"></i></button></td>`
+                            ? `<td><button class="btn btn-warning" title="Nota de pedido" onclick="openModalDescription('${identifier * aleatorio}')"><i class="fa-solid fa-file-pen"></i></button></td>`
                             : "<td>N/A</td>"
                     }
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${(+price_unit).toLocaleString(
@@ -2426,7 +2430,7 @@ function addProductToCar(
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${convert_price.toLocaleString(
                         "es"
                     )}</td>
-                    <td><center><a onclick="deleteUnitsCart('${identifier}','${price_unit}', ${
+                    <td><center><a onclick="deleteUnitsCart('${identifier * aleatorio}','${price_unit}', ${
         amunt.value
     })" type='button' title="Eliminar item"><i class="fa-solid fa-xmark text-danger"></i></a></center></td>
                   </tr>`;
