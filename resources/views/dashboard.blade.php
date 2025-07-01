@@ -62,6 +62,7 @@
     <div class="wrapper">
 
         <audio id="notificationSound" src="{{ asset('notification/notification.mp3') }}"></audio>
+        <audio id="notificationSound2" src="{{ asset('notification/devolution.mp3') }}"></audio>
 
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->

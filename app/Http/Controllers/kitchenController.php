@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Events\NotificacionCreada;
+use App\Events\requestFood;
 use App\Models\modelProducts;
 use App\Models\modelKitchen;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -25,7 +26,6 @@ class kitchenController extends Controller
         $decode_token = JWTAuth::setToken($replace)->authenticate();
         $cajero = $decode_token["nombre"];
         $id_cajero = $decode_token["cedula"];
-        $description = "prueba de descripcion ";
         $hora = date('H:i:s');
         $fecha_actual = date('Y-m-d');
 
@@ -37,7 +37,7 @@ class kitchenController extends Controller
             $data_insert = [
                 "nombre_producto" => $nombre_producto,
                 "cantidad" => $cantidad,
-                "descripcion" =>  25000,
+                "descripcion" =>  $item['description'],
                 "hora" => $hora,
                 "estado" => $this->state_preparation,
                 "fecha" => $fecha_actual,
@@ -53,10 +53,11 @@ class kitchenController extends Controller
             broadcast(new NotificacionCreada(
                 $nombre_producto,
                 $cantidad,
-                $cajero,
-                $id_cajero,
-                $description,
                 $hora,
+                'pedido',
+                $id_cajero,
+                $item['description'],
+                $cajero,
                 $fecha_actual,
                 $image_product,
                 $id_order
@@ -116,6 +117,18 @@ class kitchenController extends Controller
 
         $id_order = $request->id_order;
         $state = $request->state;
+
+        
+        if($state === "preparado") {
+            
+            $order = modelKitchen::getOrderId($id_order);
+            $name_order = $order->nombre_producto;
+            $amount_order = $order->cantidad;
+            $hora = date('H:i:s');
+
+            broadcast(new NotificacionCreada( $name_order, $amount_order,  $hora, 'devolucion' ));
+
+        }
 
         $change_state = modelKitchen::changeStateForId($id_order, $state);
 

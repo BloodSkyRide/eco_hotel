@@ -1,6 +1,6 @@
 Pusher.logToConsole = true;
 
-let route = "http://localhost/cambiar_estado_button";
+let route = "http://localhost/cambiar-estado-button";
 // sistema de escucha de eventos para notificaciones en tiempo real
 var echo = new Echo({
     broadcaster: "pusher",
@@ -22,33 +22,102 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
     .listen(".orderKitchen", function (data) {
         let role = document.getElementById("role_h1").textContent;
 
-        if (role === "administrador") {
+        if (role === "administrador" && data.tipo === "pedido") {
             playNotificationSound();
             $(document).Toasts("create", {
-                class: "bg-white text-dark",
+                class: "bg-white text-primary",
                 body: `<strong>Nombre producto:</strong> ${data.name_product.toUpperCase()}<br>
-                <strong>Cantidad:</strong> ${data.amount.toUpperCase()}<br>
+                <strong>Cantidad:</strong> ${data.amount}<br>
                 <strong>Hora orden:</strong> ${data.hora}<br>
                 <strong>Nombre Cajero:</strong> ${data.name_shopkeeper.toUpperCase()}<br>
                 <strong>Identificacion cajero:</strong> ${data.id_shopkeeper.toUpperCase()}<br><br>
                 <strong>Descripcion:</strong> ${data.description.toUpperCase()}<br><br><hr>
-                <center><button class="btn btn-primary ml-2" onclick="buttonChangeState('${
-                    data.id_order
-                }','preparado')">Preparado</button>
-                <button class="btn btn-info" onclick="buttonChangeState('${
-                    data.id_order
-                }','despachado')">Despachado</button></center>
-                <button class="btn btn-info" onclick="buttonChangeState('${
-                    data.id_order
-                }','rechazado')">Rechazar</button></center>
+                <center style="width: 100%;">
+                <button title="Pedido preparado" class="btn btn-primary ml-1" id="btn_preparate_${data.id_order}" onclick="buttonChangeState('${data.id_order}','preparado')"><i class="fa-solid fa-check"></i></button>
+                <button title="Despachar pedido" class="btn btn-info" id="btn_exit_${data.id_order}" onclick="buttonChangeState('${data.id_order}','despachado')"><i class="fa-solid fa-person-walking-arrow-right"></i></button></center>
+                <button title="Rechazar pedido" class="btn btn-danger" id="btn_cancel_${data.id_order}" onclick="buttonChangeState('${data.id_order}','rechazado')"><i class="fa-solid fa-xmark"></i></button>
+                </center>
                 `,
                 title: "Nueva orden",
                 subtitle: data.fecha,
                 image: data.image_product,
                 imageAlt: data.name_product,
             });
+        }else if(role !== "administrador" && data.tipo === "devolucion"){
+
+            playNotificationSound2();
+            $(document).Toasts("create", {
+                class: "bg-white text-dark",
+                body: `<strong>Nombre producto:</strong> ${data.name_product.toUpperCase()}<br>
+                <strong>Cantidad:</strong> ${data.amount}<br>
+                <strong>Hora preparación:</strong> ${data.hora}<br>
+                <h3>¡YA ESTA PREPARADO!</h3>
+                `,
+                title: "Tu pedido ya esta listo",
+                subtitle: data.fecha,
+            });
+            
         }
     });
+
+
+    function openModalDescription(id_order){
+
+        $("#modal_description").modal("show");
+
+        let content_textarea = document.getElementById("description_order");
+
+        content_textarea.dataset.id = id_order;
+
+    }
+
+function chargeDescriptionKitchen(){
+
+    let description_modal = document.getElementById("description_order");
+
+    let id_order = description_modal.dataset.id;
+
+    let get_row_product = document.getElementById(`row_product_${id_order}`);
+
+    get_row_product.dataset.description = description_modal.value;
+
+    description_modal.value = "";
+
+    $("#modal_description").modal("hide");
+
+}
+
+
+async function blockbuttonsNotification(state, id_order){
+
+
+
+
+    if(state === "preparado"){
+
+        document.getElementById("btn_preparate_"+id_order)?.remove();
+        document.getElementById("btn_cancel_"+id_order)?.remove();
+
+        echo.channel("realtime-channel").listen(".requestFood", (data) =>{
+
+
+
+        });
+    }
+
+    else if(state === "despachado"){
+
+        document.getElementById("btn_cancel_"+id_order)?.remove();
+        document.getElementById("btn_exit_"+id_order)?.remove();
+    }else{
+
+        document.getElementById("btn_cancel_"+id_order)?.remove();
+        document.getElementById("btn_exit_"+id_order)?.remove();
+        document.getElementById("btn_preparate_"+id_order)?.remove();
+
+    }
+
+}
 
 async function buttonChangeState(id_order, state) {
     let token = localStorage.getItem("access_token");
@@ -69,6 +138,7 @@ async function buttonChangeState(id_order, state) {
 
     if (data.status) {
 
+        blockbuttonsNotification(state, id_order);
         Swal.fire({
             title: "Excelente!",
             text: "Ahora tu orden esta "+ state.toUpperCase(),
@@ -153,6 +223,15 @@ async function orderByKitchen(url) {
 
 function playNotificationSound() {
     const audio = document.getElementById("notificationSound");
+    if (audio) {
+        audio.play().catch((error) => {
+            console.error("Error reproduciendo el sonido: ", error);
+        });
+    }
+}
+
+function playNotificationSound2() {
+    const audio = document.getElementById("notificationSound2");
     if (audio) {
         audio.play().catch((error) => {
             console.error("Error reproduciendo el sonido: ", error);
@@ -2299,6 +2378,8 @@ function deleteUnitsCart(id_nodo, price_product, units) {
     nodo_delete.remove();
 }
 
+
+
 function addProductToCar(
     name,
     description,
@@ -2328,17 +2409,15 @@ function addProductToCar(
     let amunt = document.getElementById(`content_input-${identifier}`);
     let price_finally = document.getElementById(`price-${identifier}`);
     let convert_price = price_finally.textContent;
-    let data_product = `<tr id="row_product_${identifier}" class="row_product" data-date="${identifier}-${
-        amunt.value
-    }-${category}">
-                    <th><img src='${url_image}' alt='Imagen pollo' width='60' height='60'></th>
+    let data_product = `<tr id="row_product_${identifier}" class="row_product" data-date="${identifier}-${amunt.value}-${category}" data-description="">
+                    <th><img src='${url_image}' alt='Imagen ${name}' width='60' height='60'></th>
                     <td>${name}</td>
                     <td>${description}</td>
                     <td>${amunt.value}</td>
                     <td>${category}</td>
                     ${
                         category === "cocina"
-                            ? `<td><button class="btn btn-warning" title="Nota de pedido" data-toggle="modal" data-target="#modal_description"><i class="fa-solid fa-file-pen"></i></button></td>`
+                            ? `<td><button class="btn btn-warning" title="Nota de pedido" onclick="openModalDescription('${identifier}')"><i class="fa-solid fa-file-pen"></i></button></td>`
                             : "<td>N/A</td>"
                     }
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${(+price_unit).toLocaleString(
@@ -2431,17 +2510,21 @@ async function sellProducts(url) {
 
 function convertArrayKkitchen() {
     let products = document.querySelectorAll(".row_product");
-
+    
     let array_producto = [];
 
     products.forEach((element) => {
         let id_product = element.dataset.date.split("-");
+        let description = element.dataset.description;
 
+        if(description === "") description = "Sin descripción";
+        
         if (id_product[2] === "cocina") {
             array_producto.push({
                 id_item: id_product[0],
                 cantidad: id_product[1],
                 categoria: id_product[2],
+                description: description
             });
         }
     });

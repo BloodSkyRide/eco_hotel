@@ -33,4 +33,12 @@ class modelKitchen extends Model
         ->update(["estado" => $state]);
 
     }
+
+
+    public static function getOrderId($id_order){
+
+
+        return self::where("id_pedido", $id_order)
+        ->first();
+    }
 }

@@ -10,33 +10,22 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificacionCreada implements ShouldBroadcast
+class requestFood implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $nombre_producto;
     public $cantidad;
-    public $cajero;
-    public $id_cajero;
-    public $description;
     public $hora;
-    public $fecha;
     public $image_product;
-    public $id_order;
-    public $tipo;
 
-    public function __construct($nombre,$cantidad,$hora, $tipo, $id_cajero = '', $description = '', $cajero = '' ,$fecha = '', $image_product = '', $id_order = '')
+
+    public function __construct($nombre,$cantidad,$hora)
     {
         $this->nombre_producto = $nombre;
         $this->cantidad = $cantidad;
-        $this->cajero = $cajero;
-        $this->id_cajero = $id_cajero;
-        $this->description = $description;
-        $this->hora = $hora;
-        $this->fecha = $fecha;
-        $this->image_product = $image_product;
-        $this->id_order = $id_order;
-        $this->tipo = $tipo;
+        $this->$hora = $hora;
+
     }
 
     public function broadcastOn(): Channel
@@ -47,7 +36,7 @@ class NotificacionCreada implements ShouldBroadcast
     // Opcional: cambiar el nombre que se usa en JS para escuchar el evento
     public function broadcastAs()
     {
-        return 'orderKitchen';
+        return 'requestFood';
     }
 
         public function broadcastWith()
@@ -57,14 +46,8 @@ class NotificacionCreada implements ShouldBroadcast
             
             'name_product' => $this->nombre_producto,
             'amount' => $this->cantidad,
-            'name_shopkeeper' => $this->cajero,
-            'id_shopkeeper' => $this->id_cajero,
-            'description' => $this->description,
             'hora' => $this->hora,
-            'fecha' => $this->fecha,
-            'image_product'=> $this->image_product,
-            'id_order' => $this->id_order,
-            'tipo' => $this->tipo
+            'tipo' => "recibido"
         ];
     }
 }

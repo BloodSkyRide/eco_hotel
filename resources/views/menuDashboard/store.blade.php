@@ -107,20 +107,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Cambio</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="edit_price">cambio:</label>
-          <input type="number" class="form-control" id="cambio"
-              placeholder="Monto del cleinte..." autocomplete="off" name="costo">
+          <label for="edit_price">Descripción orden:</label>
+          
+          <textarea name="description_order" data-id="" class="form-control" id="description_order" cols="30" rows="3"></textarea>
       </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button onclick="change()" type="button" class="btn btn-primary">Calcular cambio</button>
+        <button onclick="chargeDescriptionKitchen()" type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>
   </div>
