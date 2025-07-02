@@ -1,6 +1,6 @@
 Pusher.logToConsole = true;
 
-let route = "http://18.218.135.247 /cambiar-estado-button";
+let route = "http://18.218.135.247/cambiar-estado-button";
 // sistema de escucha de eventos para notificaciones en tiempo real
 var echo = new Echo({
     broadcaster: "pusher",
@@ -23,7 +23,7 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
         let role = document.getElementById("role_h1").textContent;
 
         
-        if ((data.id_shopkeeper === "1093228865" || data.id_shopkeeper === "1091272724") && data.tipo === "pedido") {
+        if ((data.id_shopkeeper == "1093228865" || data.id_shopkeeper == "1091272724") && data.tipo === "pedido") {
             playNotificationSound();
 
             hablar(
