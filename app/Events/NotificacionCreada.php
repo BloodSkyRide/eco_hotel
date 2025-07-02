@@ -25,7 +25,7 @@ class NotificacionCreada implements ShouldBroadcast
     public $id_order;
     public $tipo;
 
-    public function __construct($nombre,$cantidad,$hora, $tipo, $id_cajero = '', $description = '', $cajero = '' ,$fecha = '', $image_product = '', $id_order = '')
+    public function __construct($nombre,$cantidad,$hora, $tipo, $id_cajero, $description = '', $cajero = '' ,$fecha = '', $image_product = '', $id_order = '')
     {
         $this->nombre_producto = $nombre;
         $this->cantidad = $cantidad;

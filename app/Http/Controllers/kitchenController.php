@@ -48,7 +48,7 @@ class kitchenController extends Controller
             $image_product = modelProducts::getProduct($item['id_item'])->url_imagen;
 
             $id_order = modelKitchen::insertOrderKitchen($data_insert);
-            
+
 
             broadcast(new NotificacionCreada(
                 $nombre_producto,
@@ -65,7 +65,7 @@ class kitchenController extends Controller
             sleep(1);
         }
 
-        return response()->json(["status" => "evento emitido satisfactoriamente"]);
+        return response()->json(["status" => true, "message" => "Evento emitido de manera satisfactoria"]);
     }
 
 
@@ -91,7 +91,8 @@ class kitchenController extends Controller
     }
 
 
-    public function changeState(Request $request){
+    public function changeState(Request $request)
+    {
 
         $id_order = $request->id_order;
 
@@ -100,40 +101,41 @@ class kitchenController extends Controller
         $change_state = modelKitchen::changeStateForId($id_order, $state);
 
 
-        if($change_state){
+        if ($change_state) {
 
             return self::getShowKitchen($request);
-
-        }
-
-        else return response()->json(["status" => true]);
-
-
+        } else return response()->json(["status" => true]);
     }
 
 
 
-    public function changeStateButton(Request $request){
+    public function changeStateButton(Request $request)
+    {
 
         $id_order = $request->id_order;
         $state = $request->state;
 
-        
-        if($state === "preparado") {
-            
+
+        $token_header = $request->header("Authorization");
+
+        $replace = str_replace("Bearer ", "", $token_header);
+
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+
+        if ($state === "preparado") {
+
             $order = modelKitchen::getOrderId($id_order);
             $name_order = $order->nombre_producto;
             $amount_order = $order->cantidad;
             $hora = date('H:i:s');
+            $id_cajero = $decode_token['cedula'];
 
-            broadcast(new NotificacionCreada( $name_order, $amount_order,  $hora, 'devolucion' ));
-
+                broadcast(new NotificacionCreada($name_order, $amount_order,  $hora, 'devolucion', $id_cajero));
         }
 
         $change_state = modelKitchen::changeStateForId($id_order, $state);
 
-        if($change_state) return response()->json(["status" => true]);
+        if ($change_state) return response()->json(["status" => true]);
         else return response()->json(["status" => false]);
-
     }
 }

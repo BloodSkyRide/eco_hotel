@@ -1,12 +1,12 @@
 Pusher.logToConsole = true;
 
-let route = "http://localhost/cambiar-estado-button";
+let route = "http://18.218.135.247 /cambiar-estado-button";
 // sistema de escucha de eventos para notificaciones en tiempo real
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
     key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
-    wsHost: "localhost",
+    wsHost: "18.218.135.247",
     wsPort: 8080,
     forceTLS: false,
     enabledTransports: ["ws", "wss"], // Solo WebSockets ws:http wss: https
@@ -22,8 +22,13 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
     .listen(".orderKitchen", function (data) {
         let role = document.getElementById("role_h1").textContent;
 
-        if (role === "administrador" && data.tipo === "pedido") {
+        
+        if ((data.id_shopkeeper === "1093228865" || data.id_shopkeeper === "1091272724") && data.tipo === "pedido") {
             playNotificationSound();
+
+            hablar(
+                `Tienes un pedido nuevo: ${data.amount} ${data.name_product} y porfavor ${data.description}`
+            );
             $(document).Toasts("create", {
                 class: "bg-white text-primary",
                 body: `<strong>Nombre producto:</strong> ${data.name_product.toUpperCase()}<br>
@@ -33,9 +38,21 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
                 <strong>Identificacion cajero:</strong> ${data.id_shopkeeper.toUpperCase()}<br><br>
                 <strong>Descripcion:</strong> ${data.description.toUpperCase()}<br><br><hr>
                 <center style="width: 100%;">
-                <button title="Pedido preparado" class="btn btn-primary ml-1" id="btn_preparate_${data.id_order}" onclick="buttonChangeState('${data.id_order}','preparado')"><i class="fa-solid fa-check"></i></button>
-                <button title="Despachar pedido" class="btn btn-info" id="btn_exit_${data.id_order}" onclick="buttonChangeState('${data.id_order}','despachado')"><i class="fa-solid fa-person-walking-arrow-right"></i></button></center>
-                <button title="Rechazar pedido" class="btn btn-danger" id="btn_cancel_${data.id_order}" onclick="buttonChangeState('${data.id_order}','rechazado')"><i class="fa-solid fa-xmark"></i></button>
+                <button title="Pedido preparado" class="btn btn-primary ml-1" id="btn_preparate_${
+                    data.id_order
+                }" onclick="buttonChangeState('${
+                    data.id_order
+                }','preparado')"><i class="fa-solid fa-check"></i></button>
+                <button title="Despachar pedido" class="btn btn-info" id="btn_exit_${
+                    data.id_order
+                }" onclick="buttonChangeState('${
+                    data.id_order
+                }','despachado')"><i class="fa-solid fa-person-walking-arrow-right"></i></button></center>
+                <button title="Rechazar pedido" class="btn btn-danger" id="btn_cancel_${
+                    data.id_order
+                }" onclick="buttonChangeState('${
+                    data.id_order
+                }','rechazado')"><i class="fa-solid fa-xmark"></i></button>
                 </center>
                 `,
                 title: "Nueva orden",
@@ -43,9 +60,9 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
                 image: data.image_product,
                 imageAlt: data.name_product,
             });
-        }else if(role !== "administrador" && data.tipo === "devolucion"){
-
+        } else if (role !== "administrador" && data.tipo === "devolucion") {
             playNotificationSound2();
+
             $(document).Toasts("create", {
                 class: "bg-white text-dark",
                 body: `<strong>Nombre producto:</strong> ${data.name_product.toUpperCase()}<br>
@@ -57,23 +74,45 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
                 title: "Tu pedido ya esta listo",
                 subtitle: data.fecha,
             });
-            
         }
     });
 
+function hablar(texto) {
+    speechSynthesis.cancel(); // Detener cualquier lectura previa
 
-    function openModalDescription(id_order){
+    const mensaje = new SpeechSynthesisUtterance(texto);
+    mensaje.lang = "es-US";     // Idioma asociado a esa voz
+    mensaje.pitch = 1.5;
+    mensaje.volume = 1;
 
-        $("#modal_description").modal("show");
+    function asignarYHablar() {
+        const voces = speechSynthesis.getVoices();
+        const vozGoogle = voces.find(v => v.name === "Microsoft Raul - Spanish (Mexico)");
 
-        let content_textarea = document.getElementById("description_order");
+        if (vozGoogle) {
+            mensaje.voice = vozGoogle;
+        }
 
-        content_textarea.dataset.id = id_order;
-
+        speechSynthesis.speak(mensaje);
     }
 
-function chargeDescriptionKitchen(){
+    if (speechSynthesis.getVoices().length > 0) {
+        asignarYHablar();
+    } else {
+        speechSynthesis.onvoiceschanged = asignarYHablar;
+    }
+}
 
+
+function openModalDescription(id_order) {
+    $("#modal_description").modal("show");
+
+    let content_textarea = document.getElementById("description_order");
+
+    content_textarea.dataset.id = id_order;
+}
+
+function chargeDescriptionKitchen() {
     let description_modal = document.getElementById("description_order");
 
     let id_order = description_modal.dataset.id;
@@ -85,39 +124,22 @@ function chargeDescriptionKitchen(){
     description_modal.value = "";
 
     $("#modal_description").modal("hide");
-
 }
 
+async function blockbuttonsNotification(state, id_order) {
+    if (state === "preparado") {
+        document.getElementById("btn_preparate_" + id_order)?.remove();
+        document.getElementById("btn_cancel_" + id_order)?.remove();
 
-async function blockbuttonsNotification(state, id_order){
-
-
-
-
-    if(state === "preparado"){
-
-        document.getElementById("btn_preparate_"+id_order)?.remove();
-        document.getElementById("btn_cancel_"+id_order)?.remove();
-
-        echo.channel("realtime-channel").listen(".requestFood", (data) =>{
-
-
-
-        });
+        echo.channel("realtime-channel").listen(".requestFood", (data) => {});
+    } else if (state === "despachado") {
+        document.getElementById("btn_cancel_" + id_order)?.remove();
+        document.getElementById("btn_exit_" + id_order)?.remove();
+    } else {
+        document.getElementById("btn_cancel_" + id_order)?.remove();
+        document.getElementById("btn_exit_" + id_order)?.remove();
+        document.getElementById("btn_preparate_" + id_order)?.remove();
     }
-
-    else if(state === "despachado"){
-
-        document.getElementById("btn_cancel_"+id_order)?.remove();
-        document.getElementById("btn_exit_"+id_order)?.remove();
-    }else{
-
-        document.getElementById("btn_cancel_"+id_order)?.remove();
-        document.getElementById("btn_exit_"+id_order)?.remove();
-        document.getElementById("btn_preparate_"+id_order)?.remove();
-
-    }
-
 }
 
 async function buttonChangeState(id_order, state) {
@@ -138,11 +160,10 @@ async function buttonChangeState(id_order, state) {
     let data = await response.json();
 
     if (data.status) {
-
         blockbuttonsNotification(state, id_order);
         Swal.fire({
             title: "Excelente!",
-            text: "Ahora tu orden esta "+ state.toUpperCase(),
+            text: "Ahora tu orden esta " + state.toUpperCase(),
             icon: "success",
         });
     }
@@ -187,14 +208,13 @@ function startChannelPrivate(id_user) {
 }
 
 function deleteItemsforStore() {
-
-    let products = document.querySelectorAll(".row_product");``
+    let products = document.querySelectorAll(".row_product");
+    ``;
 
     products.forEach((element) => {
         let product_category = element.dataset.date.split("-");
 
-
-        if(product_category[2] === "cocina") element.remove();
+        if (product_category[2] === "cocina") element.remove();
     });
 }
 
@@ -2379,8 +2399,6 @@ function deleteUnitsCart(id_nodo, price_product, units) {
     nodo_delete.remove();
 }
 
-
-
 function addProductToCar(
     name,
     description,
@@ -2408,12 +2426,15 @@ function addProductToCar(
 
     let aleatorio = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
 
-
     let car = document.getElementById("container_shop");
     let amunt = document.getElementById(`content_input-${identifier}`);
     let price_finally = document.getElementById(`price-${identifier}`);
     let convert_price = price_finally.textContent;
-    let data_product = `<tr id="row_product_${identifier * aleatorio}" class="row_product" data-date="${identifier}-${amunt.value}-${category}" data-description="">
+    let data_product = `<tr id="row_product_${
+        identifier * aleatorio
+    }" class="row_product" data-date="${identifier}-${
+        amunt.value
+    }-${category}" data-description="">
                     <th><img src='${url_image}' alt='Imagen ${name}' width='60' height='60'></th>
                     <td>${name}</td>
                     <td>${description}</td>
@@ -2421,7 +2442,9 @@ function addProductToCar(
                     <td>${category}</td>
                     ${
                         category === "cocina"
-                            ? `<td><button class="btn btn-warning" title="Nota de pedido" onclick="openModalDescription('${identifier * aleatorio}')"><i class="fa-solid fa-file-pen"></i></button></td>`
+                            ? `<td><button class="btn btn-warning" title="Nota de pedido" onclick="openModalDescription('${
+                                  identifier * aleatorio
+                              }')"><i class="fa-solid fa-file-pen"></i></button></td>`
                             : "<td>N/A</td>"
                     }
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${(+price_unit).toLocaleString(
@@ -2430,7 +2453,9 @@ function addProductToCar(
                     <td><i class='fa-solid fa-dollar-sign text-success'></i>&nbsp;&nbsp;${convert_price.toLocaleString(
                         "es"
                     )}</td>
-                    <td><center><a onclick="deleteUnitsCart('${identifier * aleatorio}','${price_unit}', ${
+                    <td><center><a onclick="deleteUnitsCart('${
+                        identifier * aleatorio
+                    }','${price_unit}', ${
         amunt.value
     })" type='button' title="Eliminar item"><i class="fa-solid fa-xmark text-danger"></i></a></center></td>
                   </tr>`;
@@ -2514,21 +2539,21 @@ async function sellProducts(url) {
 
 function convertArrayKkitchen() {
     let products = document.querySelectorAll(".row_product");
-    
+
     let array_producto = [];
 
     products.forEach((element) => {
         let id_product = element.dataset.date.split("-");
         let description = element.dataset.description;
 
-        if(description === "") description = "Sin descripción";
-        
+        if (description === "") description = "Sin descripción";
+
         if (id_product[2] === "cocina") {
             array_producto.push({
                 id_item: id_product[0],
                 cantidad: id_product[1],
                 categoria: id_product[2],
-                description: description
+                description: description,
             });
         }
     });
