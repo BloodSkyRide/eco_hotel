@@ -138,4 +138,21 @@ class kitchenController extends Controller
         if ($change_state) return response()->json(["status" => true]);
         else return response()->json(["status" => false]);
     }
+
+
+    public function getIdUser(Request $request){
+
+        $token_header = $request->header("Authorization");
+
+        $replace = str_replace("Bearer ", "", $token_header);
+
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+
+        $self_id = $decode_token['cedula'];
+
+
+        return response()->json(["status" => true, "id_access" => $self_id]);
+
+
+    }
 }

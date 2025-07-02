@@ -1,6 +1,7 @@
 Pusher.logToConsole = true;
 
 let route = "http://18.218.135.247/cambiar-estado-button";
+let route2 = "http://18.218.135.247/verifyId";
 // sistema de escucha de eventos para notificaciones en tiempo real
 var echo = new Echo({
     broadcaster: "pusher",
@@ -18,12 +19,43 @@ var echo = new Echo({
     },
 });
 
+async function verifyUser(){
+
+    let token = localStorage.getItem("access_token");
+
+    let response = await fetch(route2,{
+
+        method: "get",
+        headers: {
+
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+
+
+    });
+
+    let data = await response.json();
+
+    if(data.status){
+
+
+        return data.id_access;
+
+    }
+
+
+}
+
 echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo que usas en el backend
-    .listen(".orderKitchen", function (data) {
+    .listen(".orderKitchen", async function (data) {
         let role = document.getElementById("role_h1").textContent;
 
+        let get_id =  await verifyUser();
+
+        console.log(get_id);
         
-        if ((data.id_shopkeeper == "1093228865" || data.id_shopkeeper == "1091272724") && data.tipo === "pedido") {
+        if ((get_id == "1093228865" || get_id == "1091272724") && data.tipo === "pedido") {
             playNotificationSound();
 
             hablar(
