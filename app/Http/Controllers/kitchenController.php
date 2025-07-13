@@ -80,11 +80,12 @@ class kitchenController extends Controller
         $decode_token = JWTAuth::setToken($replace)->authenticate();
 
         $cedula = $decode_token['cedula'];
+        $role = $decode_token['rol'];
         $today = date('Y-m-d');
 
         $orders = modelKitchen::getOrdersToday($today);
 
-        $render = view("menuDashboard.historyOrderKitchen", ["orders" => $orders, 'id' => $cedula])->render();
+        $render = view("menuDashboard.historyOrderKitchen", ["orders" => $orders, 'id' => $cedula, "rol" => $role])->render();
 
 
         return response()->json(["status" => true, "html" => $render]);
@@ -153,6 +154,31 @@ class kitchenController extends Controller
 
         return response()->json(["status" => true, "id_access" => $self_id]);
 
+
+    }
+
+
+    public static function getRange(Request $request){
+
+
+        $range = $request->range;
+
+        $token_header = $request->header("Authorization");
+
+        $replace = str_replace("Bearer ", "", $token_header);
+
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
+
+        $cedula = $decode_token['cedula'];
+        $role = $decode_token['rol'];
+        
+
+        $orders = modelKitchen::getOrdersToday($range);
+
+        $render = view("menuDashboard.historyOrderKitchen", ["orders" => $orders, 'id' => $cedula, "rol" => $role])->render();
+
+
+        return response()->json(["status" => true, "html" => $render]);
 
     }
 }

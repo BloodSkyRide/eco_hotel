@@ -187,6 +187,8 @@ Route::post('/cambiar-estado-cocina', [kitchenController::class, 'changeState'])
 Route::post('/cambiar-estado-button', [kitchenController::class, 'changeStateButton'])->name("changeStateButton")->middleware(["verifyTokenHeader"]);
 Route::get('/verifyId', [kitchenController::class, 'getIdUser'])->name("verifyId")->middleware(["verifyTokenHeader"]);
 
+Route::post('/rango-cocina', [kitchenController::class, 'getRange'])->name("rangeKitchen")->middleware(["verifyTokenHeader"]);
+
 
 
 

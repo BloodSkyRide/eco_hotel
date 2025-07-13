@@ -1520,6 +1520,46 @@ function showPass(id, id_input) {
 //     }
 // }
 
+async function searchRangeKitchen(url){
+
+    let token = localStorage.getItem("access_token");
+    let range = document.getElementById("range_kitchen").value;
+
+
+    let response = await fetch(url, {
+
+        method: "POST",
+        headers:{
+
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            range
+
+        })
+
+    });
+
+    let data = await response.json();
+
+
+    if(data.status){
+
+
+        
+        let element_container = document.getElementById("container_menu");
+        element_container.innerHTML = data.html;
+
+        document.getElementById("range_kitchen").value = range;
+
+    }
+
+
+}
+
 async function searchRangeAssist() {
     const token = localStorage.getItem("access_token");
 
@@ -2529,8 +2569,8 @@ async function sellProducts(url) {
 
     let button = document.getElementById("button_sell");
     button.setAttribute("disabled", "true");
-    let iterator = 15;
-    for (i = 1; i <= 15; i++) {
+    let iterator = 5;
+    for (i = 1; i <= 5; i++) {
         await retardoSell(iterator);
 
         iterator--;
