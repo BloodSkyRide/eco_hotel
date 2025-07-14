@@ -23,6 +23,7 @@ return new class extends Migration
             $table->time("hora")->nullable();
             $table->date("fecha")->nullable();
             $table->bigInteger("total_venta")->nullable();
+            $table->string("categoria")->nullable();
             $table->timestamps();
             
         });

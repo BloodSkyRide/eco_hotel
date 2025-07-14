@@ -14,6 +14,7 @@ return new class extends Migration
             Schema::create('cocina_pedidos', function (Blueprint $table) {
 
             $table->id("id_pedido");
+            $table->string("id_producto_venta")->nullable();
             $table->string("nombre_producto")->nullable();
             $table->integer("cantidad")->nullable();
             $table->text("descripcion")->nullable();

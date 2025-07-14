@@ -448,8 +448,8 @@
                                                 <tr>
                                                     <td>{{ $item['titular'] }}</td>
                                                     <td>{{ $item['cedula'] }}</td>
-                                                    <td>{{ $item['monto_reservado'] }}</td>
-                                                    <td>{{ $item['monto_adeudado'] }}</td>
+                                                    <td><span class="badge badge-warning">{{$item['monto_reservado']}}</span></td>
+                                                    <td><span class="badge badge-warning">{{$item['monto_adeudado']}}</span></td>
                                                     <td>{{ $item['medio_pago'] }}</td>
                                                     <td>{{ $item['numero_huespedes'] }}</td>
                                                     <td>{{ $item['descripcion_reserva'] }}</td>

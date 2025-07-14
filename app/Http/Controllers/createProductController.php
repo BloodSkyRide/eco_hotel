@@ -20,6 +20,8 @@ class createProductController extends Controller
 {
 
 
+    
+
     private function deleteItem($id_item){
 
         $get_original_path = modelProducts::getPathForId($id_item)->url_imagen;
@@ -325,7 +327,7 @@ class createProductController extends Controller
 
 
             $decrement = $item['cantidad'];
-
+            $categoria = $item['categoria'];
             // historial de ventas
 
             $hour = date('H:i:s');
@@ -357,7 +359,8 @@ class createProductController extends Controller
                     "nombre_cajero" => $self_name,
                     "hora" => $hour,
                     "fecha" => $fecha,
-                    "total_venta" => $total_venta
+                    "total_venta" => $total_venta,
+                    "categoria" => $categoria
                 ];
                 modelSell::insertSell($data_sell);
             }

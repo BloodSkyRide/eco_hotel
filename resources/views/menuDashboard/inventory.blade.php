@@ -60,7 +60,7 @@
                         <select class="form-control" id="categoria" name="categoria">
                             <option value="">Seleccione una categoria</option>
                             <option value="tienda">Tienda</option>
-                            <option value="tienda">Cocina</option>
+                            <option value="cocina">Cocina</option>
                         </select>
 
                     </div>

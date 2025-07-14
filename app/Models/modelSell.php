@@ -20,6 +20,7 @@ class modelSell extends Model
         "hora",
         "fecha",
         "total_venta",
+        "categoria",
         "created_at",
         "updated_at"
     ];
@@ -56,6 +57,20 @@ class modelSell extends Model
     }
 
 
+    public static function getUnitcategory($id_product_seller, $date){
+
+        // return self::where("fecha", $date)
+        // ->get();
+
+        return self::select('nombre_producto_venta', DB::raw('SUM(unidades_venta) as total_vendidos'), 'id_producto_venta')
+        ->where('id_producto_venta', $id_product_seller)
+        ->where("fecha",$date)
+        ->groupBy('nombre_producto_venta','id_producto_venta')
+        ->first();
+
+    }
+
+
     public static function unitTotalSells($fecha)
     {
 
@@ -73,6 +88,29 @@ class modelSell extends Model
         )
             ->join("productos_venta", "historial_ventas.id_producto_venta", "=", "productos_venta.id_producto")
             ->whereDate('fecha', $fecha)
+            ->groupBy('id_producto_venta')
+            ->get();
+    }
+
+
+        public static function unitTotalSellsCategory($fecha, $category)
+    {
+
+        return self::select(
+            'historial_ventas.id_producto_venta',
+            DB::raw('MAX(productos_venta.url_imagen) AS url_imagen'),
+            DB::raw('MAX(historial_ventas.nombre_producto_venta) AS nombre_producto_venta'),
+            DB::raw('MAX(historial_ventas.descripcion_producto_venta) AS descripcion_producto_venta'),
+            DB::raw('MAX(historial_ventas.id_user_cajero) AS id_user_cajero'),
+            DB::raw('MAX(historial_ventas.hora) AS hora'),
+            DB::raw('MAX(historial_ventas.fecha) AS fecha'),
+            DB::raw('MAX(historial_ventas.nombre_cajero) AS nombre_cajero'),
+            DB::raw('SUM(historial_ventas.unidades_venta) AS total_cantidad'),
+            DB::raw('SUM(historial_ventas.total_venta) AS total_vendido')      
+        )
+            ->join("productos_venta", "historial_ventas.id_producto_venta", "=", "productos_venta.id_producto")
+            ->whereDate('fecha', $fecha)
+            ->where("historial_ventas.categoria", $category)
             ->groupBy('id_producto_venta')
             ->get();
     }

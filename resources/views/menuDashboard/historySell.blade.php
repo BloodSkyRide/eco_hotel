@@ -91,9 +91,7 @@
                                         <td>{{ $item['id_user_cajero'] }}</td>
                                         <td>{{ $item['hora'] }}</td>
                                         <td>{{ $item['fecha'] }}</td>
-                                        <td><i
-                                                class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_venta'], 0, '', '.') }}
-                                        </td>
+                                        <td><i class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_venta'], 0, '', '.') }}</td>
                                     </tr>
 
                                     @php
@@ -123,7 +121,7 @@
                     </center>
 
 
-                    @if ($self_id == '1093228865')
+                    @if ($self_id == '1093228865' || $self_id == '1091272724')
 
                         <div class="table-responsive">
                             <table class="table">

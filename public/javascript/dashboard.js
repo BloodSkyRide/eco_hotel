@@ -32,7 +32,6 @@ async function verifyUser(){
             "Content-Type": "application/json"
         }
 
-
     });
 
     let data = await response.json();
@@ -368,12 +367,14 @@ async function sendStateKitchen(url) {
 
     let state = document.getElementById("state_kitchen");
 
-    if (state.value === "") {
+    if (state.value === "selected") {
         Swal.fire({
             title: "Uuuups!",
             text: "Elige un estado!",
             icon: "error",
         });
+
+        return 0;
     }
 
     let response = await fetch(url, {
@@ -1033,7 +1034,7 @@ async function getShowReportAssists(url) {
     }
 }
 
-async function getShowAdminUsers(url) {
+async function getShowOrdersKitchen(url) {
     const token = localStorage.getItem("access_token");
 
     let response = await fetch(url, {
@@ -1051,9 +1052,18 @@ async function getShowAdminUsers(url) {
 
         element_container.innerHTML = data.html;
 
-        $("#table_userss").DataTable({
+        initializeTable("table_order_kitchen"); //tabla primera
+        initializeTable("table_order_kitchen_unit"); // tabla secundaria
+    }
+}
+
+
+
+function initializeTable(id_table){
+
+            $(`#${id_table}`).DataTable({
             responsive: true,
-            order: [[9, "desc"]],
+            //order: [[9, "desc"]],
             lengthChange: false,
             autoWidth: false,
             buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
@@ -1070,7 +1080,7 @@ async function getShowAdminUsers(url) {
                 emptyTable: "No hay datos disponibles",
             },
         });
-    }
+
 }
 
 async function openModalUser(cedula, url) {
@@ -2644,6 +2654,7 @@ function convertArray() {
         array_producto.push({
             id_item: id_product[0],
             cantidad: id_product[1],
+            categoria: id_product[2]
         });
     });
 

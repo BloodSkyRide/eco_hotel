@@ -154,7 +154,7 @@
 
                          <li class="nav-item">
                                 <a class="nav-link menu_dashboard"
-                                    onclick="getShowAdminUsers('{{ route('showKitchen') }}')" type="button">
+                                    onclick="getShowOrdersKitchen('{{ route('showKitchen') }}')" type="button">
                                     <i class="fa-solid fa-kitchen-set"></i>&nbsp;&nbsp;
                                     <p>
                                         Pedidos cocina
