@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="{{ asset('javascript/plugins/toastr/toastr.min.css') }}">
 
 </head>
-
+<div id="custom-toast-container"></div>
 <body class="hold-transition sidebar-mini">
 
     <div class="wrapper">

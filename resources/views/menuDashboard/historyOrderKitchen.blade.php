@@ -216,9 +216,7 @@
                                                     class="badge badge-success">{{ $item['items_historial'] }}</span>
                                             </td>
                                             <td><span class="badge badge-danger">{{ $item['diferencia'] }}</span></td>
-                                            <td><i
-                                                    class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_restante'], 0, '', '.') }}
-                                            </td>
+                                            <td><i class="fa-solid fa-dollar-sign text-success"></i>&nbsp;&nbsp;{{ number_format($item['total_restante'], 0, '', '.') }}</td>
 
                                         </tr>
                                     @endforeach

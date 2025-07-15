@@ -27,6 +27,12 @@ class modelInventario extends Model
 
     }
 
+    public static function getProductsCategory($category){
+
+        return self::where("categoria",$category)
+        ->get();
+    }
+
     public static function decrementInventory($id_item, $decrement){
 
         return self::where('id_item', $id_item)

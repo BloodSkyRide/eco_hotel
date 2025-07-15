@@ -75,7 +75,7 @@ class historySellController extends Controller
         $self_sell = modelSell::getMySell($today, $self_id);
 
         
-        if($self_id === "1093228865"){
+        if($self_id == "1093228865" || $self_id == "1091272724"){
             
             $total_sells_for_user = self::getCashPerson($today);
             $render = view("menuDashboard.historySell", ["rol" => $rol, 

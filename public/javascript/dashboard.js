@@ -19,49 +19,41 @@ var echo = new Echo({
     },
 });
 
-async function verifyUser(){
-
+async function verifyUser() {
     let token = localStorage.getItem("access_token");
 
-    let response = await fetch(route2,{
-
+    let response = await fetch(route2, {
         method: "get",
         headers: {
-
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-        }
-
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
     });
 
     let data = await response.json();
 
-    if(data.status){
-
-
+    if (data.status) {
         return data.id_access;
-
     }
-
-
 }
 
 echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo que usas en el backend
     .listen(".orderKitchen", async function (data) {
         let role = document.getElementById("role_h1").textContent;
 
-        let get_id =  await verifyUser();
+        let get_id = await verifyUser();
 
-        console.log(get_id);
-        
-        if ((get_id == "1093228865" || get_id == "1091272724") && data.tipo === "pedido") {
+        if (
+            (get_id == "1093228865" || get_id == "1091272724") &&
+            data.tipo === "pedido"
+        ) {
             playNotificationSound();
 
             hablar(
                 `Tienes un pedido nuevo: ${data.amount} ${data.name_product} y porfavor ${data.description}`
             );
-            $(document).Toasts("create", {
-                class: "bg-white text-primary",
+            let notification = $(document).Toasts("create", {
+                class: "bg-white text-primary toast-scroll",
                 body: `<strong>Nombre producto:</strong> ${data.name_product.toUpperCase()}<br>
                 <strong>Cantidad:</strong> ${data.amount}<br>
                 <strong>Hora orden:</strong> ${data.hora}<br>
@@ -90,7 +82,15 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
                 subtitle: data.fecha,
                 image: data.image_product,
                 imageAlt: data.name_product,
+                autohide: false,
             });
+
+            setTimeout(() => {
+                const $toast = $(".toast-scroll").last();
+                if ($toast.length) {
+                    $("#custom-toast-container").append($toast);
+                }
+            }, 150);
         } else if (role !== "administrador" && data.tipo === "devolucion") {
             playNotificationSound2();
 
@@ -112,13 +112,15 @@ function hablar(texto) {
     speechSynthesis.cancel(); // Detener cualquier lectura previa
 
     const mensaje = new SpeechSynthesisUtterance(texto);
-    mensaje.lang = "es-US";     // Idioma asociado a esa voz
+    mensaje.lang = "es-US"; // Idioma asociado a esa voz
     mensaje.pitch = 1.5;
     mensaje.volume = 1;
 
     function asignarYHablar() {
         const voces = speechSynthesis.getVoices();
-        const vozGoogle = voces.find(v => v.name === "Microsoft Raul - Spanish (Mexico)");
+        const vozGoogle = voces.find(
+            (v) => v.name === "Microsoft Raul - Spanish (Mexico)"
+        );
 
         if (vozGoogle) {
             mensaje.voice = vozGoogle;
@@ -133,7 +135,6 @@ function hablar(texto) {
         speechSynthesis.onvoiceschanged = asignarYHablar;
     }
 }
-
 
 function openModalDescription(id_order) {
     $("#modal_description").modal("show");
@@ -396,6 +397,66 @@ async function sendStateKitchen(url) {
 
         let element_container = document.getElementById("container_menu");
         element_container.innerHTML = data.html;
+    }
+}
+
+function getDataArray() {
+    let datos = document.querySelectorAll(".product_inventory");
+
+    let data = [];
+
+    datos.forEach((item) => {
+        let id = item.dataset.info;
+        console.log(id);
+        let convert_id = document.getElementById(`product_${id}`);
+        let valor = convert_id.value;
+
+        data.push({
+            id_product_original: id,
+            count: valor,
+        });
+    });
+
+    return data;
+}
+
+async function sendInventoryControl(url) {
+    let token = localStorage.getItem("access_token");
+    let array_data = getDataArray();
+    let response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            array_data,
+        }),
+    });
+
+    let data = await response.json();
+
+    if (data.status) {
+        Swal.fire({
+            title: "Excelente!",
+            text: "Tu inventario ha sido reportado con exito!",
+            icon: "success",
+        });
+    } else {
+        Swal.fire({
+            title: "Uuuups!",
+            text: "Parece que ya reportaste el inventario de hoy!",
+            icon: "error",
+        });
+
+        let inputs = document.querySelectorAll(".product_inventory");
+
+        inputs.forEach((element) => {
+            element.disabled = true;
+        });
+
+        let button_id = document.getElementById("button_send_inventory");
+        button_id.disabled = true;
     }
 }
 
@@ -1057,30 +1118,26 @@ async function getShowOrdersKitchen(url) {
     }
 }
 
-
-
-function initializeTable(id_table){
-
-            $(`#${id_table}`).DataTable({
-            responsive: true,
-            //order: [[9, "desc"]],
-            lengthChange: false,
-            autoWidth: false,
-            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
-            language: {
-                search: "Buscar en la tabla:",
-                lengthMenu: "Mostrar _MENU_ registros",
-                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                paginate: {
-                    first: "Primero",
-                    last: "Último",
-                    next: "Siguiente",
-                    previous: "Anterior",
-                },
-                emptyTable: "No hay datos disponibles",
+function initializeTable(id_table) {
+    $(`#${id_table}`).DataTable({
+        responsive: true,
+        //order: [[9, "desc"]],
+        lengthChange: false,
+        autoWidth: false,
+        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        language: {
+            search: "Buscar en la tabla:",
+            lengthMenu: "Mostrar _MENU_ registros",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior",
             },
-        });
-
+            emptyTable: "No hay datos disponibles",
+        },
+    });
 }
 
 async function openModalUser(cedula, url) {
@@ -1530,44 +1587,32 @@ function showPass(id, id_input) {
 //     }
 // }
 
-async function searchRangeKitchen(url){
-
+async function searchRangeKitchen(url) {
     let token = localStorage.getItem("access_token");
     let range = document.getElementById("range_kitchen").value;
 
-
     let response = await fetch(url, {
-
         method: "POST",
-        headers:{
-
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
         },
 
         body: JSON.stringify({
-
-            range
-
-        })
-
+            range,
+        }),
     });
 
     let data = await response.json();
 
-
-    if(data.status){
-
-
-        
+    if (data.status) {
         let element_container = document.getElementById("container_menu");
         element_container.innerHTML = data.html;
 
         document.getElementById("range_kitchen").value = range;
-
+        initializeTable("table_order_kitchen"); //tabla primera
+        initializeTable("table_order_kitchen_unit"); // tabla secundaria
     }
-
-
 }
 
 async function searchRangeAssist() {
@@ -2654,7 +2699,7 @@ function convertArray() {
         array_producto.push({
             id_item: id_product[0],
             cantidad: id_product[1],
-            categoria: id_product[2]
+            categoria: id_product[2],
         });
     });
 

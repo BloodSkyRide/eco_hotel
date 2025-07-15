@@ -134,3 +134,16 @@ aside a {
     max-width: 100% !important;
 
 }
+
+#custom-toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 350px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1050; /* por encima del contenido normal */
+}

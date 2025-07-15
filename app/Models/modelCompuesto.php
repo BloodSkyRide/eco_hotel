@@ -57,6 +57,14 @@ class modelCompuesto extends Model
     }
 
 
+    public static function getIdProductSeller($id_item_fk){
+
+        return self::where("id_item_fk", $id_item_fk)
+        ->get();
+
+    }
+
+
 
 
 }

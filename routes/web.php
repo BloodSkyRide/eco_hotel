@@ -151,6 +151,7 @@ Route::post('/saveInventory', [inventoryController::class, 'saveInventory'])->na
 Route::put('/editInventory', [inventoryController::class, 'editInventory'])->name("editInventory")->middleware(["verifyTokenHeader"]);
 
 Route::post('/delete', [inventoryController::class, 'deleteInventory'])->name("deleteInventory")->middleware(["verifyTokenHeader"]);
+Route::post('/control-inventario', [inventoryController::class, 'insertIventoryControl'])->name("controlInventory")->middleware(["verifyTokenHeader"]);
 
 Route::get('/getShowHistorySell', [historySellController::class, 'getShowHistorySell'])->name("getShowHistorySell")->middleware(["verifyTokenHeader"]);
 

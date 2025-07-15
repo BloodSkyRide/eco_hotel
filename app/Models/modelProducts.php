@@ -117,5 +117,13 @@ class modelProducts extends Model
 
         return self::where("id_producto", $id_producto)
         ->get();
-    } 
+    }
+    
+    
+    public static function verifyCategory($id_producto){
+
+        return self::where("id_producto", $id_producto)
+        ->first();
+
+    }
 }

@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 use App\Models\modelInventario;
 use App\Models\modelCompuesto;
+use App\Models\modelcontrol_inventarios;
+use App\Models\modelProducts;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class inventoryController extends Controller
 {
+
+    private $category_kitchen = "cocina";
+    private $category_store = "tienda";
+    
     
 
     public function getShowInventory(Request $request){
@@ -20,11 +26,11 @@ class inventoryController extends Controller
 
         $rol = $decode_token["rol"];
 
-        $productos_inventario = modelInventario::getAllProducts();
+        $productos_inventario = ($rol == "administrador") ? modelInventario::getAllProducts(): modelInventario::getProductsCategory($this->category_store);
         $total_inventory = modelInventario::getTotalInventory();
+        $comparative = self::comparativeInventory(date("Y-m-d"));
 
-
-        $render = view("menuDashboard.inventory", ["rol" => $rol, "productos" => $productos_inventario,"total" => $total_inventory])->render();
+        $render = view("menuDashboard.inventory", ["rol" => $rol, "productos" => $productos_inventario,"total" => $total_inventory, "comparativo" => $comparative])->render();
 
         return response()->json(["status" => true, "html" => $render]);
 
@@ -111,6 +117,131 @@ class inventoryController extends Controller
 
         if($delete && $delete_compund) return self::getShowInventory($request);
         else return response()->json(["status" => false]);
+
+    }
+
+
+    private function calculateCosts($id_item_fk){
+
+        $composed = modelCompuesto::getIdProductSeller($id_item_fk);
+        
+        $array_ids = [];
+        if($composed){
+
+            foreach($composed as $item){
+
+                array_push($array_ids,[
+
+                    "id_producto_venta" => $item['id_producto_venta']
+                ]);
+            }
+
+        }else return 0;
+
+
+        foreach($array_ids as $item){
+
+
+            $verify_category = modelProducts::verifyCategory($item['id_producto_venta']);
+
+            if($verify_category->categoria == "tienda"){
+
+                return (!isset($verify_category->precio)) ? 0: $verify_category->precio;
+            }
+
+        }
+
+        return 0;
+    }
+
+
+    private function comparativeInventory($date){
+
+        $verify_inventory = modelcontrol_inventarios::verifyExists($date);
+        $array_data = [];
+        
+        if($verify_inventory){
+
+            $original_inventory = modelInventario::getProductsCategory($this->category_store);
+            foreach($original_inventory as $item){
+
+                $id_item_original = $item['id_item'];
+
+                $row_product_control = modelcontrol_inventarios::getItemControl($id_item_original);
+                
+                $cantidad_control = (!isset($row_product_control->unidades_disponibles)) ? 0: $row_product_control->unidades_disponibles;
+                $restante = $item['unidades_disponibles'] - $cantidad_control;
+                
+                $calculate_cost = self::calculateCosts($id_item_original);
+                
+                array_push($array_data,[
+
+                    "nombre" => $item['nombre'],
+                    "item_original" => $item['unidades_disponibles'],
+                    "item_control" => $cantidad_control,
+                    "restante" => $restante,
+                    "precio" => $calculate_cost,
+                    "hora_reporte" => $row_product_control->hora_reporte,
+                    "fecha_reporte" => $row_product_control->fecha_reporte,
+                    "total_faltante" => $restante * $calculate_cost
+                ]);
+
+                
+            }
+
+        }
+
+        
+        return $array_data;
+
+    }
+
+    private function verifyButton(){
+
+
+        $verify = modelcontrol_inventarios::verifyExists(date("Y-m-d"));
+
+
+        return $verify;
+
+    }
+
+
+    public function insertIventoryControl(Request $request){
+
+        $array_data = $request->array_data;
+        $verification_button = self::verifyButton();
+
+        if($verification_button) return response()->json(["status" => false]);
+
+        $flagg = 0;
+        foreach($array_data as $item){
+
+            $id_item = $item['id_product_original'];
+            $cantidad = $item['count']; 
+
+            $row = modelInventario::verifyExists($id_item);
+
+            $data_insert = [
+
+                "id_original" => $id_item,
+                "nombre" => $row->nombre ,
+                "unidades_disponibles" => $cantidad,
+                "fecha_reporte" => date("Y-m-d"),
+                "hora_reporte" => date('h:i:s'),
+                "categoria" => $row->categoria,
+            ];
+
+
+            $insert = modelcontrol_inventarios::insertData($data_insert);
+            $flagg++;
+        }
+
+
+        $finally_results = ($flagg == count($array_data)) ? true : false;
+
+        return response()->json(["status" => $finally_results]);
+
 
     }
 }
