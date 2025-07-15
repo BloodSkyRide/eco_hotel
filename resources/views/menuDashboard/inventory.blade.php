@@ -211,7 +211,7 @@
                                                         <td><span
                                                                 class="badge badge-info">{{ $item['nombre'] }}</span>
                                                         </td>
-                                                        <td><input type="number" style="width: 15%" class="form form-control product_inventory" data-info="{{ $item['id_item'] }}" id="product_{{ $item['id_item'] }}" value="{{$item['unidades_disponibles']}}"></td>
+                                                        <td><input type="number" style="width: 30%" class="form form-control product_inventory" data-info="{{ $item['id_item'] }}" id="product_{{ $item['id_item'] }}" value="{{$item['unidades_disponibles']}}"></td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
