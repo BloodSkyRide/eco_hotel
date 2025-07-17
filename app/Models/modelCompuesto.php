@@ -65,6 +65,14 @@ class modelCompuesto extends Model
     }
 
 
+    public static function deleteCompoundForId($id_producto_venta){
+
+        return self::where("id_producto_venta", $id_producto_venta)
+        ->delete();
+
+    }
+
+
 
 
 }

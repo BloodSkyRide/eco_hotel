@@ -49,17 +49,22 @@ class createProductController extends Controller
 
         if($delete_image){
 
+            $delete_product = modelProducts::deleteRegister($id_item);
+            $delete_compund = modelCompuesto::deleteCompoundForId($id_item);
 
-            $delete_register = modelProducts::deleteRegister($id_item);
+            if($delete_compund && $delete_product){
 
             $productos_inventario = modelInventario::getAllProducts();
             $products_compound = modelProducts::getAllProducts();
             $render = view("menuDashboard.createProduct", ["productos" => $productos_inventario, "compuestos" => $products_compound])->render();
             return response()->json(["html" => $render,"status" => true]);
+
+            }
+
         }
 
 
-        return response()->json(["status" => false]);
+        return response()->json(["status" => false, "message" => "Parece que el registro del compuesto no se ha elimnado o/y el registro de venta!"]);
     }
 
 

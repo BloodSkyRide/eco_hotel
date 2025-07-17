@@ -3244,6 +3244,13 @@ async function deleteProductSeller(url) {
                 emptyTable: "No hay datos disponibles",
             },
         });
+    }else{
+
+            Toast.fire({
+            icon: "error",
+            title: data.message,
+        });
+
     }
 }
 
