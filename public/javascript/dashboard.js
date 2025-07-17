@@ -1121,6 +1121,7 @@ async function getShowOrdersKitchen(url) {
 function initializeTable(id_table) {
     $(`#${id_table}`).DataTable({
         responsive: true,
+        info: true,
         //order: [[9, "desc"]],
         lengthChange: false,
         autoWidth: false,
@@ -2727,10 +2728,13 @@ async function getShowInventory(url) {
             theme: "bootstrap4",
         });
 
-        $("#table_inventory").DataTable({
+        
+        initializeTable("table_inventory");
+
+        $("#table_inventory_input").DataTable({
+            paging: false, // 👈 Esto desactiva la paginación
             info: true,
             responsive: true,
-            order: [[0, "asc"]],
             lengthChange: false,
             autoWidth: false,
             buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
@@ -3244,13 +3248,11 @@ async function deleteProductSeller(url) {
                 emptyTable: "No hay datos disponibles",
             },
         });
-    }else{
-
-            Toast.fire({
+    } else {
+        Toast.fire({
             icon: "error",
             title: data.message,
         });
-
     }
 }
 

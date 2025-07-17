@@ -189,7 +189,9 @@
                             @php
                                 $total_descuadres = 0;
                             @endphp
-                            <table class="table" id="table_order_kitchen_unit">
+
+                            <div class="table-responsive">
+                                                            <table class="table" id="table_order_kitchen_unit">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">Nombre Producto</th>
@@ -223,6 +225,8 @@
 
                                 </tbody>
                             </table>
+                            </div>
+
 
                             <div class="row p-5">
 

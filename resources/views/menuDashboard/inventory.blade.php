@@ -198,7 +198,7 @@
 
 
                                     <div class="table-responsive">
-                                        <table class="table">
+                                        <table class="table" id="table_inventory_input">
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th scope="col">Nombre Producto</th>
