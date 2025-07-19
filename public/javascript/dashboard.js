@@ -293,7 +293,46 @@ function playNotificationSound2() {
 }
 
 //////////////////////////////////////////////////////////////////////
+async function getShowAdminUsers(url) {
+    const token = localStorage.getItem("access_token");
 
+
+    let response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    let data = await response.json();
+
+    if (data.status) {
+        let element_container = document.getElementById("container_menu");
+
+        element_container.innerHTML = data.html;
+
+        $("#table_userss").DataTable({
+            responsive: true,
+            order: [[9, "desc"]],
+            lengthChange: false,
+            autoWidth: false,
+            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            language: {
+                search: "Buscar en la tabla:",
+                lengthMenu: "Mostrar _MENU_ registros",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior",
+                },
+                emptyTable: "No hay datos disponibles",
+            },
+        });
+    }
+}
 $(document).ready(function () {
     $("#register_nav").trigger("click");
 });
