@@ -1,13 +1,13 @@
 Pusher.logToConsole = true;
 
-let route = "http://localhost/cambiar-estado-button";
-let route2 = "http://localhost/verifyId";
+let route = "http://18.218.135.247/cambiar-estado-button";
+let route2 = "http://18.218.135.247/verifyId";
 // sistema de escucha de eventos para notificaciones en tiempo real
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
     key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
-    wsHost: "localhost",
+    wsHost: "18.218.135.247",
     wsPort: 8080,
     forceTLS: false,
     enabledTransports: ["ws", "wss"], // Solo WebSockets ws:http wss: https
