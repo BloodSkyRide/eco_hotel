@@ -1,13 +1,13 @@
 Pusher.logToConsole = true;
 
-let route = "http://18.218.135.247/cambiar-estado-button";
-let route2 = "http://18.218.135.247/verifyId";
+let route = "http://localhost/cambiar-estado-button";
+let route2 = "http://localhost/verifyId";
 // sistema de escucha de eventos para notificaciones en tiempo real
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
     key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
-    wsHost: "18.218.135.247",
+    wsHost: "localhost",
     wsPort: 8080,
     forceTLS: false,
     enabledTransports: ["ws", "wss"], // Solo WebSockets ws:http wss: https
@@ -46,9 +46,9 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
             (get_id == "1093228865" || get_id == "1091272724") &&
             data.tipo === "pedido"
         ) {
-            playNotificationSound();
+            
 
-            hablar(
+           await hablar(
                 `Tienes un pedido nuevo: ${data.amount} ${data.name_product} y porfavor ${data.description}`
             );
             let notification = $(document).Toasts("create", {
@@ -107,9 +107,9 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
         }
     });
 
-function hablar(texto) {
-    speechSynthesis.cancel(); // Detener cualquier lectura previa
-
+async function hablar(texto) {
+    // speechSynthesis.cancel(); // Detener cualquier lectura previa
+    playNotificationSound();
     const mensaje = new SpeechSynthesisUtterance(texto);
     mensaje.lang = "es-US"; // Idioma asociado a esa voz
     mensaje.pitch = 1.5;

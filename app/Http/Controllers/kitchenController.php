@@ -97,7 +97,7 @@ class kitchenController extends Controller
                         "items_ordenados" => $item['total'],
                         "items_historial" => $search_sum_sell->total_vendidos,
                         "diferencia" => $diferencia,
-                        "total_restante" => $diferencia * $price_product
+                        "total_restante" => ($diferencia * $price_product) * -1
 
                     ]);
                 }
