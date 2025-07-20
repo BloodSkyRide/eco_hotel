@@ -351,8 +351,8 @@ class createProductController extends Controller
                 $descuento = $compuesto['descuento'];
                 $descuento_final = $decrement * $descuento;
                 modelInventario::decrementInventory($id_item_fk, $descuento_final);
-                // $verify_date_report = modelcontrol_inventarios::verifyExists($fecha); con esto se descuenta de control inventarios
-                // if($categoria == "tienda" && $verify_date_report) modelcontrol_inventarios::decrementControlInventory($id_item_fk, $descuento_final);
+                $verify_date_report = modelcontrol_inventarios::verifyExists($fecha);
+                if($categoria == "tienda" && $verify_date_report) modelcontrol_inventarios::decrementControlInventory($id_item_fk, $descuento_final,$fecha);
                 $bandera++;
             }
 

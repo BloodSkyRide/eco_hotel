@@ -26,17 +26,19 @@ class modelcontrol_inventarios extends Model
 
    }
 
-   public static function getItemControl($id_item){
+   public static function getItemControl($id_item,$date){
 
     return self::where("id_original",$id_item)
+    ->where("fecha_reporte", $date)
     ->first();
 
    }
 
 
-       public static function decrementControlInventory($id_item, $decrement){
+       public static function decrementControlInventory($id_item, $decrement, $date){
 
         return self::where('id_original', $id_item)
+        ->where("fecha_reporte", $date)
         ->decrement('unidades_disponibles', $decrement);
     }
 }

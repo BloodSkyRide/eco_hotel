@@ -163,7 +163,7 @@ class inventoryController extends Controller
 
         $verify_inventory = modelcontrol_inventarios::verifyExists($date);
         $array_data = [];
-
+        $date = date("Y-m-d");
         if ($verify_inventory) {
 
             $original_inventory = modelInventario::getProductsCategory($this->category_store);
@@ -173,8 +173,9 @@ class inventoryController extends Controller
                 $verify_compund = modelCompuesto::verifyItemCompund($id_item_original);
                 if ($verify_compund) {
 
-                    $row_product_control = modelcontrol_inventarios::getItemControl($id_item_original);
-
+                    
+                    $row_product_control = modelcontrol_inventarios::getItemControl($id_item_original,$date);
+                    
                     $cantidad_control = (!isset($row_product_control->unidades_disponibles)) ? 0 : $row_product_control->unidades_disponibles;
                     $restante = $item['unidades_disponibles'] - $cantidad_control;
 
