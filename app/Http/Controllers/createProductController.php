@@ -11,6 +11,7 @@ use App\Models\modelProducts;
 use App\Models\modelCompuesto;
 use App\Models\modelSell;
 use App\Models\modelAssits;
+use App\Models\modelcontrol_inventarios;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Storage;
 
@@ -345,10 +346,12 @@ class createProductController extends Controller
 
             foreach ($get_compuesto as $compuesto) {
 
+                $id_item_fk = $compuesto['id_item_fk'];
+                
                 $descuento = $compuesto['descuento'];
                 $descuento_final = $decrement * $descuento;
-                $id_item_fk = $compuesto['id_item_fk'];
                 modelInventario::decrementInventory($id_item_fk, $descuento_final);
+                if($categoria == "tienda") modelcontrol_inventarios::decrementControlInventory($id_item_fk, $descuento_final);
                 $bandera++;
             }
 

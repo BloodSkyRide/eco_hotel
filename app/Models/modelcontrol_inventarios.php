@@ -32,4 +32,11 @@ class modelcontrol_inventarios extends Model
     ->first();
 
    }
+
+
+       public static function decrementControlInventory($id_item, $decrement){
+
+        return self::where('id_original', $id_item)
+        ->decrement('unidades_disponibles', $decrement);
+    }
 }

@@ -170,25 +170,28 @@ class inventoryController extends Controller
             foreach ($original_inventory as $item) {
 
                 $id_item_original = $item['id_item'];
+                $verify_compund = modelCompuesto::verifyItemCompund($id_item_original);
+                if ($verify_compund) {
 
-                $row_product_control = modelcontrol_inventarios::getItemControl($id_item_original);
+                    $row_product_control = modelcontrol_inventarios::getItemControl($id_item_original);
 
-                $cantidad_control = (!isset($row_product_control->unidades_disponibles)) ? 0 : $row_product_control->unidades_disponibles;
-                $restante = $item['unidades_disponibles'] - $cantidad_control;
+                    $cantidad_control = (!isset($row_product_control->unidades_disponibles)) ? 0 : $row_product_control->unidades_disponibles;
+                    $restante = $item['unidades_disponibles'] - $cantidad_control;
 
-                $calculate_cost = self::calculateCosts($id_item_original);
+                    $calculate_cost = self::calculateCosts($id_item_original);
 
-                array_push($array_data, [
+                    array_push($array_data, [
 
-                    "nombre" => $item['nombre'],
-                    "item_original" => $item['unidades_disponibles'],
-                    "item_control" => $cantidad_control,
-                    "restante" => $restante,
-                    "precio" => $calculate_cost,
-                    "hora_reporte" => $row_product_control->hora_reporte,
-                    "fecha_reporte" => $row_product_control->fecha_reporte,
-                    "total_faltante" => $restante * $calculate_cost
-                ]);
+                        "nombre" => $item['nombre'],
+                        "item_original" => $item['unidades_disponibles'],
+                        "item_control" => $cantidad_control,
+                        "restante" => $restante,
+                        "precio" => $calculate_cost,
+                        "hora_reporte" => $row_product_control->hora_reporte,
+                        "fecha_reporte" => $row_product_control->fecha_reporte,
+                        "total_faltante" => ($restante * $calculate_cost) * -1
+                    ]);
+                }
             }
         }
 

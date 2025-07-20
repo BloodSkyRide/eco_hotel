@@ -40,7 +40,6 @@ async function verifyUser() {
 echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo que usas en el backend
     .listen(".orderKitchen", async function (data) {
         let role = document.getElementById("role_h1").textContent;
-
         let get_id = await verifyUser();
 
         if (
@@ -53,7 +52,7 @@ echo.channel("realtime-channel") // El nombre del canal debe coincidir con lo qu
                 `Tienes un pedido nuevo: ${data.amount} ${data.name_product} y porfavor ${data.description}`
             );
             let notification = $(document).Toasts("create", {
-                class: "bg-white text-primary toast-scroll",
+                class: `bg-white text-primary toast-scroll toast-${data.id_order}`,
                 body: `<strong>Nombre producto:</strong> ${data.name_product.toUpperCase()}<br>
                 <strong>Cantidad:</strong> ${data.amount}<br>
                 <strong>Hora orden:</strong> ${data.hora}<br>
@@ -193,11 +192,24 @@ async function buttonChangeState(id_order, state) {
 
     if (data.status) {
         blockbuttonsNotification(state, id_order);
-        Swal.fire({
-            title: "Excelente!",
-            text: "Ahora tu orden esta " + state.toUpperCase(),
-            icon: "success",
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
         });
+
+        Toast.fire({
+            icon: "success",
+            title: `Excelente cambiaste tu orden a ¡${state.toUpperCase()}!`,
+        });
+
+        if (state == "despachado") {
+
+            const toast = document.querySelector(`.toast-${id_order}`);
+
+            toast.remove();
+        }
     }
 }
 
@@ -254,7 +266,20 @@ async function orderByKitchen(url) {
     let token = localStorage.getItem("access_token");
 
     let data_convert = convertArrayKkitchen();
+    if (data_convert.length < 1) {
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+        });
 
+        Toast.fire({
+            icon: "error",
+            title: "Uuups parece que no tienes items de cocina para ordenar!",
+        });
+        return 0;
+    }
     let response = await fetch(url, {
         method: "POST",
         headers: {
@@ -295,7 +320,6 @@ function playNotificationSound2() {
 //////////////////////////////////////////////////////////////////////
 async function getShowAdminUsers(url) {
     const token = localStorage.getItem("access_token");
-
 
     let response = await fetch(url, {
         method: "GET",
@@ -2767,7 +2791,6 @@ async function getShowInventory(url) {
             theme: "bootstrap4",
         });
 
-        
         initializeTable("table_inventory");
 
         $("#table_inventory_input").DataTable({

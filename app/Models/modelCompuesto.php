@@ -72,6 +72,14 @@ class modelCompuesto extends Model
 
     }
 
+    public static function verifyItemCompund($id_item_fk){
+
+
+        return self::where("id_item_fk",$id_item_fk)
+        ->exists();
+    }
+
+
 
 
 
