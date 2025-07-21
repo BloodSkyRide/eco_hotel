@@ -204,7 +204,7 @@ async function buttonChangeState(id_order, state) {
             title: `Excelente cambiaste tu orden a ¡${state.toUpperCase()}!`,
         });
 
-        if (state == "despachado") {
+        if (state == "despachado" || state == "rechazado") {
 
             const toast = document.querySelector(`.toast-${id_order}`);
 
