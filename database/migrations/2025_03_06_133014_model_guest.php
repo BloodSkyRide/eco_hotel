@@ -16,7 +16,9 @@ return new class extends Migration
             $table->id("id_habitacion");
             $table->string("nombre_huesped",255)->nullable();
             $table->string("apellido_huesped",255)->nullable();
+            $table->string("tipo_documento")->nullable();
             $table->string("cedula_huesped",255)->nullable();
+            $table->integer("acompaniantes")->nullable();
             $table->date("nacimiento")->nullable();
             $table->text("email")->nullable();
             $table->text("origen")->nullable();

@@ -59,13 +59,19 @@ function addGuest() {
 
     let number_contact = document.getElementById("contacto");
 
+    let number_companions = document.getElementById("number_companions");
+
+    let type_document = document.getElementById("type_document");
+
     let verify = verifyInputs2();
 
     if (verify) {
         let add_td = `<tr id="td_row${flag}"><td>${name_guest.value}</td>
         <td>${last_name.value}</td>
         <td>${fecha_nacimiento.value}</td>
+        <td>${type_document.value}</td>
         <td>${cedula.value}</td>
+        <td>${number_companions.value}</td>
         <td>${correo.value}</td>
         <td>${origen.value}</td>
         <td>${destino.value}</td>
@@ -80,15 +86,17 @@ function addGuest() {
         add.innerHTML += add_td;
         flag = flag + 1;
 
-        name_guest.value = "";
-        last_name.value = "";
-        fecha_nacimiento.value = "";
-        cedula.value = "";
-        correo.value = "";
-        origen.value = "";
-        destino.value = "";
-        estado_civil.value = "selected";
-        number_contact.value = "";
+        // name_guest.value = "";
+        // last_name.value = "";
+        // fecha_nacimiento.value = "";
+        // cedula.value = "";
+        // correo.value = "";
+        // origen.value = "";
+        // destino.value = "";
+        // estado_civil.value = "selected";
+        // number_contact.value = "";
+        // type_document.value = "selected";
+        // number_companions.value = "selected";
 
         if (flag >= 2) room.disabled = true;
         else {
@@ -117,16 +125,18 @@ function getGuests() {
         let guest = document.querySelectorAll(`#td_row${i + 1} > td`); // aca estamos obtenieno todos los campos para empezar a extraer los innerText
 
         data_object_array.push({
-            nombre: guest[0].innerText.trim(),
-            apellido: guest[1].innerText.trim(),
+            nombres: guest[0].innerText.trim(),
+            apellidos: guest[1].innerText.trim(),
             nacimiento: guest[2].innerText.trim(),
-            cedula: guest[3].innerText.trim(),
-            email: guest[4].innerText.trim(),
-            origen: guest[5].innerText.trim(),
-            destino: guest[6].innerText.trim(),
-            estado_civil: guest[7].innerText.trim(),
-            celular: guest[8].innerText.trim(),
-            habitacion: guest[9].innerText.trim(),
+            tipo_documento: guest[3].innerText.trim(),
+            cedula: guest[4].innerText.trim(),
+            numero_acompanantes: guest[5].innerText.trim(),
+            email: guest[6].innerText.trim(),
+            origen: guest[7].innerText.trim(),
+            destino: guest[8].innerText.trim(),
+            estado_civil: guest[9].innerText.trim(),
+            celular: guest[10].innerText.trim(),
+            habitacion: guest[11].innerText.trim(),
         });
     }
 
@@ -179,8 +189,15 @@ function verifyInputs2() {
 
     let number_contact = document.getElementById("contacto").value;
 
+    let number_companions = document.getElementById("number_companions").value;
+
+    let type_document = document.getElementById("type_document").value;
+
     let data_verify = [
         room,
+        estado_civil,
+        type_document,
+        number_companions,
         name_guest,
         last_name,
         fecha_nacimiento,
@@ -188,18 +205,17 @@ function verifyInputs2() {
         correo,
         origen,
         destino,
-        estado_civil,
         number_contact,
     ];
 
     let finally_data = true;
 
     data_verify.forEach((item, index) => {
-        if (index === 0) {
+        if (index >= 0 && index <= 2) {
             if (item === "selected") finally_data = false;
         }
 
-        if (item < 1) finally_data = false;
+        if (item.length < 1) finally_data = false;
     });
 
     return finally_data;

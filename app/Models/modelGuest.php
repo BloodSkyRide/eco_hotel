@@ -10,7 +10,7 @@ class modelGuest extends Model
     use HasFactory;
 
     protected $table = "alquiler_habitaciones";
-    protected $fillable = ["id_habitacion", "nombre_huesped", "apellido_huesped", "cedula_huesped", "nacimiento", "email", "origen", "destino", "estado_civil", "celular", "hora", "habitacion", "estadia", "total_venta", "fecha", "createdd_at", "updatedd_at"];
+    protected $fillable = ["id_habitacion", "nombre_huesped", "apellido_huesped","tipo_documento", "cedula_huesped", "acompanantes", "nacimiento", "email", "origen", "destino", "estado_civil", "celular", "hora", "habitacion", "estadia", "total_venta", "fecha", "createdd_at", "updatedd_at"];
     
 
     public static function insertGuests($data){

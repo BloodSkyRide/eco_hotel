@@ -35,9 +35,9 @@
                             aria-selected="false"><i class="fa-solid fa-bed"></i>&nbsp;&nbsp;Huespedes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="custom-tabs-one-profile-reservation" data-toggle="pill" href="#reservation"
-                            role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false"><i
-                                class="fa-solid fa-passport"></i>&nbsp;&nbsp;Reservaciones</a>
+                        <a class="nav-link" id="custom-tabs-one-profile-reservation" data-toggle="pill"
+                            href="#reservation" role="tab" aria-controls="custom-tabs-one-profile"
+                            aria-selected="false"><i class="fa-solid fa-passport"></i>&nbsp;&nbsp;Reservaciones</a>
                     </li>
                 </ul>
             </div>
@@ -72,6 +72,22 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="select_item">Tipo Identificación:</label>
+                                        <select class="form-control select2 select2-danger"
+                                            data-dropdown-css-class="select2-danger" style="width: 100%;"
+                                            id="type_document"> 
+                                            <option selected="selected" value="selected">Seleccionar item
+                                            </option>
+                                            <option value="C.C">C.C</option>
+                                            <option value="C.E">Cedula Extranjeria</option>
+                                            <option value="T.I">Tarjeta Identidad</option>
+                                            <option value="R.C">Tarjeta Identidad</option>
+                                            <option value="P.A">Pasaporte</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="imagen_product">Cédula o documento:</label>
                                         <input type="number" class="form-control" id="documento" name="documento"
                                             placeholder="Documento de identidad..." autocomplete="off">
@@ -94,6 +110,13 @@
                                     <div class="row">
 
                                         <div class="col-md-9">
+
+                                            <div class="form-group">
+                                                <label for="nombre_producto"># Acompañantes:</label>
+                                                <input type="number" class="form-control" id="number_companions"
+                                                    placeholder="Numero de acompañantes..." autocomplete="off"
+                                                    name="nombre">
+                                            </div>
 
                                             <div class="form-group">
                                                 <label for="imagen">Origien:</label>
@@ -176,7 +199,9 @@
                                                 <th scope="col">Nombre</th>
                                                 <th scope="col">Apellido</th>
                                                 <th scope="col">Nacimiento</th>
-                                                <th scope="col">Cédula</th>
+                                                <th scope="col">Tipo Documento</th>
+                                                <th scope="col"># Documento</th>
+                                                <th scope="col"># Acompañantes</th>
                                                 <th scope="col">E-mail</th>
                                                 <th scope="col">Origen</th>
                                                 <th scope="col">Destino</th>
@@ -448,8 +473,12 @@
                                                 <tr>
                                                     <td>{{ $item['titular'] }}</td>
                                                     <td>{{ $item['cedula'] }}</td>
-                                                    <td><span class="badge badge-warning">{{$item['monto_reservado']}}</span></td>
-                                                    <td><span class="badge badge-warning">{{$item['monto_adeudado']}}</span></td>
+                                                    <td><span
+                                                            class="badge badge-warning">{{ $item['monto_reservado'] }}</span>
+                                                    </td>
+                                                    <td><span
+                                                            class="badge badge-warning">{{ $item['monto_adeudado'] }}</span>
+                                                    </td>
                                                     <td>{{ $item['medio_pago'] }}</td>
                                                     <td>{{ $item['numero_huespedes'] }}</td>
                                                     <td>{{ $item['descripcion_reserva'] }}</td>
@@ -467,7 +496,9 @@
                                                             class="{{ $estado }}">{{ $item['estado'] }}</span>
                                                     </td>
                                                     <td>
-                                                        <a type="button"  onclick="redmeeCode('{{route('redeemCode')}}','{{$item['id_reservacion']}}')"><span class="badge badge-primary">{{ $item['id_reserva_unit'] }}</span></a>
+                                                        <a type="button"
+                                                            onclick="redmeeCode('{{ route('redeemCode') }}','{{ $item['id_reservacion'] }}')"><span
+                                                                class="badge badge-primary">{{ $item['id_reserva_unit'] }}</span></a>
                                                     </td>
 
                                                 </tr>
@@ -503,7 +534,8 @@
             <div class="modal-body" id="modal_body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalInformation()">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    onclick="closeModalInformation()">Cerrar</button>
             </div>
         </div>
     </div>

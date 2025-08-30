@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Models\modelGuest;
 use App\Models\modelSell;
@@ -20,6 +21,9 @@ class guestController extends Controller
     protected $id_defecto = 500; // id por defecto para crear el producto de venta correspondiente a la alquilada de las habitaciones
     protected $id_pasadia_amarilla = 45;
     protected $nombre_pasadia_amarilla = "pasadia HOTEL";
+    protected $type_acomodation = "Habitacion";
+    protected $name_business = "Eco Hotel Parador de Rapi";
+    protected $rnt_business = 52741;
     public function getShowGuest(Request $request)
     {
 
@@ -87,6 +91,7 @@ class guestController extends Controller
         self::verifyProductSellerRoom();
         $hora =  Carbon::now();
         $fecha = date('Y-m-d');
+        $fecha_mas_un_dia = date('Y-m-d', strtotime($fecha . ' +1 day'));
         $verify_pasadia = modelInventario::verifyPasadia($this->id_pasadia_amarilla);
 
         if (!$verify_pasadia) {
@@ -111,20 +116,25 @@ class guestController extends Controller
 
 
         $confirmation = count($registros['registros']);
-
+        
+       
         $precio_divisor = $precio_alquiler / $confirmation;
 
 
         $flag = 0;
+
+        $principalCode = null;
 
         foreach ($registros['registros'] as $item) {
 
 
             $data = [
 
-                "nombre_huesped" => $item['nombre'],
-                "apellido_huesped" => $item['apellido'],
+                "nombre_huesped" => $item['nombres'],
+                "apellido_huesped" => $item['apellidos'],
+                "tipo_documento" => $item['tipo_documento'],
                 "cedula_huesped" => $item['cedula'],
+                "acompanantes" => $item['numero_acompanantes'],
                 "nacimiento" => $item['nacimiento'],
                 "email" => $item['email'],
                 "origen" => $item['origen'],
@@ -144,6 +154,61 @@ class guestController extends Controller
             $insert = modelGuest::insertGuests($data);
 
             if ($insert) $flag++;
+
+            
+
+            if($flag == 1){
+
+                            $response = Http::withHeaders([
+                'Authorization' => 'token vwSeTgu4uJjoqyEaezcf1Cu3VWaRZKx4EdsaW5qn',
+                'Accept' => 'application/json'
+            ])->post('https://pms.mincit.gov.co/one/', [
+                // Aquí van los datos que quieras enviar en el body
+                'tipo_identificacion' => $item['tipo_documento'],
+                'numero_identificacion' => $item['cedula'],
+                'nombres' => $item['nombres'],
+                'apellidos' => $item['apellidos'],
+                'cuidad_residencia' => $item['origen'],
+                'cuidad_procedencia' => $item['destino'],
+                'numero_habitacion' => $item['habitacion'],
+                'motivo' => 'trabajo',
+                'check_in' => $fecha,
+                'check_out' => $fecha_mas_un_dia,
+                'numero_acompanantes' => $item['numero_acompanantes'],
+                'costo' => $this->type_acomodation,
+                'tipo_acomodacion' => $precio_alquiler / 2,
+                'nombre_establecimiento' => $this->name_business,
+                'rnt_establecimiento' => $this->rnt_business,
+            ]);
+
+            if($item['numero_acompanantes'] > 0) $principalCode = data_get($response->json(), 'code');
+            
+            
+        }else{
+                          
+                if(!isset($principalCode)){
+
+                    
+                }
+                $response = Http::withHeaders([
+                'Authorization' => 'token vwSeTgu4uJjoqyEaezcf1Cu3VWaRZKx4EdsaW5qn',
+                'Accept' => 'application/json'
+            ])->post('https://pms.mincit.gov.co/one/', [
+                // Aquí van los datos que quieras enviar en el body
+                'tipo_identificacion' => $item['tipo_documento'],
+                'numero_identificacion' => $item['cedula'],
+                'nombres' => $item['nombres'],
+                'apellidos' => $item['apellidos'],
+                'cuidad_residencia' => $item['origen'],
+                'cuidad_procedencia' => $item['destino'],
+                'numero_habitacion' => $item['habitacion'],
+                'check_in' => $fecha,
+                'check_out' => $fecha_mas_un_dia,
+                'padre' => $principalCode,
+            ]);
+
+            }
+
         }
 
         $data_sell = [
