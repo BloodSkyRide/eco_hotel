@@ -86,17 +86,17 @@ function addGuest() {
         add.innerHTML += add_td;
         flag = flag + 1;
 
-        // name_guest.value = "";
-        // last_name.value = "";
-        // fecha_nacimiento.value = "";
-        // cedula.value = "";
-        // correo.value = "";
-        // origen.value = "";
-        // destino.value = "";
-        // estado_civil.value = "selected";
-        // number_contact.value = "";
-        // type_document.value = "selected";
-        // number_companions.value = "selected";
+        name_guest.value = "";
+        last_name.value = "";
+        fecha_nacimiento.value = "";
+        cedula.value = "";
+        correo.value = "";
+        origen.value = "";
+        destino.value = "";
+        estado_civil.value = "selected";
+        number_contact.value = "";
+        type_document.value = "selected";
+        number_companions.value = "selected";
 
         if (flag >= 2) room.disabled = true;
         else {
