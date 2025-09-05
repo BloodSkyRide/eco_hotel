@@ -155,11 +155,11 @@ class guestController extends Controller
 
             if ($insert) $flag++;
 
-            
+            $flagg_second = 0;
 
             if($flag == 1){
 
-                            $response = Http::withHeaders([
+                $response = Http::withHeaders([
                 'Authorization' => 'token vwSeTgu4uJjoqyEaezcf1Cu3VWaRZKx4EdsaW5qn',
                 'Accept' => 'application/json'
             ])->post('https://pms.mincit.gov.co/one/', [
@@ -182,30 +182,37 @@ class guestController extends Controller
             ]);
 
             if($item['numero_acompanantes'] > 0) $principalCode = data_get($response->json(), 'code');
+
+            $flagg_principal = 0;
+
+            $flagg_principal = (isset($principalCode)) ? $flagg_principal+= 1 : $principalCode;
+
+            
             
             
         }else{
                           
-                if(!isset($principalCode)){
+                if(isset($principalCode)){
 
                     
+                    $flagg_second++;
+                    $response = Http::withHeaders([
+                    'Authorization' => 'token vwSeTgu4uJjoqyEaezcf1Cu3VWaRZKx4EdsaW5qn',
+                    'Accept' => 'application/json'
+                ])->post('https://pms.mincit.gov.co/one/', [
+                    // Aquí van los datos que quieras enviar en el body
+                    'tipo_identificacion' => $item['tipo_documento'],
+                    'numero_identificacion' => $item['cedula'],
+                    'nombres' => $item['nombres'],
+                    'apellidos' => $item['apellidos'],
+                    'cuidad_residencia' => $item['origen'],
+                    'cuidad_procedencia' => $item['destino'],
+                    'numero_habitacion' => $item['habitacion'],
+                    'check_in' => $fecha,
+                    'check_out' => $fecha_mas_un_dia,
+                    'padre' => $principalCode,
+                ]);
                 }
-                $response = Http::withHeaders([
-                'Authorization' => 'token vwSeTgu4uJjoqyEaezcf1Cu3VWaRZKx4EdsaW5qn',
-                'Accept' => 'application/json'
-            ])->post('https://pms.mincit.gov.co/one/', [
-                // Aquí van los datos que quieras enviar en el body
-                'tipo_identificacion' => $item['tipo_documento'],
-                'numero_identificacion' => $item['cedula'],
-                'nombres' => $item['nombres'],
-                'apellidos' => $item['apellidos'],
-                'cuidad_residencia' => $item['origen'],
-                'cuidad_procedencia' => $item['destino'],
-                'numero_habitacion' => $item['habitacion'],
-                'check_in' => $fecha,
-                'check_out' => $fecha_mas_un_dia,
-                'padre' => $principalCode,
-            ]);
 
             }
 
@@ -226,10 +233,34 @@ class guestController extends Controller
         modelSell::insertSell($data_sell);
 
 
+        
+        $validate2 = ($flagg_second > 0) ? " además se registran $flagg_second acompañantes" : "";
+
+        if($flagg_principal > 0){
+
+            $validate = "Se registró el principal exitosamente";
+        }else if(!isset($flagg_principal) && $item['numero_acompanantes'] < 1){
+
+
+            $validate = "No se registran acompañantes";
+
+        }else if(!isset($flagg_principal) && $item['numero_acompanantes'] > 0){
+
+
+
+            $validate = "parece que no se pudo registrar en el TRA";
+        }
+
+        $validate_total = "$validate $validate2";
+
+
+
         if ($flag === $confirmation) {
 
             modelInventario::decrementInventory($this->id_pasadia_amarilla, $confirmation);
-            return response()->json(["status" => true]);
+
+            return response()->json(["status" => true, "message" => $validate_total]);
+
         } else {
 
             return response()->json(["status" => false, "mesagge" => "No se completo el guardado correctamente!"]);

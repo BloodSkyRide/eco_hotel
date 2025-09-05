@@ -96,7 +96,8 @@ function addGuest() {
         estado_civil.value = "selected";
         number_contact.value = "";
         type_document.value = "selected";
-        number_companions.value = "selected";
+        number_companions.value = "0";
+        number_companions.disabled = true;
 
         if (flag >= 2) room.disabled = true;
         else {
@@ -256,8 +257,9 @@ async function registerGuest(url) {
 
             Toast.fire({
                 icon: "success",
-                title: "Se ha alquilado la habitacion de manera satisfactoria!",
+                title: "Se ha alquilado la habitacion de manera satisfactoria! "+ data.message,
             });
+            console.log(data.message);
 
             price.value = "";
             estadia.value = "selected";
