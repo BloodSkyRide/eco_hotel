@@ -12,6 +12,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Payload;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\modelUser;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
