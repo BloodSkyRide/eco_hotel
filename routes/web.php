@@ -18,6 +18,7 @@ use App\Http\Controllers\guestController;
 use App\Http\Controllers\contabilityController;
 use App\Http\Controllers\kitchenController;
 use App\Http\Controllers\transfersController;
+use App\Http\Controllers\chatBotController;
  
 
 
@@ -189,6 +190,10 @@ Route::post('/cambiar-estado-button', [kitchenController::class, 'changeStateBut
 Route::get('/verifyId', [kitchenController::class, 'getIdUser'])->name("verifyId")->middleware(["verifyTokenHeader"]);
 
 Route::post('/rango-cocina', [kitchenController::class, 'getRange'])->name("rangeKitchen")->middleware(["verifyTokenHeader"]);
+
+///////////chat bot .//////////
+
+Route::match(['GET', 'POST'], '/webhook', [chatBotController::class, 'chatBot']);
 
 
 
