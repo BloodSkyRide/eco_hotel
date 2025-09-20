@@ -1,7 +1,7 @@
 Pusher.logToConsole = true;
 
-let route = "https://18.218.135.247/cambiar-estado-button";
-let route2 = "https://18.218.135.247/verifyId";
+let route = "https://intranetparadorrapi.com/cambiar-estado-button";
+let route2 = "https:intranetparadorrapi.com/verifyId";
 // sistema de escucha de eventos para notificaciones en tiempo real
 var echo = new Echo({
     broadcaster: "pusher",
