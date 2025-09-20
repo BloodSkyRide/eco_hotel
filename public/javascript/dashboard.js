@@ -1,20 +1,21 @@
 Pusher.logToConsole = true;
 
-let route = "http://18.218.135.247/cambiar-estado-button";
-let route2 = "http://18.218.135.247/verifyId";
-// sistema de escucha de eventos para notificaciones en tiempo real
+let route = "https://intranetparadorrapi.com/cambiar-estado-button";
+let route2 = "https://intranetparadorrapi.com/verifyId";
+
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
-    key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
-    wsHost: "18.218.135.247",
-    wsPort: 8080,
-    forceTLS: false,
-    enabledTransports: ["ws", "wss"], // Solo WebSockets ws:http wss: https
-    disabledTransports: ["xhr_polling", "xhr_streaming"], // Deshabilita otras opciones y evita el cors
+    key: "7lznea8sbpv6xz0c3aqk",
+    wsHost: "intranetparadorrapi.com",
+    wsPort: 443,
+    forceTLS: true,
+    wssPort: 443,                         // si quieres forzar HTTPS
+    enabledTransports: ["wss,ws"], 
+    disabledTransports: ["xhr_polling", "xhr_streaming"], 
     auth: {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`, // Reemplaza con tu token real
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
     },
 });
