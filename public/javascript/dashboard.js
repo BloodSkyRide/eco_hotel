@@ -6,15 +6,16 @@ let route2 = "https://18.218.135.247/verifyId";
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
-    key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
+    key: "7lznea8sbpv6xz0c3aqk", // Reemplaza por tu REVERB_APP_KEY
     wsHost: "18.218.135.247",
-    wsPort: 8080,
-    forceTLS: true, //habilita el https
-    enabledTransports: ["ws", "wss"], // Solo WebSockets ws:http wss: https
-    disabledTransports: ["xhr_polling", "xhr_streaming"], // Deshabilita otras opciones y evita el cors
+    wsPort: 443,              // Puerto seguro para WSS
+    wssPort: 443,             // Explicitamente WSS
+    forceTLS: true,           // Habilita SSL
+    enabledTransports: ["ws", "wss"], 
+    disabledTransports: ["xhr_polling", "xhr_streaming"], 
     auth: {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`, // Reemplaza con tu token real
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
     },
 });
