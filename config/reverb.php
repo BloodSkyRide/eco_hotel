@@ -29,9 +29,9 @@ return [
     'servers' => [
 
         'reverb' => [
-            'host' => env('REVERB_SERVER_HOST', '0.0.0.0'),
+            'host' => env('REVERB_SERVER_HOST', '127.0.0.1'),
             'port' => env('REVERB_SERVER_PORT', 6001),
-            'hostname' => env('REVERB_HOST',  '0.0.0.0'),
+            'hostname' => env('REVERB_HOST',  '127.0.0.1'),
             'options' => [
                 'tls' => [],
             ],
