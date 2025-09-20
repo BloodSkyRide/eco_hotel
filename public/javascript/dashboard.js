@@ -9,7 +9,7 @@ var echo = new Echo({
     key: "7lznea8sbpv6xz0c3aqk", // cambiar por la key generada en el archivo .env REVERB_APP_KEY, si se desea cambiar se puede usar php artisan reverb:install
     wsHost: "18.218.135.247",
     wsPort: 8080,
-    forceTLS: false,
+    forceTLS: true, //habilita el https
     enabledTransports: ["ws", "wss"], // Solo WebSockets ws:http wss: https
     disabledTransports: ["xhr_polling", "xhr_streaming"], // Deshabilita otras opciones y evita el cors
     auth: {
