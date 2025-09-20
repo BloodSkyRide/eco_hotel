@@ -1,16 +1,16 @@
 Pusher.logToConsole = true;
 
 let route = "https://intranetparadorrapi.com/cambiar-estado-button";
-let route2 = "https:intranetparadorrapi.com/verifyId";
-// sistema de escucha de eventos para notificaciones en tiempo real
+let route2 = "https://intranetparadorrapi.com/verifyId";
+
 var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
-    key: "7lznea8sbpv6xz0c3aqk", // Reemplaza por tu REVERB_APP_KEY
+    key: "7lznea8sbpv6xz0c3aqk",
     wsHost: "intranetparadorrapi.com",
-    wsPort: 443,              // Puerto seguro para WSS             
-    forceTLS: true,           // Habilita SSL
-    enabledTransports: ["ws", "wss"], 
+    wsPort: 443,
+    forceTLS: true,
+    enabledTransports: ["wss"], 
     disabledTransports: ["xhr_polling", "xhr_streaming"], 
     auth: {
         headers: {
