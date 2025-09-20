@@ -7,9 +7,8 @@ var echo = new Echo({
     broadcaster: "pusher",
     cluster: "mt1",
     key: "7lznea8sbpv6xz0c3aqk", // Reemplaza por tu REVERB_APP_KEY
-    wsHost: "18.218.135.247",
-    wsPort: 443,              // Puerto seguro para WSS
-    wssPort: 443,             // Explicitamente WSS
+    wsHost: "intranetparadorrapi.com",
+    wsPort: 443,              // Puerto seguro para WSS             
     forceTLS: true,           // Habilita SSL
     enabledTransports: ["ws", "wss"], 
     disabledTransports: ["xhr_polling", "xhr_streaming"], 
