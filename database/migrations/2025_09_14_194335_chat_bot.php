@@ -14,7 +14,7 @@ return new class extends Migration
             Schema::create('chat_bot', function (Blueprint $table) {
 
             $table->id('id_chat');
-            $table->string('numero')->unique();
+            $table->string('telefono')->unique();
             $table->text('ultimo_mensaje')->nullable();
             $table->string('estado_conversacion')->nullable();
             $table->boolean('consentimiento')->default(false);

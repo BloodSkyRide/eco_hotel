@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class modelChatBot extends Model
 {
     protected $table = "chat_bot";
-    protected $fillable = ["id_chat","numero", "ultimo_mensaje", "estado_conversacion","consentimiento","fecha", "hora", "created_at", "updated_at"];
+    protected $fillable = ["id_chat","telefono", "ultimo_mensaje", "estado_conversacion","consentimiento","fecha", "hora", "created_at", "updated_at"];
 
     public static function insertConversation($data){
 
@@ -18,7 +18,7 @@ class modelChatBot extends Model
 
     public static function verifyExists($numero){
 
-        return self::where("numero", $numero)->exists();
+        return self::where("telefono", $numero)->exists();
 
 
     }
@@ -26,7 +26,7 @@ class modelChatBot extends Model
 
     public static function verifyStateConversation($numero){
 
-        return self::where('numero', $numero)
+        return self::where('telefono', $numero)
         ->value("estado_conversacion");
 
     }
@@ -34,7 +34,7 @@ class modelChatBot extends Model
     public static function changeStateConversation($state, $numero){
 
 
-        return self::where('numero', $numero)
+        return self::where('telefono', $numero)
         ->update(["estado_conversacion" => $state]);
 
 
