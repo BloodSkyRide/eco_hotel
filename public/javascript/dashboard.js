@@ -8,7 +8,7 @@ var echo = new Echo({
     cluster: "mt1",
     key: "7lznea8sbpv6xz0c3aqk",
     wsHost: "intranetparadorrapi.com",
-    wsPort: 6001,
+    wsPort: 443,
     forceTLS: true,
     enabledTransports: ["wss"], 
     disabledTransports: ["xhr_polling", "xhr_streaming"], 
