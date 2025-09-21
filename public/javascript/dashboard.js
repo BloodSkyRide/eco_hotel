@@ -12,7 +12,7 @@ var echo = new Echo({
     forceTLS: true,
     wssPort: 443,                         // si quieres forzar HTTPS
     enabledTransports: ["wss", "ws"],
-    wsPath: "/ws",
+    wsPath: "/ws/app",
     disabledTransports: ["xhr_polling", "xhr_streaming"], 
     auth: {
         headers: {
