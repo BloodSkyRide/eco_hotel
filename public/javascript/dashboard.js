@@ -5,21 +5,18 @@ let route2 = "https://intranetparadorrapi.com/verifyId";
 
 var echo = new Echo({
     broadcaster: "pusher",
-    cluster: "mt1",
     key: "7lznea8sbpv6xz0c3aqk",
     wsHost: "intranetparadorrapi.com",
-    wsPort: 8080,
-    forceTLS: false,
-    // wssPort: 6001,                         // si quieres forzar HTTPS
-    enabledTransports: ["ws"],
-    disabledTransports: ["xhr_polling", "xhr_streaming"], 
+    wsPath: "/app",
+    wsPort: 443,
+    forceTLS: true,
+    enabledTransports: ["wss"],
     auth: {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
     },
 });
-
 async function verifyUser() {
     let token = localStorage.getItem("access_token");
 
