@@ -6,11 +6,12 @@ let route2 = "https://intranetparadorrapi.com/verifyId";
 var echo = new Echo({
     broadcaster: "pusher",
     key: "7lznea8sbpv6xz0c3aqk",
+    cluster: "mt1",              // obligatorio aunque uses Reverb
     wsHost: "intranetparadorrapi.com",
-    wsPath: "/app",
+    wsPath: "/app",              // debe coincidir con tu ProxyPass en Apache
     wsPort: 443,
     forceTLS: true,
-    enabledTransports: ["wss"],
+    enabledTransports: ["ws","wss"],
     auth: {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
