@@ -8,6 +8,7 @@ var echo = new Echo({
     wsHost: "intranetparadorrapi.com",
     wsPort: 443,
     forceTLS: true,
+    wsPath: "/app",
     enabledTransports: ["ws","wss"],
     auth: {
         headers: {
