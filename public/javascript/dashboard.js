@@ -1,3 +1,6 @@
+Pusher.logToConsole = true;
+
+
 var echo = new Echo({
     broadcaster: "pusher",
     key: "7lznea8sbpv6xz0c3aqk",
