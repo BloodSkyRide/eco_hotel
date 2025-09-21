@@ -8,10 +8,10 @@ var echo = new Echo({
     cluster: "mt1",
     key: "7lznea8sbpv6xz0c3aqk",
     wsHost: "intranetparadorrapi.com",
-    wsPort: 443,
+    wsPort: 6001,
     forceTLS: true,
-    wssPort: 443,                         // si quieres forzar HTTPS
-    enabledTransports: ["wss,ws"], 
+    wssPort: 6001,                         // si quieres forzar HTTPS
+    enabledTransports: ["wss", "ws"], 
     disabledTransports: ["xhr_polling", "xhr_streaming"], 
     auth: {
         headers: {

@@ -33,7 +33,7 @@ return [
             'port' => env('REVERB_SERVER_PORT', 6001),
             'hostname' => env('REVERB_HOST',  '127.0.0.1'),
             'options' => [
-                'tls' => [
+                'ssl' => [
                     'local_cert' => '/etc/letsencrypt/live/intranetparadorrapi.com/fullchain.pem',
                     'local_pk'   => '/etc/letsencrypt/live/intranetparadorrapi.com/privkey.pem',
                     'verify_peer' => true, // producción
@@ -84,7 +84,7 @@ return [
                     'scheme' => env('REVERB_SCHEME', 'https'),
                     'useTLS' => env('REVERB_SCHEME', 'https') === 'https',
                 ],
-                'allowed_origins' => ['*'],
+                'allowed_origins' => ['https://intranetparadorrapi.com'],
                 'ping_interval' => env('REVERB_APP_PING_INTERVAL', 60),
                 'activity_timeout' => env('REVERB_APP_ACTIVITY_TIMEOUT', 30),
                 'max_message_size' => env('REVERB_APP_MAX_MESSAGE_SIZE', 10_000),
