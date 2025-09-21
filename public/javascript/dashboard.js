@@ -1,14 +1,9 @@
-Pusher.logToConsole = true;
-
-let route = "https://intranetparadorrapi.com/cambiar-estado-button";
-let route2 = "https://intranetparadorrapi.com/verifyId";
-
 var echo = new Echo({
     broadcaster: "pusher",
     key: "7lznea8sbpv6xz0c3aqk",
-    cluster: "mt1",              // obligatorio aunque uses Reverb
+    cluster: "mt1",
     wsHost: "intranetparadorrapi.com",
-    wsPath: "/",              // debe coincidir con tu ProxyPass en Apache
+    wsPath: "/app",
     wsPort: 443,
     forceTLS: true,
     enabledTransports: ["ws","wss"],
