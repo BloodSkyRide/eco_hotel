@@ -8,7 +8,7 @@ var echo = new Echo({
     key: "7lznea8sbpv6xz0c3aqk",
     cluster: "mt1",              // obligatorio aunque uses Reverb
     wsHost: "intranetparadorrapi.com",
-    wsPath: "/app",              // debe coincidir con tu ProxyPass en Apache
+    wsPath: "/",              // debe coincidir con tu ProxyPass en Apache
     wsPort: 443,
     forceTLS: true,
     enabledTransports: ["ws","wss"],
