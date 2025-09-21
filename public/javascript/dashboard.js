@@ -3,7 +3,7 @@ var echo = new Echo({
     key: "7lznea8sbpv6xz0c3aqk",
     cluster: "mt1",
     wsHost: "intranetparadorrapi.com",
-    wsPath: "/app",
+    wsPath: "/",
     wsPort: 443,
     forceTLS: true,
     enabledTransports: ["ws","wss"],
