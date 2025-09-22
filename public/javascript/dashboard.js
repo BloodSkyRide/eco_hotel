@@ -6,10 +6,9 @@ var echo = new Echo({
     key: "7lznea8sbpv6xz0c3aqk",
     cluster: "mt1",
     wsHost: "intranetparadorrapi.com",
-    wsPort: 443,
     wssPort: 443,
     forceTLS: true,
-    enabledTransports: ["ws", "wss"],
+    enabledTransports: ["wss"],
     path: "/app", // 👈 muy importante
     auth: {
         headers: {
