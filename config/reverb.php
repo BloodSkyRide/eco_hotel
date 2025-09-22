@@ -33,7 +33,7 @@ return [
             'port' => env('REVERB_SERVER_PORT', 6001),
             'hostname' => env('REVERB_HOST',  'intranetparadorrapi.com'),
             'options' => [
-                'tls' => [
+                'ssl' => [
                     'local_cert' => '/etc/letsencrypt/live/intranetparadorrapi.com/fullchain.pem',
                     'local_pk'   => '/etc/letsencrypt/live/intranetparadorrapi.com/privkey.pem',
                     'verify_peer' => true, // producción
