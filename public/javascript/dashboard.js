@@ -7,8 +7,10 @@ var echo = new Echo({
     cluster: "mt1",
     wsHost: "intranetparadorrapi.com",
     wsPort: 443,
+    wssPort: 443,
     forceTLS: true,
-    enabledTransports: ["ws","wss"],
+    enabledTransports: ["ws", "wss"],
+    path: "/ws", // 👈 muy importante
     auth: {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
