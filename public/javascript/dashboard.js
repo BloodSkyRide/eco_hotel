@@ -10,7 +10,7 @@ var echo = new Echo({
     wssPort: 443,
     forceTLS: true,
     enabledTransports: ["ws", "wss"],
-    path: "/ws", // 👈 muy importante
+    path: "/app", // 👈 muy importante
     auth: {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
