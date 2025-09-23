@@ -79,6 +79,9 @@ RESPONDE siempre como un asesor natural y simpático.
     $this->my_number_phone = env('MY_NUMBER_PHONE');
     $this->access_token = env('ACCESS_TOKEN');
     $this->token_API_IA = env('OPENAI_API_KEY');
+
+        dd($this->verifyToken, $this->my_number_phone, $this->access_token, $this->token_API_IA);
+
 }
     public function chatBot(Request $request)
     {
