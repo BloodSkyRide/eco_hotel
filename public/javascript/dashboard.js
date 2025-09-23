@@ -1,6 +1,6 @@
 Pusher.logToConsole = true;
 let route = "https://intranetparadorrapi.com/cambiar-estado-button";
-let route2 = "https://intranetparadorrapi.com/";
+let route2 = "https://intranetparadorrapi.com/verifyid";
 
 var echo = new Echo({
     broadcaster: "pusher",
