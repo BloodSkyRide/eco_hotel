@@ -92,7 +92,7 @@ RESPONDE siempre como un asesor natural y simpático.
                 return response($request->input('hub_challenge'), 200);
             }
 
-            return response("Error de verificación $this->verifyToken", 403);
+            return response("Error de verificación ".$this->verifyToken, 403);
         }
 
         // --- Recepción de mensajes (POST) ---
