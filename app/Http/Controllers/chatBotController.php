@@ -160,6 +160,8 @@ RESPONDE siempre como un asesor natural y simpático.
 
                     $data = $response_IA->json();
 
+                    $reply3 = "";
+
                     if (isset($data['output'][1]['content'][0]['text'])) {
                         $reply = $data['output'][1]['content'][0]['text'];
                         $reply = is_array($reply) ? json_encode($reply) : (string)$reply;
