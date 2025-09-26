@@ -92,9 +92,10 @@ RESPONDE siempre como un asesor natural y simpático.
             }
 
             $hola = "";
+            $prueba = $request->input('hub_mode');
             if($request->input('hub_verify_token') === $this->verifyToken) $hola = "se verifican satisfactoriamente";
 
-            return response("Error de verificación ".$this->verifyToken." ".$hola, 403);
+            return response("Error de verificación ".$this->verifyToken." ".$hola." ademas esto es asi: ".$prueba, 403);
         }
 
         // --- Recepción de mensajes (POST) ---
