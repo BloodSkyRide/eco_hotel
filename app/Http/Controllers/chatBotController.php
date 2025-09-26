@@ -87,14 +87,14 @@ RESPONDE siempre como un asesor natural y simpático.
 
         if ($request->isMethod('get')) {
 
-            if (
-                $request->input('hub_mode') === 'subscribe' &&
-                $request->input('hub_verify_token') === $this->verifyToken
-            ) {
+            if ( $request->input('hub_mode') === 'subscribe' && $request->input('hub_verify_token') === $this->verifyToken) {
                 return response($request->input('hub_challenge'), 200);
             }
 
-            return response("Error de verificación ".$this->verifyToken, 403);
+            $hola = "";
+            if($request->input('hub_verify_token') === $this->verifyToken) $hola = "se verifican satisfactoriamente";
+
+            return response("Error de verificación ".$this->verifyToken." ".$hola, 403);
         }
 
         // --- Recepción de mensajes (POST) ---
