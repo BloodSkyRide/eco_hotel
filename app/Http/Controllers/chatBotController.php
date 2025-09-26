@@ -94,6 +94,7 @@ RESPONDE siempre como un asesor natural y simpático.
             $hola = "";
             $prueba = $request->query('hub.mode');
             if($request->query('hub.verify_token') === $this->verifyToken) $hola = "se verifican satisfactoriamente";
+            else $hola = "ni mergas";
 
             return response("Error de verificación ".$this->verifyToken." ".$hola." ademas esto es asi: ".$prueba, 403);
         }
