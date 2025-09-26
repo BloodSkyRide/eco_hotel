@@ -39,4 +39,11 @@ class modelChatBot extends Model
 
 
     }
+
+    public static function updateChat($numero,$message){
+
+        return self::where('telefono', $numero)
+        ->update(["ultimo_mensaje" => $message]);
+
+    }
 }

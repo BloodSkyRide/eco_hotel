@@ -118,8 +118,9 @@ RESPONDE siempre como un asesor natural y simpático.
             if (!$exists) self::saveChatBot($from, $text);
             else {
 
-                $verify_exists_conversation = modelChatBot::verifyStateConversation($from);
+                $update_ultimate_message = modelChatBot::updateChat($from,$text);
 
+                if(!$update_ultimate_message) return response()->json(["message" => "no pudo ser guardado el ususario en base de datos"]);
                 $reply = '';
 
 
@@ -202,7 +203,7 @@ RESPONDE siempre como un asesor natural y simpático.
                         "messaging_product" => "whatsapp",
                         "to" => $from_general,
                         "type" => "text",
-                        "text" => ["body" => "Hola, parece que el cliente con numero de whatsapp $from necesita $action"]
+                        "text" => ["body" => "Hola, parece que el cliente con numero de whatsapp $from necesita $action \n wa.me/$from"]
                     ]);
                 }
                 // Retornar respuesta de WhatsApp para debugging
