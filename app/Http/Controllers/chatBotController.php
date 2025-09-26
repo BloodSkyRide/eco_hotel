@@ -87,13 +87,13 @@ RESPONDE siempre como un asesor natural y simpático.
 
         if ($request->isMethod('get')) {
 
-            if ( $request->input('hub.mode') === 'subscribe' && $request->input('hub_verify_token') === $this->verifyToken) {
-                return response($request->input('hub_challenge'), 200);
+            if ( $request->query('hub.mode') === 'subscribe' && $request->query('hub.verify_token') === $this->verifyToken) {
+                return response($request->query('hub.challenge'), 200);
             }
 
             $hola = "";
-            $prueba = $request->input('hub.mode');
-            if($request->input('hub_verify_token') === $this->verifyToken) $hola = "se verifican satisfactoriamente";
+            $prueba = $request->query('hub.mode');
+            if($request->query('hub.verify_token') === $this->verifyToken) $hola = "se verifican satisfactoriamente";
 
             return response("Error de verificación ".$this->verifyToken." ".$hola." ademas esto es asi: ".$prueba, 403);
         }
