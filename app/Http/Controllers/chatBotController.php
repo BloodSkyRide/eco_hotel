@@ -87,7 +87,7 @@ RESPONDE siempre como un asesor natural y simpático.
 
         if ($request->isMethod('get')) {
 
-            if ( $request->input('hub_mode') === 'subscribe' && $request->input('hub_verify_token') === $this->verifyToken) {
+            if ( $request->input('hub.mode') === 'subscribe' && $request->input('hub_verify_token') === $this->verifyToken) {
                 return response($request->input('hub_challenge'), 200);
             }
 
