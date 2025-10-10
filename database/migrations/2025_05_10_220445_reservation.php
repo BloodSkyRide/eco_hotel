@@ -29,6 +29,7 @@ return new class extends Migration
             $table->time("hora_reserva")->nullable();
             $table->string("id_reserva_unit",30)->nullable();
             $table->string("estado",30)->nullable();
+            $table->string("id_transferencia",20)->nullable();
             $table->timestamps();
         });
     }

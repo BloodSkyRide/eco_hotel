@@ -25,7 +25,8 @@ class modelReservations extends Model
         "descripcion_reserva",
         "hora_reserva",
         "id_reserva_unit",
-        "estado"
+        "estado", 
+        "id_transferencia"
     ];
     public static function getReservations($fecha)
     {
@@ -44,6 +45,13 @@ class modelReservations extends Model
     {
         return modelReservations::where("id_reserva_unit", $code)
             ->first();
+    }
+
+    public static function getIdTransfer($id_reservation){
+
+        return self::where("id_reservacion", $id_reservation)
+        ->first();
+
     }
 
 

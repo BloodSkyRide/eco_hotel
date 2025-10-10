@@ -9,6 +9,7 @@ use App\Models\modelSell;
 use App\Models\modelProducts;
 use App\Models\modelInventario;
 use App\Models\modelReservations;
+use App\Models\modelTransfer;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Str;
 
@@ -116,8 +117,8 @@ class guestController extends Controller
 
 
         $confirmation = count($registros['registros']);
-        
-       
+
+
         $precio_divisor = $precio_alquiler / $confirmation;
 
 
@@ -157,46 +158,9 @@ class guestController extends Controller
 
             $flagg_second = 0;
 
-            if($flag == 1){
+            if ($flag == 1) {
 
                 $response = Http::withHeaders([
-                'Authorization' => 'token vwSeTgu4uJjoqyEaezcf1Cu3VWaRZKx4EdsaW5qn',
-                'Accept' => 'application/json'
-            ])->post('https://pms.mincit.gov.co/one/', [
-                // Aquí van los datos que quieras enviar en el body
-                'tipo_identificacion' => $item['tipo_documento'],
-                'numero_identificacion' => $item['cedula'],
-                'nombres' => $item['nombres'],
-                'apellidos' => $item['apellidos'],
-                'cuidad_residencia' => $item['origen'],
-                'cuidad_procedencia' => $item['destino'],
-                'numero_habitacion' => $item['habitacion'],
-                'motivo' => 'trabajo',
-                'check_in' => $fecha,
-                'check_out' => $fecha_mas_un_dia,
-                'numero_acompanantes' => $item['numero_acompanantes'],
-                'costo' => $this->type_acomodation,
-                'tipo_acomodacion' => $precio_alquiler / 2,
-                'nombre_establecimiento' => $this->name_business,
-                'rnt_establecimiento' => $this->rnt_business,
-            ]);
-
-            if($item['numero_acompanantes'] > 0) $principalCode = data_get($response->json(), 'code');
-
-            $flagg_principal = 0;
-
-            $flagg_principal = (isset($principalCode)) ? $flagg_principal+= 1 : $principalCode;
-
-            
-            
-            
-        }else{
-                          
-                if(isset($principalCode)){
-
-                    
-                    $flagg_second++;
-                    $response = Http::withHeaders([
                     'Authorization' => 'token vwSeTgu4uJjoqyEaezcf1Cu3VWaRZKx4EdsaW5qn',
                     'Accept' => 'application/json'
                 ])->post('https://pms.mincit.gov.co/one/', [
@@ -208,14 +172,45 @@ class guestController extends Controller
                     'cuidad_residencia' => $item['origen'],
                     'cuidad_procedencia' => $item['destino'],
                     'numero_habitacion' => $item['habitacion'],
+                    'motivo' => 'trabajo',
                     'check_in' => $fecha,
                     'check_out' => $fecha_mas_un_dia,
-                    'padre' => $principalCode,
+                    'numero_acompanantes' => $item['numero_acompanantes'],
+                    'costo' => $this->type_acomodation,
+                    'tipo_acomodacion' => $precio_alquiler / 2,
+                    'nombre_establecimiento' => $this->name_business,
+                    'rnt_establecimiento' => $this->rnt_business,
                 ]);
+
+                if ($item['numero_acompanantes'] > 0) $principalCode = data_get($response->json(), 'code');
+
+                $flagg_principal = 0;
+
+                $flagg_principal = (isset($principalCode)) ? $flagg_principal += 1 : $principalCode;
+            } else {
+
+                if (isset($principalCode)) {
+
+
+                    $flagg_second++;
+                    $response = Http::withHeaders([
+                        'Authorization' => 'token vwSeTgu4uJjoqyEaezcf1Cu3VWaRZKx4EdsaW5qn',
+                        'Accept' => 'application/json'
+                    ])->post('https://pms.mincit.gov.co/one/', [
+                        // Aquí van los datos que quieras enviar en el body
+                        'tipo_identificacion' => $item['tipo_documento'],
+                        'numero_identificacion' => $item['cedula'],
+                        'nombres' => $item['nombres'],
+                        'apellidos' => $item['apellidos'],
+                        'cuidad_residencia' => $item['origen'],
+                        'cuidad_procedencia' => $item['destino'],
+                        'numero_habitacion' => $item['habitacion'],
+                        'check_in' => $fecha,
+                        'check_out' => $fecha_mas_un_dia,
+                        'padre' => $principalCode,
+                    ]);
                 }
-
             }
-
         }
 
         $data_sell = [
@@ -233,18 +228,17 @@ class guestController extends Controller
         modelSell::insertSell($data_sell);
 
 
-        
+
         $validate2 = ($flagg_second > 0) ? " además se registran $flagg_second acompañantes" : "";
 
-        if($flagg_principal > 0){
+        if ($flagg_principal > 0) {
 
             $validate = "Se registró el principal exitosamente";
-        }else if(!isset($flagg_principal) && $item['numero_acompanantes'] < 1){
+        } else if (!isset($flagg_principal) && $item['numero_acompanantes'] < 1) {
 
 
             $validate = "No se registran acompañantes";
-
-        }else if(!isset($flagg_principal) && $item['numero_acompanantes'] > 0){
+        } else if (!isset($flagg_principal) && $item['numero_acompanantes'] > 0) {
 
 
 
@@ -260,7 +254,6 @@ class guestController extends Controller
             modelInventario::decrementInventory($this->id_pasadia_amarilla, $confirmation);
 
             return response()->json(["status" => true, "message" => $validate_total]);
-
         } else {
 
             return response()->json(["status" => false, "mesagge" => "No se completo el guardado correctamente!"]);
@@ -296,6 +289,31 @@ class guestController extends Controller
     }
 
 
+
+    private function saveBill($request)
+    {
+
+        $imagen = $request->file("comprobante");
+
+        // Nombre final del archivo
+        $name_final = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME) . "_" . Carbon::now()->format('Y-m-d_H-i-s') . ".jpg";
+        $full_path = storage_path("app/public/transfers/" . $name_final);
+
+        // Optimizar imagen antes de guardarla
+        $this->optimizeImage($imagen, $full_path);
+
+        return "storage/transfers/" . $name_final;
+    }
+
+    private function optimizeImage($image, $destination)
+    {
+        $src = imagecreatefromjpeg($image->getPathname());
+        imagejpeg($src, $destination, 50);
+
+        imagedestroy($src);
+    }
+
+
     public function makeReservation(Request $request)
     {
 
@@ -314,6 +332,8 @@ class guestController extends Controller
         $descripcion = $request->descripcion;
         $monto_reserva = $request->monto_reserva;
         $valor_paquete = $request->valor_paquete;
+
+        $save_bill = 0;
 
 
         $rol = $decode_token["rol"];
@@ -341,6 +361,18 @@ class guestController extends Controller
             "id_reserva_unit" => $id_unit,
             "estado" => "RESERVADO"
         ];
+
+        if ($medio_pago === "transferencia") {
+
+
+            $path_image = self::saveBill($request);
+
+            $data = ["valor" => $monto_reserva, "url_imagen" => $path_image];
+
+            $save_bill = modelTransfer::insertTransferGetId($data);
+
+            $data_insert["id_transferencia"] = $save_bill;
+        }
         $insert = modelReservations::insertReservations($data_insert);
 
         if ($insert) {
@@ -369,8 +401,33 @@ class guestController extends Controller
 
 
         $id_reserva = $request->id_reserva;
-
+        $payment_method = modelReservations::getIdTransfer($id_reserva)->medio_pago;
         $change_state = modelReservations::changeStateReservation($id_reserva, "REDIMIDO");
+
+        if ($payment_method == "transferencia") {
+
+            $tittle_reservation = modelReservations::getIdTransfer($id_reserva)->titular;
+            $tittle_id = modelReservations::getIdTransfer($id_reserva)->cedula;
+            $token = $request->header("Authorization");
+            $replace = str_replace("Bearer ", "", $token);
+
+            $decode_token = JWTAuth::setToken($replace)->authenticate();
+
+            $cajero = $decode_token["nombre"];
+
+            $id_cajero = $decode_token["cedula"];
+
+            $id_transfer = modelReservations::getIdTransfer($id_reserva)->id_transferencia;
+
+            $hoy = date('Y-m-d');
+            $time = date('H:i:s');
+
+
+            $data_change = ["fecha" => $hoy, "hora" => $time, "cajero_responsable" => $cajero, "id_cajero" => $id_cajero, 
+            "descripcion" => "Abono reservacion de $tittle_reservation con cedula: $tittle_id"];
+
+            $charge_transfer = modelTransfer::setTransfer($id_transfer, $data_change);
+        }
 
         $messagge = ($change_state) ? "Reservación redimida con exito!" : "No se pudo redimir la reservación!";
 

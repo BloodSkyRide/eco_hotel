@@ -75,7 +75,7 @@
                                         <label for="select_item">Tipo Identificación:</label>
                                         <select class="form-control select2 select2-danger"
                                             data-dropdown-css-class="select2-danger" style="width: 100%;"
-                                            id="type_document"> 
+                                            id="type_document">
                                             <option selected="selected" value="selected">Seleccionar item
                                             </option>
                                             <option value="C.C">C.C</option>
@@ -424,10 +424,22 @@
 
                                     </div>
 
-
                                 </div>
 
                             </div>
+
+                            <center class="mb-2">
+
+                                <div class="form-group">
+                                    <label for="valor_total">Adjuntar comprobante:</label>
+                                    <input type="file" class="form-control w-50" id="comprobante" name="contacto" placeholder="Subir comprobante">
+
+
+                                </div>
+
+
+                            </center>
+
 
                             <center>
                                 <button class="btn btn-primary"

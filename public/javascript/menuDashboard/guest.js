@@ -257,7 +257,9 @@ async function registerGuest(url) {
 
             Toast.fire({
                 icon: "success",
-                title: "Se ha alquilado la habitacion de manera satisfactoria! "+ data.message,
+                title:
+                    "Se ha alquilado la habitacion de manera satisfactoria! " +
+                    data.message,
             });
             console.log(data.message);
 
@@ -354,6 +356,11 @@ async function getReservationsO(url) {
     }
 }
 
+function comprobante(image) {
+    let comprobante = false;
+    if (image.length > 0) comprobante = true;
+}
+
 async function makeReservation(url) {
     let verify = verificarInputs();
     if (verify) {
@@ -367,26 +374,28 @@ async function makeReservation(url) {
         let descripcion = document.getElementById("description_reservation");
         let monto_reserva = document.getElementById("monto_reserva");
         let valor_paquete = document.getElementById("valor_total");
+        let comprobante = document.getElementById("comprobante");
+
+        let formData = new FormData();
+        formData.append("titular", titular.value);
+        formData.append("telefono", telefono.value);
+        formData.append("fecha", fecha.value);
+        formData.append("documento", documento.value);
+        formData.append("medio_pago", medio_pago.value);
+        formData.append("contacto", contacto.value);
+        formData.append("huespedes", huespedes.value);
+        formData.append("descripcion", descripcion.value);
+        formData.append("monto_reserva", monto_reserva.value);
+        formData.append("valor_paquete", valor_paquete.value);
+        formData.append("comprobante", comprobante.files[0]);
 
         let token = localStorage.getItem("access_token");
         let response = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({
-                titular: titular.value,
-                telefono: telefono.value,
-                fecha: fecha.value,
-                documento: documento.value,
-                medio_pago: medio_pago.value,
-                contacto: contacto.value,
-                huespedes: huespedes.value,
-                descripcion: descripcion.value,
-                monto_reserva: monto_reserva.value,
-                valor_paquete: valor_paquete.value,
-            }),
+            body: formData,
         });
 
         let data = await response.json();
@@ -407,8 +416,6 @@ async function makeReservation(url) {
             $("#reservationInformation").modal("show");
 
             let modal_id_body = document.getElementById("modal_body");
-
-
 
             modal_id_body.innerHTML = `<div class="row">
 
@@ -449,8 +456,7 @@ async function makeReservation(url) {
         <hr>
         <p>Nota: guarda esta informacion para canjear tu reservación, lo puedes hacer con el codigo de reserva.</p>`;
         }
-    }else{
-
+    } else {
         var Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -474,6 +480,7 @@ function verificarInputs() {
     let contacto = document.getElementById("contacto_numero").value;
     let huespedes = document.getElementById("number_huespedes").value;
     let descripcion = document.getElementById("description_reservation").value;
+    let comprobante = document.getElementById("comprobante").value;
 
     let data_verify = [
         titular,
@@ -483,26 +490,26 @@ function verificarInputs() {
         contacto,
         huespedes,
         descripcion,
+        comprobante,
     ];
 
     let finally_data = true;
 
-    data_verify.forEach((item,index) => {
+    data_verify.forEach((item, index) => {
         if (item.length < 1) finally_data = false;
-        console.log(`estoy en el indice ${index}, ademas la longitud es ${item.length}`);
+        console.log(
+            `estoy en el indice ${index}, ademas la longitud es ${item.length}`
+        );
     });
 
-    if(fecha === "") finally_data = false;
+    if (fecha === "") finally_data = false;
 
     console.log(`la variable de verificacion es ${finally_data}`);
 
     return finally_data;
 }
 
-
 async function searchReservation(url) {
-    
-
     let code = document.getElementById("search_reservation").value;
     let token = localStorage.getItem("access_token");
 
@@ -519,17 +526,16 @@ async function searchReservation(url) {
 
     let data = await response.json();
 
-
-    if(data.status){
-
-
-        if(data.results == true){
-
-             $("#reservationInformation").modal("show");
+    if (data.status) {
+        if (data.results == true) {
+            $("#reservationInformation").modal("show");
 
             let modal_id_body = document.getElementById("modal_body");
 
-            let status = (data.datos.estado === "RESERVADO") ? "badge badge-success" : "badge badge-danger";
+            let status =
+                data.datos.estado === "RESERVADO"
+                    ? "badge badge-success"
+                    : "badge badge-danger";
 
             modal_id_body.innerHTML = `<div class="row">
 
@@ -569,10 +575,7 @@ async function searchReservation(url) {
         </div>
         <hr>
         <p>Nota: guarda esta informacion para canjear tu reservación, lo puedes hacer con el codigo de reserva.</p>`;
-
-        }else{
-
-
+        } else {
             var Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -585,26 +588,15 @@ async function searchReservation(url) {
                 title: "No se ha encontrado la reservación, verifica el codigo de reserva",
             });
         }
-
-           
-
     }
-
 }
 
-
-
-function closeModalInformation(){
-
-
+function closeModalInformation() {
     let modal_id_body = document.getElementById("modal_body");
     modal_id_body.innerHTML = "";
-
 }
 
-
 async function redmeeCode(url, id_reservation) {
-
     let token = localStorage.getItem("access_token");
 
     let response = await fetch(url, {
@@ -632,10 +624,8 @@ async function redmeeCode(url, id_reservation) {
             icon: "success",
             title: data.mesagge,
         });
-    }else{
-
-
-            var Toast = Swal.mixin({
+    } else {
+        var Toast = Swal.mixin({
             toast: true,
             position: "top-end",
             showConfirmButton: false,
@@ -646,7 +636,5 @@ async function redmeeCode(url, id_reservation) {
             icon: "error",
             title: data.mesagge,
         });
-
-
     }
 }

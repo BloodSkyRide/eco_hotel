@@ -8,12 +8,18 @@ class modelTransfer extends Model
 {
     protected $table = "transferencias";
     protected $fillable = ["fecha", "hora", "cajero_responsable", "valor", "url_imagen", "created_at", "updated_at", "descripcion", "id_cajero"];
-
+    protected $primaryKey = "id_transferencias";
 
     public static function insertTransfer($data){
 
         return self::insert($data);
 
+    }
+
+        public static function insertTransferGetId($data)
+    {
+        $transfer = self::create($data); // crea el registro y devuelve el modelo creado
+        return $transfer->id_transferencias; // devuelve el ID recién insertado
     }
 
     public static function getTransfersForMonth($year,$month, $today){
@@ -72,6 +78,15 @@ class modelTransfer extends Model
         return self::where("fecha",$date)
         ->where("id_cajero", $self_id)
         ->sum("valor");
+    }
+
+
+    public static function setTransfer($id_transfer, $data){
+
+        return self::where("id_transferencias", $id_transfer)
+        ->update($data);
+
+
     }
 
 
