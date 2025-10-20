@@ -464,20 +464,30 @@ async function sendStateKitchen(url) {
 
 function getDataArray() {
     let datos = document.querySelectorAll(".product_inventory");
-
     let data = [];
 
-    datos.forEach((item) => {
+    for (let item of datos) {
         let id = item.dataset.info;
-        console.log(id);
         let convert_id = document.getElementById(`product_${id}`);
-        let valor = convert_id.value;
+        let valor = convert_id.value.trim();
+        let num = Number(valor); // corregido
 
-        data.push({
-            id_product_original: id,
-            count: valor,
+        if (!isNaN(num) && valor !== "") {
+            data.push({
+                id_product_original: id,
+                count: num,
+            });
+            convert_id.style.border = "";
+        } else {
+            convert_id.style.border = "2px solid red";
+            Swal.fire({
+            title: "Uuuups!",
+            text: "Parece que hay algun dato inválido en tu inventario, verifica nuevamente",
+            icon: "error",
         });
-    });
+            throw new Error("Campo no numérico encontrado");
+        }
+    }
 
     return data;
 }
