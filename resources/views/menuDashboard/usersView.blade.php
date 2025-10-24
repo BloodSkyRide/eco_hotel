@@ -16,7 +16,6 @@
                             <th scope="col">Cédula</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
-                            <th scope="col">Tipo de usuario</th>
                             <th scope="col">Labor Asignada</th>
                             <th scope="col">Direccion</th>
                             <th scope="col">E-mail</th>
@@ -52,7 +51,6 @@
                                     class="badge bg-{{$text}}">{!! $icon !!}&nbsp;&nbsp;{{ $item['rol'] }}</span>
                                 
                                 </td>
-                                <td>{{ $item['nombre_labor'] }}</td>
                                 <td>{{ $item['direccion'] }}</td>
                                 <td>{{ $item['email'] }}</td>
                                 <td>{{ $item['contacto_emergencia'] }}</td>

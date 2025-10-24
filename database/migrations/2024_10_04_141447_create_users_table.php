@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('password');
             $table->string('nombre',255)->nullable();
             $table->string('apellido',255)->nullable();
-            $table->string('id_labor',255)->nullable();
             $table->date('fecha_registro')->nullable();
             $table->date('fecha_notificacion')->nullable();
             $table->string('rol',255);

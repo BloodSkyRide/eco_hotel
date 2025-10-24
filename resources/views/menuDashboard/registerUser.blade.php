@@ -41,8 +41,12 @@
                     <div class="form-group">
                         <label for="rol">Tipo de Usuario:</label>
                         <select class="form-control" name="rol" id="rol">
+                            
+                            <option value="usuario">Usuario</option>
+                            @if ($rol === "super admin")
+                            <option value="super admin">Administrador</option>
                             <option value="administrador">Administrador</option>
-                            <option value="usuario">usuario</option>
+                            @endif
                         </select>
                     </div>
                 </div>
@@ -50,7 +54,7 @@
                 {{-- COLUMNA 2 --}}
                 <div class="col">
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="labor">Tipo de labor:</label>
 
 
@@ -60,7 +64,7 @@
                             @endforeach
                         </select>
 
-                    </div>
+                    </div> --}}
 
 
                     <div class="form-group">

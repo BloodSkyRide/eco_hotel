@@ -8,12 +8,20 @@ use App\Models\modelTransfer;
 use App\Models\modelEgress;
 use App\Models\modelUser;
 use Carbon\Carbon;
+use App\Http\Controllers\dashboardController;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class historySellController extends Controller
 {
 
+    protected $rols;
 
+
+        public function __construct()
+    {
+        $controller = new dashboardController();
+        $this->rols = $controller->getRols();
+    }
 
     private function getCashPerson($date){
 
@@ -74,9 +82,9 @@ class historySellController extends Controller
 
         $self_sell = modelSell::getMySell($today, $self_id);
 
-        
-        if($self_id == "1093228865" || $self_id == "1091272724"){
-            
+
+        if(in_array($rol, $this->rols)){
+   
             $total_sells_for_user = self::getCashPerson($today);
             $render = view("menuDashboard.historySell", ["rol" => $rol, 
             "historial" => $history_sells, 
@@ -87,8 +95,7 @@ class historySellController extends Controller
             "name" => $self_name,
             "my_egress" => $total_caja_egress,
             "my_sell" => $self_sell,
-            "total_users" => $total_sells_for_user,
-            "self_id" => $self_id])->render();
+            "total_users" => $total_sells_for_user,])->render();
 
             return response()->json(["status" => true, "html" => $render]);
 
@@ -102,8 +109,7 @@ class historySellController extends Controller
             "self_transfers" => $self_transfers,
             "name" => $self_name,
             "my_egress" => $total_caja_egress,
-            "my_sell" => $self_sell,
-            "self_id" => $self_id])->render();
+            "my_sell" => $self_sell])->render();
     
             return response()->json(["status" => true, "html" => $render]);
 
@@ -150,7 +156,7 @@ class historySellController extends Controller
         $self_sell = modelSell::getMySell($today, $self_id);
 
 
-        if($self_id === "1093228865"){
+        if(in_array($rol, $this->rols)){
 
 
             $total_sells_for_user = self::getCashPerson($today);

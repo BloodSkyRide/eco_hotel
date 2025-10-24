@@ -367,7 +367,7 @@ async function register_user(url) {
         dataType: "json",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
         },
     }).done(function (res) {
         if (res.status) {
@@ -385,6 +385,7 @@ async function sendUser(url) {
     const token = localStorage.getItem("access_token");
 
     if (verifyInputs()) {
+
         form.forEach((value, key) => {
             jsonObject[key] = value;
         });
@@ -1412,53 +1413,6 @@ async function logout(url) {
     }
 }
 
-// async function editNamLabor(url) {
-//     const token = localStorage.getItem("access_token");
-
-//     let name = document.getElementById("edit_name_labor").value;
-
-//     let id_labor = document.getElementById("select_labor").value;
-
-//     if (id_labor !== "selected" && name.length > 0) {
-//         let response = await fetch(url, {
-//             method: "PUT",
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 Authorization: `Bearer ${token}`,
-//             },
-
-//             body: JSON.stringify({
-//                 id_labor: id_labor,
-//                 nombre_nuevo: name,
-//             }),
-//         });
-
-//         let data = await response.json();
-
-//         if (data.status) {
-//             let element_container = document.getElementById("container_menu");
-//             element_container.innerHTML = data.html;
-
-//             Swal.fire({
-//                 title: "¡Excelente!",
-//                 text: "¡¡La labor fue modificada correctamente!!",
-//                 icon: "success",
-//             });
-//         } else {
-//             Swal.fire({
-//                 title: "¡Uuuuups!",
-//                 text: "¡¡La labor no pudó ser modificada correctamente, si el error persiste por favor comunicarte con el departamento de sistemas!!",
-//                 icon: "error",
-//             });
-//         }
-//     } else {
-//         Swal.fire({
-//             title: "¡Uuuuups!",
-//             text: "¡¡ Error: verifica que si has escrito el nombre al que deseas cambiar ó no has seleccionado la labor que deseas modificar!!",
-//             icon: "error",
-//         });
-//     }
-// }
 
 function verifyInputs() {
     let nombre = document.getElementById("nombre");
@@ -1467,7 +1421,6 @@ function verifyInputs() {
     let celular_emergencia = document.getElementById("cel_emergencia");
     let password = document.getElementById("password");
     let rol = document.getElementById("rol");
-    let labor = document.getElementById("labor");
     let nacimiento = document.getElementById("nacimiento");
     let email = document.getElementById("cedula");
     let celular = document.getElementById("celular");
@@ -1482,7 +1435,6 @@ function verifyInputs() {
         direccion,
         password,
         rol,
-        labor,
         nombre_contacto_emergencia,
         nacimiento,
         email,
@@ -1499,7 +1451,7 @@ function verifyInputs() {
         let value = nodo.value;
 
         if (value.length > 0) {
-            if (index > 8) {
+            if (index > 7) {
                 let number = parseInt(value);
 
                 if (!isNaN(number)) {

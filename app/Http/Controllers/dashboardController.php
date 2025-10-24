@@ -20,6 +20,22 @@ use function Termwind\render;
 class dashboardController extends Controller
 {
 
+    public $rols;
+
+
+        public function __construct()
+    {
+
+        $this->rols = ["administrador", "super admin"];
+        
+    }
+
+    public function getRols(){
+
+
+        return $this->rols;
+    }
+
 
     public function emitirEvento()
     {
@@ -34,11 +50,6 @@ class dashboardController extends Controller
 
     public function openView(Request $request)
     {
-
-        // print("entro a la funcion de controller depuracion: ").$request->header("Authorization");
-        //    $token = $request->header("Authorization");
-        //     $array = [];
-        //     $replace = str_replace("Bearer ","",$token);
         $token = $request->query("token");
         $decode_token = JWTAuth::setToken($token)->authenticate();
 
@@ -59,14 +70,19 @@ class dashboardController extends Controller
     }
 
 
-    public function viewRegister()
+    public function viewRegister(Request $request)
     {
 
+        
+        $token_header = $request->header("Authorization");
 
-        $labores = labores::getLabores();
+        $replace = str_replace("Bearer ", "", $token_header);
 
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
 
-        $htmlContent = view("menuDashboard.registerUser", ["labores" => $labores])->render();
+        $rol = $decode_token["rol"];
+
+        $htmlContent = view("menuDashboard.registerUser", ["rol" => $rol])->render();
 
         return response()->json(["status" => true, "html" => $htmlContent]);
     }
@@ -75,9 +91,17 @@ class dashboardController extends Controller
     public function saveUser(Request $request)
     {
 
+        $token_header = $request->header("Authorization");
 
+        $replace = str_replace("Bearer ", "", $token_header);
 
+        $decode_token = JWTAuth::setToken($replace)->authenticate();
 
+        $rol = $decode_token["rol"];
+
+        $verify_rol = in_array($rol, $this->rols);
+
+        if(!$verify_rol) return response()->json(["status" => false, "message" => "Rol no válido, verifica nuevamente"]);
         try {
 
             
@@ -91,7 +115,6 @@ class dashboardController extends Controller
                 "nombre_contacto" => "required|string|max:255",
                 "direccion" => "required|string|max:255",
                 "email" => "required|email|unique:users,email",
-                "labor" => "required|string",
                 "nacimiento" => "required|date|before:".Carbon::now()->subYears(18)->toDateString(),
                 "nombre" => "required|string|max:255",
                 "password" => "required|string",
@@ -113,7 +136,6 @@ class dashboardController extends Controller
                 "nombre_contacto" => $validate["nombre_contacto"],
                 "direccion" => $validate["direccion"],
                 "email" => $validate["email"],
-                "id_labor" => $validate["labor"],
                 "fecha_registro" => $validate["nacimiento"],
                 "nombre" => $validate["nombre"],
                 "password" => $validate["password"],
@@ -285,7 +307,6 @@ class dashboardController extends Controller
 
         foreach($users as $item){
 
-            $name_labor = labores::getNameLabor($item->id_labor);
 
 
             array_push($data,[
@@ -294,7 +315,6 @@ class dashboardController extends Controller
                 "nombre" => $item->nombre,
                 "apellido" => $item->apellido,
                 "rol" => $item->rol,
-                "nombre_labor" => $name_labor->nombre_labor,
                 "id_labor" => $item->id_labor,
                 "direccion" => $item->direccion,
                 "email" => $item->email,

@@ -1,6 +1,6 @@
 <div class="d-flex justify-contente-center">
 
-    @if ($rol === 'administrador')
+    @if ($rol === 'administrador'|| $rol === 'super admin')
         <div class="form-group d-flex">
             <div>
 
@@ -121,7 +121,7 @@
                     </center>
 
 
-                    @if ($self_id == '1093228865' || $self_id == '1091272724')
+                    @if ($rol === 'administrador'|| $rol === 'super admin')
 
                         <div class="table-responsive">
                             <table class="table">
