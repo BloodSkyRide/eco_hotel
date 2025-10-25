@@ -57,6 +57,7 @@
 
 </head>
 <div id="custom-toast-container"></div>
+
 <body class="hold-transition sidebar-mini">
 
     <div class="wrapper">
@@ -142,7 +143,7 @@
 
 
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" type="button"
                                 onclick="getShowChangePassword('{{ route('changePasswordShow') }}')">
                                 <i class="fa-solid fa-key"></i>&nbsp;&nbsp;
@@ -152,30 +153,20 @@
                             </a>
                         </li>
 
-                         <li class="nav-item">
-                                <a class="nav-link menu_dashboard"
-                                    onclick="getShowOrdersKitchen('{{ route('showKitchen') }}')" type="button">
-                                    <i class="fa-solid fa-kitchen-set"></i>&nbsp;&nbsp;
-                                    <p>
-                                        Pedidos cocina
+                        <li class="nav-item">
+                            <a class="nav-link menu_dashboard"
+                                onclick="getShowOrdersKitchen('{{ route('showKitchen') }}')" type="button">
+                                <i class="fa-solid fa-kitchen-set"></i>&nbsp;&nbsp;
+                                <p>
+                                    Pedidos cocina
 
-                                    </p>
-                                </a>
-                            </li>
+                                </p>
+                            </a>
+                        </li> --}}
 
-                        @if ($array['rol'] === 'administrador')
-                            {{-- <li class="nav-item">
-                                <a class="nav-link menu_dashboard" onclick="showManageLabor('{{ route('showManageLabor') }}')"
-                                    type="button">
-                                    <i class="fa-solid fa-clipboard"></i>&nbsp;&nbsp;
-                                    <p>
-                                        Administrador de labores
+                        {{-- @if ($array['rol'] === 'administrador')
 
-                                    </p>
-                                </a>
-                            </li> --}}
 
-                           
 
 
                             <li class="nav-item">
@@ -213,28 +204,73 @@
                                     </p>
                                 </a>
                             </li>
+                        @endif --}}
 
 
+                        {{-- <li class="nav-item">
+                            <a class="nav-link menu_dashboard"
+                                onclick="getShowSchedules('{{ route('getShowSchedule') }}')" type="button"
+                                id="register_nav">
+                                <i class="fa-solid fa-house-circle-check"></i>&nbsp;&nbsp;
+                                <p>
+                                    Horarios
+                                </p>
+                            </a>
+                        </li> --}}
 
-
-                            {{-- <li class="nav-item">
-                                <a type="button" class="nav-link menu_dashboard"
-                                    onclick="getViewHistoryLabors('{{ route('getShowHistorySubLabors') }}')">
-                                    <i class="fa-solid fa-list"></i>&nbsp;&nbsp;
-                                    <p>
-                                        Historial de labores
-                                    </p>
-                                </a>
-                            </li> --}}
-                        @endif
 
                         @if ($array['rol'] === 'usuario')
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowOrdersKitchen('{{ route('showKitchen') }}')" type="button">
+                                    <i class="fa-solid fa-kitchen-set"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Pedidos cocina
+
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" type="button"
+                                    onclick="getShowChangePassword('{{ route('changePasswordShow') }}')">
+                                    <i class="fa-solid fa-key"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Cambiar contraseña
+                                    </p>
+                                </a>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link menu_dashboard" type="button"
                                     onclick="getShowAssists('{{ route('getShowAssist') }}')">
                                     <i class="fa-brands fa-creative-commons-nd"></i>&nbsp;&nbsp;
                                     <p>
                                         Asistencias
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowInventory('{{ route('getShowInventory') }}')" type="button"
+                                    id="payroll_nav">
+                                    <i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;
+                                    <p>
+
+                                        inventario
+
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard" type="button"
+                                    onclick="getShowHistoryOverTime('{{ route('getShowOverTime') }}')">
+                                    <i class="fa-solid fa-person-circle-plus"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Solicitar horas extras
                                     </p>
                                 </a>
                             </li>
@@ -250,35 +286,87 @@
                                 </a>
                             </li>
 
-                            {{-- <li class="nav-item">
-                                <a class="nav-link menu_dashboard" type="button"
-                                    onclick="getShowLabors('{{ route('showMyLabors') }}')">
-                                    <i class="fa-solid fa-user-clock"></i>&nbsp;&nbsp;
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowStore('{{ route('getShowStore') }}')" type="button"
+                                    id="payroll_nav">
+                                    <i class="fa-solid fa-store"></i>&nbsp;&nbsp;
                                     <p>
-                                        Mis labores
+                                        vender
                                     </p>
                                 </a>
-                            </li> --}}
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowHistorySell('{{ route('getShowHistorySell') }}')" type="button"
+                                    id="payroll_nav">
+                                    <i class="fa-solid fa-list"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Historial ventas
+                                    </p>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowGuest('{{ route('getShowGuest') }}')" type="button"
+                                    id="payroll_nav">
+                                    <i class="fa-solid fa-hotel"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Hospedaje
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowContability('{{ route('contability') }}')" type="button"
+                                    id="payroll_nav">
+                                    <i class="fa-solid fa-calculator"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Contabilidad
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowTransfers('{{ route('getShowTransfers') }}')" type="button"
+                                    id="payroll_nav">
+                                    <i class="fa-solid fa-arrow-right-arrow-left"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Transferencias
+                                    </p>
+                                </a>
+                            </li>
                         @endif
 
 
-                        <li class="nav-item">
-                            <a class="nav-link menu_dashboard"
-                                onclick="getShowSchedules('{{ route('getShowSchedule') }}')" type="button"
-                                id="register_nav">
-                                <i class="fa-solid fa-house-circle-check"></i>&nbsp;&nbsp;
-                                <p>
-                                    Horarios
-                                </p>
-                            </a>
-                        </li>
 
+                        @if ($array['rol'] === 'super admin')
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowAdminUsers('{{ route('getShowUsers') }}')" type="button">
+                                    <i class="fa-solid fa-users"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Administrador Usuarios
 
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowOrdersKitchen('{{ route('showKitchen') }}')" type="button">
+                                    <i class="fa-solid fa-kitchen-set"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Pedidos cocina
 
-
-
-
-                        @if ($array['rol'] === 'administrador')
+                                    </p>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link menu_dashboard"
                                     onclick="getShowPayroll('{{ route('getshowpayroll') }}')" type="button"
@@ -286,6 +374,81 @@
                                     <i class="fa-solid fa-dollar-sign"></i>&nbsp;&nbsp;
                                     <p>
                                         Nomina
+                                    </p>
+                                </a>
+                            </li>
+
+
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard" type="button"
+                                    onclick="getShowOverTime('{{ route('getShowOverTimeAdmin') }}')">
+                                    <i class="fa-solid fa-bell"></i></i>&nbsp;&nbsp;
+                                    <p>
+                                        Reporte horas extras
+                                    </p>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="createProduct('{{ route('createProduct') }}')" type="button"
+                                    id="payroll_nav">
+                                    <i class="fa-solid fa-cart-plus"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Productos de venta
+                                    </p>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowInventory('{{ route('getShowInventory') }}')" type="button"
+                                    id="payroll_nav">
+                                    <i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;
+                                    <p>
+
+                                        Materia Prima
+
+                                    </p>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowAdminUsers('{{ route('getShowUsers') }}')" type="button">
+                                    <i class="fa-solid fa-users"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Administrador Usuarios
+
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowEmployeeFood('{{ route('getShowEmployeeFood') }}')"
+                                    type="button" id="payroll_nav">
+                                    <i class="fa-solid fa-utensils"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Alimentación empleados
+                                    </p>
+                                </a>
+                            </li>
+                        @endif
+
+
+                        @if ($array['rol'] === 'administrador')
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowAdminUsers('{{ route('getShowUsers') }}')" type="button">
+                                    <i class="fa-solid fa-users"></i>&nbsp;&nbsp;
+                                    <p>
+                                        Administrador Usuarios
+
                                     </p>
                                 </a>
                             </li>
@@ -323,52 +486,84 @@
                                     <i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;
                                     <p>
 
-                                        Materia Prima
-
-                                    </p>
-                                </a>
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a class="nav-link menu_dashboard"
-                                    onclick="getShowInventory('{{ route('getShowInventory') }}')" type="button"
-                                    id="payroll_nav">
-                                    <i class="fa-solid fa-boxes-stacked"></i>&nbsp;&nbsp;
-                                    <p>
-
                                         inventario
 
                                     </p>
                                 </a>
                             </li>
 
-
                             <li class="nav-item">
-                                <a class="nav-link menu_dashboard" type="button"
-                                    onclick="getShowHistoryOverTime('{{ route('getShowOverTime') }}')">
-                                    <i class="fa-solid fa-person-circle-plus"></i>&nbsp;&nbsp;
+                                <a class="nav-link menu_dashboard"
+                                    onclick="getShowEmployeeFood('{{ route('getShowEmployeeFood') }}')"
+                                    type="button" id="payroll_nav">
+                                    <i class="fa-solid fa-utensils"></i>&nbsp;&nbsp;
                                     <p>
-                                        Solicitar horas extras
+                                        Alimentación empleados
                                     </p>
                                 </a>
                             </li>
-                        @endif
 
-
-
-                        <li class="nav-item">
-                            <a class="nav-link menu_dashboard" onclick="getShowStore('{{ route('getShowStore') }}')"
-                                type="button" id="payroll_nav">
-                                <i class="fa-solid fa-store"></i>&nbsp;&nbsp;
+                            <li class="nav-item">
+                                <a class="nav-link menu_dashboard" onclick="getShowStore('{{ route('getShowStore') }}')"
+                                    type="button" id="payroll_nav">
+                                    <i class="fa-solid fa-store"></i>&nbsp;&nbsp;
+                                    <p>
+                                        vender
+                                    </p>
+                                </a>
+                            </li>
+                                                    <li class="nav-item">
+                            <a class="nav-link menu_dashboard"
+                                onclick="getShowHistorySell('{{ route('getShowHistorySell') }}')" type="button"
+                                id="payroll_nav">
+                                <i class="fa-solid fa-list"></i>&nbsp;&nbsp;
                                 <p>
-                                    vender
+                                    Historial ventas
                                 </p>
                             </a>
                         </li>
 
+                        
+                        <li class="nav-item">
+                            <a class="nav-link menu_dashboard" onclick="getShowGuest('{{ route('getShowGuest') }}')"
+                                type="button" id="payroll_nav">
+                                <i class="fa-solid fa-hotel"></i>&nbsp;&nbsp;
+                                <p>
+                                    Hospedaje
+                                </p>
+                            </a>
+                        </li>
 
+                                                <li class="nav-item">
+                            <a class="nav-link menu_dashboard"
+                                onclick="getShowContability('{{ route('contability') }}')" type="button"
+                                id="payroll_nav">
+                                <i class="fa-solid fa-calculator"></i>&nbsp;&nbsp;
+                                <p>
+                                    Contabilidad
+                                </p>
+                            </a>
+                        </li>
 
                         <li class="nav-item">
+                            <a class="nav-link menu_dashboard"
+                                onclick="getShowTransfers('{{ route('getShowTransfers') }}')" type="button"
+                                id="payroll_nav">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i>&nbsp;&nbsp;
+                                <p>
+                                    Transferencias
+                                </p>
+                            </a>
+                        </li>
+
+                        @endif
+
+
+
+
+
+
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu_dashboard"
                                 onclick="getShowHistorySell('{{ route('getShowHistorySell') }}')" type="button"
                                 id="payroll_nav">
@@ -388,10 +583,10 @@
                                     Alimentación empleados
                                 </p>
                             </a>
-                        </li>
+                        </li> --}}
 
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu_dashboard" onclick="getShowGuest('{{ route('getShowGuest') }}')"
                                 type="button" id="payroll_nav">
                                 <i class="fa-solid fa-hotel"></i>&nbsp;&nbsp;
@@ -424,7 +619,7 @@
                             </a>
                         </li>
 
-                    </ul>
+                    </ul> --}}
                 </nav>
             </div>
 

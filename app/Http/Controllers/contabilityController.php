@@ -9,14 +9,20 @@ use App\Models\modelSell;
 use App\Models\modelContability;
 use App\Models\modelEgress;
 use App\Models\modelEgressTotal;
+use App\Http\Controllers\dashboardController;
 
 
 class contabilityController extends Controller
 {
 
-    protected $permited_users = ["1093228865", "1091272724"];
+    protected $rols;
 
 
+    public function __construct()
+    {
+        $controller = new dashboardController();
+        $this->rols = $controller->getRols();
+    }
     public function getShowContability(Request $request)
     {
 
@@ -27,13 +33,11 @@ class contabilityController extends Controller
 
         $decode_token = JWTAuth::setToken($replace)->authenticate();
 
-        $self_id = $decode_token["cedula"];
-
         $self_name = $decode_token["nombre"];
 
         $rol = $decode_token["rol"];
 
-        $confirm = in_array($self_id, $this->permited_users);
+        $confirm = in_array($rol, $this->rols);
 
         if ($confirm) {
 
@@ -44,7 +48,7 @@ class contabilityController extends Controller
             $month = $fechaActual->month;
             $day = $fechaActual->day;
             $date_back = false;
-            $confirmation = self::editDataContability($month,$date_back);
+            $confirmation = self::editDataContability($month, $date_back);
 
             if ($confirmation) {
 
@@ -61,19 +65,57 @@ class contabilityController extends Controller
 
                 $total_egress_detail = modelEgress::totalEgress($today);
 
-                $render = view("menuDashboard.contability", ["data" => $data, 
-                "total" => $total_venta, 
-                "egresos" => $get_egresos, 
-                "total_egreso" => $get_total_egress,
-                "egress_detail" => $get_egress_deatail,
-                "egress_total" => $total_egress_detail])->render();
+                $render = view("menuDashboard.contability", [
+                    "data" => $data,
+                    "total" => $total_venta,
+                    "egresos" => $get_egresos,
+                    "total_egreso" => $get_total_egress,
+                    "egress_detail" => $get_egress_deatail,
+                    "egress_total" => $total_egress_detail,
+                    "rol" => $rol
+                ])->render();
 
                 return response()->json(["status" => true, "html" => $render]);
             }
         } else {
 
+            //vista para solo registrar un egreso
+            $fechaActual = Carbon::now();
+            $today = Carbon::now()->format('Y-m-d');
 
-            return response()->json(["message" => "Acceso denegado, ponte en contacto con el desarrollador si crees que hay un error", "status" => "error"]);
+            $year = $fechaActual->year;
+            $month = $fechaActual->month;
+            $day = $fechaActual->day;
+            $date_back = false;
+            $confirmation = self::editDataContability($month, $date_back);
+
+            if ($confirmation) {
+
+                self::sumEgress($self_name);
+                $data = modelContability::getContabilityForMonth($year, $month, $day);
+
+                $total_venta = modelContability::getTotalSell($year, $month, $day);
+
+                $get_egresos = modelEgressTotal::getEgressForMonth($year, $month, $day);
+
+                $get_total_egress = modelEgress::getTotalEgress($year, $month, $day);
+
+                $get_egress_deatail = modelEgress::getEgressForDate($today);
+
+                $total_egress_detail = modelEgress::totalEgress($today);
+
+                $render = view("menuDashboard.contability", [
+                    "data" => $data,
+                    "total" => $total_venta,
+                    "egresos" => $get_egresos,
+                    "total_egreso" => $get_total_egress,
+                    "egress_detail" => $get_egress_deatail,
+                    "egress_total" => $total_egress_detail,
+                    "rol" => $rol
+                ])->render();
+
+                return response()->json(["status" => true, "html" => $render]);
+            }
         }
 
         return response()->json(["message" => "Error interno en el servidor", "status" => false]);
@@ -127,11 +169,11 @@ class contabilityController extends Controller
             $token_header = $request->header("Authorization");
 
             $replace = str_replace("Bearer ", "", $token_header);
-    
+
             $decode_token = JWTAuth::setToken($replace)->authenticate();
-    
+
             $self_id = $decode_token["cedula"];
-    
+
             $self_name = $decode_token["nombre"];
 
             $path = self::saveEgressImage($request);
@@ -144,8 +186,15 @@ class contabilityController extends Controller
 
             $today = Carbon::now()->format('Y-m-d');
 
-            $data = ["fecha" => $today, "valor" => $value, "descripcion" => $description, "url_imagen" => $path,
-             "caja" => $caja, "nombre" => $self_name, "cedula" => $self_id ];
+            $data = [
+                "fecha" => $today,
+                "valor" => $value,
+                "descripcion" => $description,
+                "url_imagen" => $path,
+                "caja" => $caja,
+                "nombre" => $self_name,
+                "cedula" => $self_id
+            ];
 
             $save_data = modelEgress::insertEgress($data);
 
@@ -174,22 +223,22 @@ class contabilityController extends Controller
     private function saveEgressImage($request)
     {
         $imagen = $request->file("image");
-    
+
         // Nombre final del archivo
         $name_final = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME) . "_" . Carbon::now()->format('Y-m-d_H-i-s') . ".jpg";
         $full_path = storage_path("app/public/egress/" . $name_final);
-    
+
         // Optimizar imagen antes de guardarla
         $this->optimizeImage($imagen, $full_path);
-    
+
         return "storage/egress/" . $name_final;
     }
-    
+
     private function optimizeImage($image, $destination)
     {
-        $src = imagecreatefromjpeg($image->getPathname()); 
-        imagejpeg($src, $destination, 50); 
-    
+        $src = imagecreatefromjpeg($image->getPathname());
+        imagejpeg($src, $destination, 50);
+
         imagedestroy($src);
     }
 
@@ -230,7 +279,8 @@ class contabilityController extends Controller
         return ($flag === $day) ? true : false;
     }
 
-    public function egressForDate(Request $request){
+    public function egressForDate(Request $request)
+    {
 
 
         $fecha_buscar = $request->fecha;
@@ -246,9 +296,9 @@ class contabilityController extends Controller
         $self_name = $decode_token["nombre"];
 
         $rol = $decode_token["rol"];
-        
 
-        $confirm = in_array($self_id, $this->permited_users);
+
+        $confirm = in_array($rol, $this->rols);
 
         if ($confirm) {
 
@@ -264,7 +314,7 @@ class contabilityController extends Controller
             $mes = Carbon::parse($fecha_buscar)->format('m');
             $dia = Carbon::parse($fecha_buscar)->endOfMonth()->day;
 
-            $confirmation = self::editDataContability($mes,$date_back);
+            $confirmation = self::editDataContability($mes, $date_back);
 
             if ($confirmation) {
 
@@ -281,12 +331,15 @@ class contabilityController extends Controller
 
                 $total_egress_detail = modelEgress::totalEgress($fecha_buscar);
 
-                $render = view("menuDashboard.contability", ["data" => $data, 
-                "total" => $total_venta, 
-                "egresos" => $get_egresos, 
-                "total_egreso" => $get_total_egress,
-                "egress_detail" => $get_egress_deatail,
-                "egress_total" => $total_egress_detail])->render();
+                $render = view("menuDashboard.contability", [
+                    "data" => $data,
+                    "total" => $total_venta,
+                    "egresos" => $get_egresos,
+                    "total_egreso" => $get_total_egress,
+                    "egress_detail" => $get_egress_deatail,
+                    "egress_total" => $total_egress_detail,
+                    "rol" => $rol
+                ])->render();
 
                 return response()->json(["status" => true, "html" => $render]);
             }
@@ -297,6 +350,5 @@ class contabilityController extends Controller
         }
 
         return response()->json(["message" => "Error interno en el servidor", "status" => false]);
-
     }
 }

@@ -1,3 +1,10 @@
+$(document).ready(function () {
+
+
+    
+    $("#register_nav").trigger("click");
+});
+
 Pusher.logToConsole = true;
 let route = "https://intranetparadorrapi.com/cambiar-estado-button";
 let route2 = "https://intranetparadorrapi.com/verifyId";
@@ -356,9 +363,7 @@ async function getShowAdminUsers(url) {
         });
     }
 }
-$(document).ready(function () {
-    $("#register_nav").trigger("click");
-});
+
 async function register_user(url) {
     const token = localStorage.getItem("access_token");
     $.ajax({

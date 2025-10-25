@@ -19,6 +19,9 @@
     <div class="card card-primary card-tabs" style="width: 100%">
         <div class="card-header p-0 pt-1">
             <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+
+                @if ($rol === "administrador" || $rol === "super admin")
+                    
                 <li class="nav-item">
                     <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill"
                         href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
@@ -29,6 +32,7 @@
                         href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile"
                         aria-selected="false"><i class="fa-solid fa-square-minus"></i>&nbsp;&nbsp;Egresos mensuales</a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill"
                         href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages"
